@@ -1,0 +1,1 @@
+- Research tasks: the egress proxy blocks WebFetch/curl to nearly every source tried (Etsy, Gumroad, Payhip, gov.uk, small blogs), not just reddit.com, so market work rests on search-engine summaries only.
