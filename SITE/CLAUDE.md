@@ -18,6 +18,6 @@ Positioned for UK sole traders under Making Tax Digital (`MARKET/brief.md`): cop
 - `style.css` — both pages; theme tokens, mobile and print rules.
 - `sw.js`, `register-sw.js` — offline cache; bump `VERSION` in `sw.js` when its file list changes.
 - `manifest.webmanifest`, `icon.svg` — installable app metadata and icon.
-- `img/` — template screenshots from the built kit: `.png` full size (store listings), `.webp`
+- `img/` — kit screenshots from the built TOOLKIT: `.png` full size (store listings), `.webp`
   for the site. `img/shots.sh` regenerates them.
 - `tests/` — `node --test SITE/tests/*.test.js`.
