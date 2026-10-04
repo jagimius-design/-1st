@@ -16,7 +16,8 @@ generator and an "Am I in MTD?" checker links to it. No server, no running costs
   - Depends on: KIT.LAUNCH.2
   - Comments:   Etsy shop first. About £14 flat. Also: refund policy, opening the templates in Excel
                 and Google Sheets, and a test of the quarterly sheet in a bridging tool's free
-                trial before any "MTD-ready" claim.
+                trial before any "MTD-ready" claim. Tax rates and the MTD checker's rules
+                checked against gov.uk.
 
 ## Sections
 
