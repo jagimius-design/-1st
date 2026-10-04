@@ -1,5 +1,5 @@
 (function () {
-  const KEY = "invoice-draft-v1";
+  const KEY = "invoice-draft-v2";
   const form = document.getElementById("sheet");
   const body = document.getElementById("items");
   const tpl = document.getElementById("line");
@@ -47,6 +47,12 @@
     // Rows left at zero are dropped from the printed invoice.
     document.querySelectorAll(".opt-discount").forEach((el) => el.classList.toggle("unused", !t.discount));
     document.querySelectorAll(".opt-tax").forEach((el) => el.classList.toggle("unused", !t.tax));
+    document.querySelectorAll(".opt-vatno").forEach((el) => el.classList.toggle("unused", !s.vatNumber.trim()));
+    // Date inputs display in the browser's locale; the printed invoice shows UK dates.
+    document.querySelectorAll(".print-date").forEach((el) => {
+      const v = s[el.dataset.for];
+      el.textContent = v ? new Date(v + "T12:00:00").toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : "";
+    });
     document.title = (s.number ? s.number + " " : "") + "Invoice";
     try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (e) {}
   }
@@ -84,7 +90,7 @@
   document.getElementById("clear").addEventListener("click", () => {
     if (!confirm("Start a new invoice? Your sender and payment details are kept.")) return;
     const s = state();
-    load({ from: s.from, payment: s.payment, currency: s.currency, taxRate: s.taxRate, title: s.title });
+    load({ from: s.from, vatNumber: s.vatNumber, payment: s.payment, currency: s.currency, taxRate: s.taxRate, title: s.title });
   });
   document.getElementById("print").addEventListener("click", () => window.print());
 })();

@@ -16,7 +16,7 @@
 
   function money(n, currency) {
     try {
-      return new Intl.NumberFormat(undefined, { style: "currency", currency }).format(n);
+      return new Intl.NumberFormat("en-GB", { style: "currency", currency }).format(n);
     } catch (e) {
       return (currency ? currency + " " : "") + n.toFixed(2);
     }

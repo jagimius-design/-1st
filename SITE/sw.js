@@ -1,8 +1,8 @@
 // Cache-first, refreshed in the background, so the site works offline after one visit.
 // Bump VERSION when the file list changes.
-const VERSION = "v1";
+const VERSION = "v2";
 const FILES = ["./", "index.html", "invoice.html", "style.css", "config.js", "invoice-core.js",
-  "invoice.js", "register-sw.js", "manifest.webmanifest", "icon.svg"];
+  "invoice.js", "mtd.html", "mtd-core.js", "mtd.js", "register-sw.js", "manifest.webmanifest", "icon.svg"];
 
 self.addEventListener("install", (e) => {
   e.waitUntil(caches.open(VERSION).then((c) => c.addAll(FILES)).then(() => self.skipWaiting()));

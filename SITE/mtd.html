@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Am I in MTD?</title>
+<meta name="description" content="Free checker: does Making Tax Digital for Income Tax apply to you as a UK sole trader or landlord, and when is your first quarterly deadline?">
+<link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="./">Sole Trader MTD Kit</a>
+    <nav><a href="invoice.html">Invoice generator</a><a href="./#kit">The kit</a></nav>
+  </header>
+
+  <div class="hero">
+    <h1>Am I in Making Tax Digital, and when?</h1>
+    <p class="muted">For UK sole traders and landlords. Enter your gross income and find out when MTD for
+      Income Tax starts for you and when your first quarterly update is due.</p>
+  </div>
+
+  <form class="card checker" id="checker" autocomplete="off">
+    <label>Gross income from self-employment and property, before expenses (£)
+      <input name="income" type="number" min="0" step="1" inputmode="numeric" placeholder="35000" required>
+    </label>
+    <label>For the tax year
+      <select name="year">
+        <option value="2024">2024-25 (return filed by 31 Jan 2026)</option>
+        <option value="2025" selected>2025-26 (return due by 31 Jan 2027)</option>
+        <option value="2026">2026-27 (return due by 31 Jan 2028)</option>
+        <option value="2027">2027-28</option>
+      </select>
+    </label>
+    <label class="check"><input name="steady" type="checkbox" checked> My income will stay about the same in later years</label>
+    <button class="btn" type="submit">Check</button>
+  </form>
+
+  <div class="card result" id="result" hidden aria-live="polite"></div>
+
+  <section>
+    <h2>How it works</h2>
+    <div class="grid">
+      <div class="card"><h3>Who's in</h3><p>Sole traders and landlords whose self-employment and property income
+        together is more than £50,000 from April 2026, £30,000 from April 2027 and £20,000 from April 2028.
+        Gross income counts, not profit.</p></div>
+      <div class="card"><h3>Which year counts</h3><p>HMRC looks at your tax return for the year two years
+        earlier: 2024-25 income decides April 2026, 2025-26 decides April 2027.</p></div>
+      <div class="card"><h3>What you then do</h3><p>Keep digital records and send a quarterly update by
+        7 August, 7 November, 7 February and 7 May, then a final declaration by 31 January. Spreadsheets
+        are allowed with bridging software.</p></div>
+    </div>
+    <p class="muted small">A guide, not tax advice. Some people are exempt or can apply to be, and a share of
+      jointly owned property counts only as your share. Check your own position on gov.uk.</p>
+  </section>
+
+  <div class="card promo">
+    <h3>Keep MTD records in a spreadsheet, without a subscription</h3>
+    <p>The Sole Trader MTD Kit keeps your income and expenses under SA103 categories, adds them up by quarter
+      for bridging software, and estimates your tax and NI. <a href="./#kit">See the kit</a></p>
+  </div>
+  <footer>Runs in your browser. Nothing you enter is sent anywhere.</footer>
+</div>
+<script src="mtd-core.js"></script>
+<script src="mtd.js"></script>
+<script src="register-sw.js"></script>
+</body>
+</html>

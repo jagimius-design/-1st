@@ -81,17 +81,34 @@ td.amt { white-space: nowrap; padding-top: 10px; }
   body { background: #fff; }
   .wrap { max-width: none; padding: 0; }
   .sheet { border: 0; padding: 0; margin: 0; }
-  .sheet input, .sheet textarea { padding: 0; border: 0; resize: none; }
+  .sheet input, .sheet textarea { padding: 0; border: 0; resize: none; outline: none !important; }
   .sheet input::placeholder, .sheet textarea::placeholder { color: transparent; }
 }
 .sheet input[type="number"] { text-align: right; }
 @media print {
   .sheet input::-webkit-calendar-picker-indicator, .sheet input::-webkit-inner-spin-button { display: none; -webkit-appearance: none; }
   .sheet input[type="number"] { -moz-appearance: textfield; }
-  .sums .unused { display: none; }
+  .sums .unused, .meta .unused, .sheet input[type="date"] { display: none; }
+  .meta .print-date { display: inline; }
   td.amt { padding-top: 4px; }
 }
 figure.card { margin: 0; display: flex; flex-direction: column; }
 figure.card img { width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: contain; object-position: top;
   border: 1px solid var(--line); border-radius: 6px; background: #fff; margin-bottom: 12px; }
 .grid.kit { grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); }
+.checker { display: grid; gap: 14px; max-width: 560px; margin-bottom: 16px; }
+.checker label { display: grid; gap: 6px; font-weight: 600; }
+.checker label.check { display: flex; gap: 8px; align-items: center; font-weight: 400; }
+.checker input:not([type="checkbox"]), .checker select { font: inherit; color: inherit; background: var(--field);
+  border: 1px solid var(--line); border-radius: 6px; padding: 10px; width: 100%; }
+.checker .btn { justify-self: start; }
+.result { max-width: 560px; border-left: 3px solid var(--accent); margin-bottom: 16px; }
+.result h3 { font-size: 1.25rem; }
+.result dl { display: grid; grid-template-columns: auto 1fr; gap: 6px 16px; margin: 12px 0 0; }
+.result dt { color: var(--muted); }
+.result dd { margin: 0; font-weight: 600; }
+.small { font-size: .9rem; }
+.print-date { display: none; }
+.card h3 + p, .card p + p { margin-top: 6px; }
+a.card { color: inherit; text-decoration: none; }
+a.card:hover { border-color: var(--accent); }
