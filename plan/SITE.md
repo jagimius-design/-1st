@@ -10,6 +10,6 @@ PDF, nothing leaves the browser) and a landing page selling the kit.
 - 2 Landing page matches the kit
   - Goal:       Landing copy checked against what TOOLKIT ships; screenshot placeholders replaced
                 by real images of the templates.
-  - Status:     not started
+  - Status:     in progress
   - Depends on: KIT.TOOLKIT.2
   - Comments:   Store URL is `storeUrl` in `SITE/config.js`, set at KIT.1.
