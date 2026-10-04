@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free UK Invoice Generator</title>
+<meta name="description" content="Free invoice generator for UK sole traders: pounds, VAT number, UK dates. Print or save as PDF; nothing is uploaded.">
+<link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="./">Sole Trader MTD Kit</a>
+    <nav><a href="mtd.html">Am I in MTD?</a><a href="./#kit">The kit</a></nav>
+  </header>
+
+  <div class="toolbar">
+    <button class="btn" id="print" type="button">Download / print PDF</button>
+    <label>Currency <input id="currency" size="4" maxlength="3" value="GBP"></label>
+    <button class="btn ghost" id="clear" type="button">New invoice</button>
+    <span class="muted">Saved in this browser only.</span>
+  </div>
+
+  <form class="sheet" id="sheet" autocomplete="off">
+    <div class="row">
+      <div>
+        <h1 style="margin:0 0 8px"><input name="title" value="Invoice" aria-label="Title"></h1>
+        <textarea name="from" placeholder="Your name / trading name&#10;Address&#10;Email" aria-label="From"></textarea>
+      </div>
+      <div class="meta">
+        <span class="lbl">Number</span><input name="number" placeholder="INV-001">
+        <span class="lbl">Date</span><span><input name="date" type="date"><span class="print-date" data-for="date"></span></span>
+        <span class="lbl">Due</span><span><input name="due" type="date"><span class="print-date" data-for="due"></span></span>
+        <span class="lbl opt-vatno">VAT no.</span><input class="opt-vatno" name="vatNumber" placeholder="If VAT registered">
+      </div>
+    </div>
+    <div class="row">
+      <div><div class="lbl">Bill to</div><textarea name="to" placeholder="Client name&#10;Address&#10;Postcode"></textarea></div>
+      <div></div>
+    </div>
+
+    <table>
+      <thead><tr><th>Description</th><th class="num" style="width:80px">Qty</th><th class="num" style="width:110px">Price</th><th class="num" style="width:110px">Amount</th><th style="width:32px"></th></tr></thead>
+      <tbody id="items"></tbody>
+    </table>
+    <p class="no-print"><button class="btn ghost" id="add" type="button">+ Add line</button></p>
+
+    <div class="sums">
+      <span>Subtotal</span><span id="subtotal"></span>
+      <span class="opt-discount">Discount</span><input class="opt-discount" name="discount" type="number" min="0" step="0.01" placeholder="0">
+      <span class="opt-tax">VAT %</span><input class="opt-tax" name="taxRate" type="number" min="0" step="0.01" placeholder="0">
+      <span class="opt-tax">VAT</span><span class="opt-tax" id="tax"></span>
+      <span class="total">Total</span><span class="total" id="total"></span>
+    </div>
+
+    <div class="row" style="margin-top:24px">
+      <div><div class="lbl">Payment details</div><textarea name="payment" placeholder="Account name&#10;Sort code 00-00-00&#10;Account no. 00000000"></textarea></div>
+      <div><div class="lbl">Notes</div><textarea name="notes" placeholder="Thank you for your business."></textarea></div>
+    </div>
+  </form>
+
+  <div class="card promo no-print">
+    <h3>Getting ready for Making Tax Digital?</h3>
+    <p>The Sole Trader MTD Kit keeps your income and expenses as MTD digital records, totals them by quarter for
+      bridging software and estimates your tax and NI. No subscription. <a href="./#kit">See the kit</a></p>
+  </div>
+  <footer></footer>
+</div>
+
+<template id="line">
+  <tr>
+    <td class="desc"><input data-k="desc" placeholder="Service or item" aria-label="Description"></td>
+    <td><input data-k="qty" type="number" min="0" step="any" value="1" class="num" aria-label="Quantity"></td>
+    <td><input data-k="price" type="number" min="0" step="0.01" placeholder="0.00" aria-label="Price"></td>
+    <td class="num amt"></td>
+    <td><button class="del" type="button" aria-label="Remove line">&times;</button></td>
+  </tr>
+</template>
+<script src="config.js"></script>
+<script src="invoice-core.js"></script>
+<script src="invoice.js"></script>
+<script src="register-sw.js"></script>
+</body>
+</html>

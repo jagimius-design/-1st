@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sole Trader MTD Kit</title>
+<meta name="description" content="Spreadsheet kit for UK sole traders under Making Tax Digital for Income Tax: SA103 records, quarterly totals for bridging software, tax and NI estimate, invoicing. Plus a free MTD checker and invoice generator.">
+<link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="./">Sole Trader MTD Kit</a>
+    <nav><a href="mtd.html">Am I in MTD?</a><a href="invoice.html">Invoice generator</a><a href="#kit">The kit</a></nav>
+  </header>
+
+  <div class="hero">
+    <h1>Making Tax Digital, kept in a spreadsheet. No subscription.</h1>
+    <p class="muted">For UK sole traders. From April 2027, anyone with self-employment and property income over
+      £30,000 must keep digital records and send HMRC a quarterly update. This kit keeps those records in
+      Excel or Google Sheets, totals each quarter for your bridging software, and estimates your tax and NI.</p>
+    <div class="actions">
+      <a class="btn" data-buy href="#kit">Get the kit</a>
+      <a class="btn ghost" href="mtd.html">Am I in MTD, and when?</a>
+    </div>
+  </div>
+
+  <section>
+    <h2>The MTD dates</h2>
+    <div class="grid">
+      <div class="card"><h3>April 2026</h3><p>Income over £50,000 is in.</p></div>
+      <div class="card"><h3>April 2027</h3><p>Income over £30,000 joins.</p></div>
+      <div class="card"><h3>April 2028</h3><p>Income over £20,000 joins.</p></div>
+      <div class="card"><h3>Every quarter</h3><p>Updates due 7 August, 7 November, 7 February and 7 May.</p></div>
+    </div>
+    <p class="muted small">Income here is gross self-employment plus property income, before expenses.
+      <a href="mtd.html">Check your own start date</a>.</p>
+  </section>
+
+  <section id="kit">
+    <h2>What's in the kit</h2>
+    <p class="muted">Three files for the 2026-27 tax year: one records workbook, a printable invoice and a
+      quick-start guide, made for Excel and Google Sheets. Spreadsheets count as MTD digital records when
+      paired with bridging software, which sends the quarterly update to HMRC. Fill in the yellow cells;
+      everything else calculates.</p>
+    <div class="grid kit">
+      <figure class="card">
+        <img src="img/start.webp" alt="Start sheet: settings, MTD check, headline figures and a monthly chart" width="900" height="419" loading="lazy">
+        <h3>One records workbook</h3><p>Income, expenses under the SA103 categories, mileage and use of home
+          at HMRC's flat rates, for a tax year from 6 April. The Start sheet shows your headline figures and
+          when MTD applies to you.</p>
+      </figure>
+      <figure class="card">
+        <img src="img/quarters.webp" alt="MTD quarterly totals by SA103 category, one column per update" width="900" height="415" loading="lazy">
+        <h3>Quarterly totals for MTD</h3><p>Cumulative totals per SA103 category for each update, with HMRC's
+          field names, in one fixed range for your bridging software to read.</p>
+      </figure>
+      <figure class="card">
+        <img src="img/tax.webp" alt="Tax estimate with income tax bands, Class 4 NI and payments on account" width="900" height="873" loading="lazy">
+        <h3>Tax &amp; NI estimate</h3><p>Income tax (UK or Scottish bands), the personal allowance taper,
+          Class 4 NI and your payments on account for 31 January and 31 July, from a Rates sheet that says
+          where to check each figure.</p>
+      </figure>
+      <figure class="card">
+        <img src="img/invoices.webp" alt="Invoices sheet with paid, open and overdue invoices" width="900" height="257" loading="lazy">
+        <h3>Clients, projects &amp; invoices</h3><p>Rates, hours against budget, unpaid and overdue balances.
+          Enter a payment once on Income with its invoice number and the invoice shows as paid.</p>
+      </figure>
+      <figure class="card">
+        <img src="img/invoice.webp" alt="Printable UK invoice in pounds" width="900" height="933" loading="lazy">
+        <h3>Invoice</h3><p>A one-page UK invoice in pounds with an optional VAT number. Adds up lines,
+          discount and VAT, works out the due date and exports cleanly to PDF.</p>
+      </figure>
+      <figure class="card">
+        <img src="img/guide.webp" alt="First page of the quick-start guide" width="900" height="1183" loading="lazy">
+        <h3>Quick-start guide (PDF)</h3><p>Am I in MTD, keeping the records, the quarterly calendar and
+          connecting a bridging tool.</p>
+      </figure>
+    </div>
+  </section>
+
+  <section>
+    <h2>Free tools</h2>
+    <div class="grid">
+      <a class="card" href="mtd.html"><h3>Am I in MTD?</h3><p>Enter your gross income; see when MTD starts for you and your first deadline.</p></a>
+      <a class="card" href="invoice.html"><h3>Invoice generator</h3><p>A UK invoice in pounds, printed or saved as PDF. Runs in your browser; nothing is uploaded.</p></a>
+    </div>
+  </section>
+
+  <section class="buy">
+    <h2>Get the Sole Trader MTD Kit</h2>
+    <p class="muted">One-off purchase, instant download, no subscription. For your own work and business.</p>
+    <p><a class="btn" data-buy href="#kit">Buy the kit</a></p>
+  </section>
+
+  <footer>These spreadsheets help you organise your records; they are not tax advice. Check rates and dates on gov.uk.</footer>
+</div>
+<script src="config.js"></script>
+<script>
+  document.querySelectorAll("[data-buy]").forEach((a) => { a.href = window.SITE_CONFIG.storeUrl; });
+</script>
+<script src="register-sw.js"></script>
+</body>
+</html>
