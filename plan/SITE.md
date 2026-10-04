@@ -14,5 +14,5 @@ PDF, nothing leaves the browser) and a landing page selling the kit.
 - 3 UK MTD site (completed)
 - 4 Site matches the UK kit
   - Goal:       Copy and screenshots match what TOOLKIT.3 ships.
-  - Status:     not started
+  - Status:     in progress
   - Depends on: KIT.TOOLKIT.3, 3
