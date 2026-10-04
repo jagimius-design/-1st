@@ -1,8 +1,10 @@
 # Freelancer Finance Kit
 
-A paid digital product for freelancers: spreadsheet templates for invoicing, expenses, tax
-set-aside and client tracking, sold as a download (Gumroad or similar). A free web invoice
-generator on GitHub Pages brings in traffic and links to the paid kit. No server, no running costs.
+A paid spreadsheet kit for UK sole traders facing Making Tax Digital for Income Tax: digital
+records, quarterly totals for bridging software, a real tax and NI estimate, invoicing and client
+tracking, with no subscription. Sold on Etsy first (Gumroad optional). A free site with an invoice
+generator and an "Am I in MTD?" checker links to it. No server, no running costs. Positioning per
+`MARKET/brief.md`.
 
 - Manager:  GROOT
 - Codename: KIT
@@ -11,9 +13,10 @@ generator on GitHub Pages brings in traffic and links to the paid kit. No server
   - Goal:       The User opens the store account (payouts are theirs), confirms the price and
                 enables GitHub Pages for the repo.
   - Status:     needs decision
-  - Depends on: KIT.MARKET.1
-  - Comments:   Suggested $19, launch code LAUNCH12 at $12. Also: refund policy, and opening the
-                templates once in Excel and Google Sheets. Steps in `LAUNCH/listing.md`.
+  - Depends on: KIT.LAUNCH.2
+  - Comments:   Etsy shop first. About £14 flat. Also: refund policy, opening the templates in Excel
+                and Google Sheets, and a test of the quarterly sheet in a bridging tool's free
+                trial before any "MTD-ready" claim.
 
 ## Sections
 
