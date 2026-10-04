@@ -12,7 +12,8 @@ generator on GitHub Pages brings in traffic and links to the paid kit. No server
                 enables GitHub Pages for the repo.
   - Status:     needs decision
   - Depends on: KIT.LAUNCH.1
-  - Comments:   Suggested price $19, launch discount $12.
+  - Comments:   Suggested $19, launch code LAUNCH12 at $12. Also: refund policy, and opening the
+                templates once in Excel and Google Sheets. Steps in `LAUNCH/listing.md`.
 
 ## Sections
 
