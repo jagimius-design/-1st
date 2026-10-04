@@ -12,10 +12,10 @@ Paste-ready for Gumroad (or any store taking a title, description, cover and thu
 
 ## Price
 
-$19, with a $12 launch code (`LAUNCH12`, about two weeks, to create in the store) for the posts. Single-template
-packs on Gumroad and Etsy mostly sit at $5–15 each; four connected templates plus a guide at $19
-stays under buying them one by one, and the free generator does the convincing that a lower price
-would otherwise have to.
+$19, with a $12 launch code (`LAUNCH12`, about two weeks, to create in the store) for the
+posts. Single spreadsheet templates commonly sell for roughly $5–15 (a general impression, not a
+survey); four connected templates and a guide at $19 stay under buying them one by one, and the
+free generator does the convincing a lower price would otherwise have to.
 
 ## Name
 
