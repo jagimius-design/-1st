@@ -2,6 +2,9 @@
 
 Reshape the kit toward what buyers actually pay for, until it can stand out in its market.
 
+- Workers:
+  - a4b14be308f193ab5
+
 - 1 Market research
   - Goal:   A short, sourced brief in `MARKET/brief.md`: where freelance finance templates sell
             (Etsy, Gumroad, others), what the best sellers offer and charge, what reviews praise and
