@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Freelancer Finance Kit</title>
+<meta name="description" content="Free invoice generator that runs in your browser, and a spreadsheet kit for freelancer invoicing, expenses, tax set-aside and clients.">
+<link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="./">Freelancer Finance Kit</a>
+    <nav><a href="invoice.html">Free invoice generator</a><a href="#kit">The kit</a></nav>
+  </header>
+
+  <div class="hero">
+    <h1>Invoice in two minutes. Know what to set aside for tax.</h1>
+    <p class="muted">A free invoice generator that runs entirely in your browser, and a spreadsheet kit
+      that keeps a freelancer's money in order: invoices, expenses, tax set-aside and clients.</p>
+    <div class="actions">
+      <a class="btn" href="invoice.html">Make a free invoice</a>
+      <a class="btn ghost" data-buy href="#kit">Get the kit</a>
+    </div>
+  </div>
+
+  <section>
+    <h2>The free invoice generator</h2>
+    <div class="grid">
+      <div class="card"><h3>Nothing leaves your browser</h3><p>No account, no upload. Your details stay on your device.</p></div>
+      <div class="card"><h3>Print or save as PDF</h3><p>A clean, printable invoice from your browser's print dialog.</p></div>
+      <div class="card"><h3>Works offline</h3><p>Once opened, it keeps working without a connection.</p></div>
+    </div>
+  </section>
+
+  <section id="kit">
+    <h2>What's in the kit</h2>
+    <p class="muted">Four spreadsheet templates for Excel and Google Sheets, plus a quick-start guide.</p>
+    <div class="grid">
+      <div class="card"><h3>Invoice</h3><p>A reusable invoice template with your details and totals worked out.</p></div>
+      <div class="card"><h3>Expense tracker</h3><p>Log business expenses by category and see the totals by month.</p></div>
+      <div class="card"><h3>Tax set-aside calculator</h3><p>How much of each payment to put away for tax.</p></div>
+      <div class="card"><h3>Client &amp; project tracker</h3><p>Clients, projects, what's invoiced and what's still owed.</p></div>
+      <div class="card"><h3>Quick-start guide (PDF)</h3><p>Set up the kit and get your first month in order.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>A look inside</h2>
+    <div class="grid">
+      <div class="shot">Screenshot: Invoice</div>
+      <div class="shot">Screenshot: Expense tracker</div>
+      <div class="shot">Screenshot: Tax set-aside</div>
+      <div class="shot">Screenshot: Client tracker</div>
+    </div>
+  </section>
+
+  <section class="buy">
+    <h2>Get the Freelancer Finance Kit</h2>
+    <p class="muted">One-off purchase. Instant download. Yours to keep.</p>
+    <p><a class="btn" data-buy href="#kit">Buy the kit</a></p>
+  </section>
+
+  <footer>Made for freelancers. The invoice generator stores nothing on any server.</footer>
+</div>
+<script src="config.js"></script>
+<script>
+  document.querySelectorAll("[data-buy]").forEach((a) => { a.href = window.SITE_CONFIG.storeUrl; });
+</script>
+<script src="register-sw.js"></script>
+</body>
+</html>

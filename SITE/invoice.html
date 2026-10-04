@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free Invoice Generator</title>
+<meta name="description" content="Fill in an invoice and print or save it as PDF. Runs in your browser; nothing is uploaded.">
+<link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="./">Freelancer Finance Kit</a>
+    <nav><a href="./#kit">The kit</a></nav>
+  </header>
+
+  <div class="toolbar">
+    <button class="btn" id="print" type="button">Download / print PDF</button>
+    <label>Currency <input id="currency" size="4" maxlength="3" value="USD"></label>
+    <button class="btn ghost" id="clear" type="button">New invoice</button>
+    <span class="muted">Saved in this browser only.</span>
+  </div>
+
+  <form class="sheet" id="sheet" autocomplete="off">
+    <div class="row">
+      <div>
+        <h1 style="margin:0 0 8px"><input name="title" value="Invoice" aria-label="Title"></h1>
+        <textarea name="from" placeholder="Your name / business&#10;Address&#10;Email" aria-label="From"></textarea>
+      </div>
+      <div class="meta">
+        <span class="lbl">Number</span><input name="number" placeholder="INV-001">
+        <span class="lbl">Date</span><input name="date" type="date">
+        <span class="lbl">Due</span><input name="due" type="date">
+      </div>
+    </div>
+    <div class="row">
+      <div><div class="lbl">Bill to</div><textarea name="to" placeholder="Client name&#10;Address"></textarea></div>
+      <div></div>
+    </div>
+
+    <table>
+      <thead><tr><th>Description</th><th class="num" style="width:80px">Qty</th><th class="num" style="width:110px">Price</th><th class="num" style="width:110px">Amount</th><th style="width:32px"></th></tr></thead>
+      <tbody id="items"></tbody>
+    </table>
+    <p class="no-print"><button class="btn ghost" id="add" type="button">+ Add line</button></p>
+
+    <div class="sums">
+      <span>Subtotal</span><span id="subtotal"></span>
+      <span class="opt-discount">Discount</span><input class="opt-discount" name="discount" type="number" min="0" step="0.01" placeholder="0">
+      <span class="opt-tax">Tax %</span><input class="opt-tax" name="taxRate" type="number" min="0" step="0.01" placeholder="0">
+      <span class="opt-tax">Tax</span><span class="opt-tax" id="tax"></span>
+      <span class="total">Total</span><span class="total" id="total"></span>
+    </div>
+
+    <div class="row" style="margin-top:24px">
+      <div><div class="lbl">Payment details</div><textarea name="payment" placeholder="Bank / IBAN / PayPal"></textarea></div>
+      <div><div class="lbl">Notes</div><textarea name="notes" placeholder="Thank you for your business."></textarea></div>
+    </div>
+  </form>
+
+  <div class="card promo no-print">
+    <h3>Keep the rest of your money in order</h3>
+    <p>The Freelancer Finance Kit adds an expense tracker, a tax set-aside calculator and a client tracker to this invoice.
+      <a href="./#kit">See the kit</a></p>
+  </div>
+  <footer></footer>
+</div>
+
+<template id="line">
+  <tr>
+    <td class="desc"><input data-k="desc" placeholder="Service or item" aria-label="Description"></td>
+    <td><input data-k="qty" type="number" min="0" step="any" value="1" class="num" aria-label="Quantity"></td>
+    <td><input data-k="price" type="number" min="0" step="0.01" placeholder="0.00" aria-label="Price"></td>
+    <td class="num amt"></td>
+    <td><button class="del" type="button" aria-label="Remove line">&times;</button></td>
+  </tr>
+</template>
+<script src="config.js"></script>
+<script src="invoice-core.js"></script>
+<script src="invoice.js"></script>
+<script src="register-sw.js"></script>
+</body>
+</html>
