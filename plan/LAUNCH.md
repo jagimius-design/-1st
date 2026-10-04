@@ -2,6 +2,9 @@
 
 Everything needed to put the kit on sale and get first buyers.
 
+- Workers:
+  - a2f2ad0364df37be4
+
 - 1 Listing and launch copy
   - Goal:       Store listing (title, description, price suggestion, cover image), and launch posts
                 for Reddit, X, Indie Hackers and Product Hunt, in `LAUNCH/`.
