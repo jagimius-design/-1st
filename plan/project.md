@@ -2,7 +2,7 @@
 
 A paid spreadsheet kit for UK sole traders facing Making Tax Digital for Income Tax: digital
 records, quarterly totals for bridging software, a real tax and NI estimate, invoicing and client
-tracking, with no subscription. Sold on Etsy first (Gumroad optional). A free site with an invoice
+tracking, with no subscription. Sold on Gumroad (Etsy optional). A free site with an invoice
 generator and an "Am I in MTD?" checker links to it. No server, no running costs. Positioning per
 `MARKET/brief.md`.
 
@@ -14,7 +14,7 @@ generator and an "Am I in MTD?" checker links to it. No server, no running costs
                 enables GitHub Pages for the repo.
   - Status:     needs decision
   - Depends on: KIT.LAUNCH.2
-  - Comments:   Etsy shop first. About £14 flat. Also: refund policy, opening the templates in Excel
+  - Comments:   Store is Gumroad (Etsy optional). £14 flat, code LAUNCH for £10. Also: refund policy, opening the templates in Excel
                 and Google Sheets, and a test of the quarterly sheet in a bridging tool's free
                 trial before any "MTD-ready" claim. Tax rates and the MTD checker's rules
                 checked against gov.uk.
