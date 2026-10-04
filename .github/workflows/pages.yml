@@ -27,7 +27,7 @@ jobs:
         with:
           node-version: 22
       - run: node --test SITE/tests/*.test.js
-      - run: mkdir _site && cp SITE/*.html SITE/*.css SITE/*.js SITE/*.svg SITE/*.webmanifest _site/
+      - run: mkdir -p _site/img && cp SITE/*.html SITE/*.css SITE/*.js SITE/*.svg SITE/*.webmanifest _site/ && cp SITE/img/*.webp _site/img/
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
