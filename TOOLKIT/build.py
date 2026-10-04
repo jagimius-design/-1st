@@ -1,24 +1,20 @@
-"""Builds the kit into dist/: the four templates, the guide, and the zip buyers download."""
+"""Builds the kit into dist/: the workbook, the invoice, the guide, and the zip buyers download."""
 
 import sys
 import zipfile
 from pathlib import Path
 
-import clients
-import expenses
+import book
 import guide
 import invoice
-import tax
 
 PARTS = [  # file name, builder
+    ("Sole-Trader-Records-2026-27.xlsx", book.build),
     ("Invoice.xlsx", invoice.build),
-    ("Expense-Tracker.xlsx", expenses.build),
-    ("Tax-Set-Aside.xlsx", tax.build),
-    ("Client-Project-Tracker.xlsx", clients.build),
     ("Quick-Start-Guide.pdf", guide.build),
 ]
-ZIP_NAME = "freelancer-finance-kit.zip"
-FOLDER = "Freelancer Finance Kit"  # top folder inside the zip
+ZIP_NAME = "sole-trader-mtd-kit-2026-27.zip"
+FOLDER = guide.KIT  # top folder inside the zip
 
 
 def build(dist):

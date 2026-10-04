@@ -21,9 +21,9 @@ GREEN_BG, GREEN_FG = "E3F4E8", "1E6B3A"
 AMBER_BG, AMBER_FG = "FFF1D6", "8A5A00"
 
 FONT = "Calibri"
-MONEY = '#,##0.00;-#,##0.00;"-"'
+MONEY = '"£"#,##0.00;-"£"#,##0.00;"-"'
 PCT = "0.0%"
-DATE = "d mmm yyyy"
+DATE = "dd/mm/yyyy"
 HOURS = "0.00"
 
 _thin = Side(style="thin", color=LINE)
@@ -33,7 +33,7 @@ TOPLINE = Border(top=Side(style="thin", color=NAVY))
 
 
 def font(size=10, bold=False, color=INK, italic=False):
-    return Font(name=FONT, size=size, bold=bold, color=color, italic=italic)
+    return Font(name=FONT, size=size, bold=bold, color=color or INK, italic=italic)
 
 
 def fill(color):

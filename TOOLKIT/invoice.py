@@ -13,8 +13,8 @@ LINES = [  # description, qty, unit price
     ("Content migration", 1, 320),
 ]
 FIRST, LAST = 17, 31  # line item rows
-DISCOUNT, TAX = 0.05, 0.08
-PLAIN_MONEY = "#,##0.00"
+DISCOUNT, VAT = 0, 0
+PLAIN_MONEY = '"£"#,##0.00'
 
 
 def build(path):
@@ -24,21 +24,20 @@ def build(path):
     ws.row_dimensions[2].height = 36
     cell(ws, "B2", "Your Business Name", bold=True, size=18, color=NAVY)
     cell(ws, "E2", "INVOICE", bold=True, size=26, color=NAVY, align="right")
-    for r, text in enumerate(["123 Main Street", "City, Postcode, Country",
-                              "hello@yourbusiness.com", "+1 555 0100 · yourbusiness.com",
-                              "Tax / VAT ID: (optional)"], start=3):
+    for r, text in enumerate(["123 Main Street", "Town, AB1 2CD",
+                              "hello@yourbusiness.co.uk", "07700 900000 · yourbusiness.co.uk",
+                              "VAT reg. no: (delete if not VAT registered)"], start=3):
         cell(ws, f"B{r}", text, color=MUTED)
 
     details = [("Invoice #", "INV-0042", None), ("Invoice date", date(2026, 10, 1), DATE),
-               ("Payment terms (days)", 14, "0"), ("Due date", "=E5+E6", DATE),
-               ("Currency", "USD", None)]
+               ("Payment terms (days)", 30, "0"), ("Due date", "=E5+E6", DATE)]
     for r, (label, value, fmt) in enumerate(details, start=4):
         cell(ws, f"D{r}", label, color=MUTED, align="right")
         cell(ws, f"E{r}", value, fmt, bold=str(value).startswith("="), align="right")
 
     cell(ws, "B10", "BILL TO", bold=True, size=9, color=BLUE)
-    for r, text in enumerate(["Client Name", "Client Company Ltd", "45 Market Road, City",
-                              "accounts@clientcompany.com"], start=11):
+    for r, text in enumerate(["Client Name", "Client Company Ltd", "45 Market Road, Town, AB3 4EF",
+                              "accounts@clientcompany.co.uk"], start=11):
         cell(ws, f"B{r}", text, bold=r == 11)
 
     header(ws, FIRST - 1, 2, ["Description", "Qty", "Unit price", "Amount"])
@@ -55,8 +54,8 @@ def build(path):
     rows = [
         ("Subtotal", None, f"=SUM(E{FIRST}:E{LAST})"),
         ("Discount", DISCOUNT, f"=-ROUND(E{t}*D{t + 1},2)"),
-        ("Tax / VAT", TAX, f"=ROUND((E{t}+E{t + 1})*D{t + 2},2)"),
-        (f'="Total ("&E8&")"', None, f"=E{t}+E{t + 1}+E{t + 2}"),
+        ("VAT", VAT, f"=ROUND((E{t}+E{t + 1})*D{t + 2},2)"),
+        ("Total", None, f"=E{t}+E{t + 1}+E{t + 2}"),
         ("Amount paid", None, 0),
         ("Balance due", None, f"=E{t + 3}-E{t + 4}"),
     ]
@@ -78,8 +77,7 @@ def build(path):
 
     cell(ws, f"B{t}", "PAYMENT DETAILS", bold=True, size=9, color=BLUE)
     for i, text in enumerate(["Bank: Your Bank", "Account name: Your Business Name",
-                              "IBAN / Account #: 0000 0000 0000",
-                              "SWIFT / Routing #: XXXXXXXX",
+                              "Sort code: 00-00-00", "Account number: 00000000",
                               "Please use the invoice number as the payment reference."], 1):
         cell(ws, f"B{t + i}", text, color=MUTED)
 
@@ -91,7 +89,7 @@ def build(path):
         ws[f"{col}{end - 1}"].border = UNDERLINE
 
     cell(ws, "H2", "Overwrite the placeholder text. Amounts, totals and the due date calculate;"
-         " set Discount or Tax to 0% if unused. Only columns A-F print.", italic=True, size=9,
+         " set VAT to 20% only if you are VAT registered. Only columns A-F print.", italic=True, size=9,
          color=MUTED)
     ws.print_area = f"A1:F{end + 1}"
     ws.page_setup.orientation = "portrait"

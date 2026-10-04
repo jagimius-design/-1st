@@ -1,46 +1,43 @@
-from datetime import date
+from datetime import date, timedelta
 
-from clients import (CL_FIRST, CLIENTS, INVOICES, PR_FIRST, PROJECTS, TIME, TL_FIRST,
-                     invoice_amount, project_rate)
+import pytest
+
+import sample
+from layout import CLIENTS, CL_FIRST, INVOICES, IN_FIRST, PROJECTS, PR_FIRST
+
+
+def paid(number):
+    return sum(row[5] for row in sample.income() if row[2] == number)
+
+
+def test_invoices_are_paid_from_income_records(recalc):
+    ws = recalc("book")[INVOICES]
+    for i, (number, *_) in enumerate(sample.INVOICES):
+        r = IN_FIRST + i
+        assert ws[f"H{r}"].value == pytest.approx(paid(number))
+        assert ws[f"I{r}"].value == pytest.approx(sample.invoice_amount(number) - paid(number))
+
+
+def test_status_follows_balance_and_due_date(recalc):
+    ws = recalc("book")[INVOICES]
+    terms = {c[0]: c[4] for c in sample.CLIENTS}
+    for i, (number, p, issued, _) in enumerate(sample.INVOICES):
+        due = issued + timedelta(days=terms[sample.PROJECTS[p][1]])
+        balance = sample.invoice_amount(number) - paid(number)
+        want = "Paid" if balance <= 0 else "Overdue" if date.today() > due else "Open"
+        assert ws[f"J{IN_FIRST + i}"].value == want, number
+
+
+def test_client_unpaid_balance(recalc):
+    ws = recalc("book")[CLIENTS]
+    for i, (name, *_) in enumerate(sample.CLIENTS):
+        unpaid = sum(sample.invoice_amount(n) - paid(n) for n, p, _, _ in sample.INVOICES
+                     if sample.PROJECTS[p][1] == name)
+        assert ws[f"I{CL_FIRST + i}"].value == pytest.approx(unpaid)
 
 
 def test_project_rate_uses_override_else_client_rate(recalc):
-    ws = recalc("clients")["Projects"]
-    for i in range(len(PROJECTS)):
-        assert ws[f"E{PR_FIRST + i}"].value in (project_rate(i), "", None)
+    ws = recalc("book")[PROJECTS]
+    for i in range(len(sample.PROJECTS)):
+        assert ws[f"E{PR_FIRST + i}"].value in (sample.project_rate(i), "", None)
     assert ws[f"E{PR_FIRST + 2}"].value == 95  # override over the client's 90
-
-
-def test_project_hours_logged(recalc):
-    ws = recalc("clients")["Projects"]
-    for i in range(len(PROJECTS)):
-        assert ws[f"G{PR_FIRST + i}"].value == sum(t[3] for t in TIME if t[1] == i)
-
-
-def test_non_billable_time_is_worth_nothing(recalc):
-    ws = recalc("clients")["Time Log"]
-    for i, t in enumerate(TIME):
-        if t[4] == "No" and project_rate(t[1]):
-            assert ws[f"H{TL_FIRST + i}"].value == 0
-
-
-def test_client_balances_and_overdue(recalc):
-    ws = recalc("clients")["Clients"]
-    for i, (name, *_, terms) in enumerate(CLIENTS):
-        unpaid = overdue = 0
-        for number, p, issued, paid_on, paid in INVOICES:
-            if PROJECTS[p][1] != name:
-                continue
-            due = date.fromordinal(issued.toordinal() + terms)
-            balance = invoice_amount(number) - (paid or invoice_amount(number) if paid_on else 0)
-            unpaid += balance
-            overdue += balance if balance > 0 and date.today() > due else 0
-        assert abs(ws[f"I{CL_FIRST + i}"].value - unpaid) < 1e-9
-        assert abs(ws[f"J{CL_FIRST + i}"].value - overdue) < 1e-9
-
-
-def test_dashboard_not_yet_invoiced(recalc):
-    ws = recalc("clients")["Dashboard"]
-    expected = sum(h * project_rate(p) for _, p, _, h, b, inv in TIME
-                   if b == "Yes" and inv is None and project_rate(p))
-    assert ws["E9"].value == expected
