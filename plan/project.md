@@ -9,15 +9,13 @@ generator and an "Am I in MTD?" checker links to it. No server, no running costs
 - Manager:  GROOT
 - Codename: KIT
 
-- 1 Store account and price
-  - Goal:       The User opens the store account (payouts are theirs), confirms the price and
-                enables GitHub Pages for the repo.
-  - Status:     needs decision
-  - Depends on: KIT.LAUNCH.2
-  - Comments:   Store is Gumroad (Etsy optional). £14 flat, code LAUNCH for £10. Also: refund policy, opening the templates in Excel
-                and Google Sheets, and a test of the quarterly sheet in a bridging tool's free
-                trial before any "MTD-ready" claim. Tax rates and the MTD checker's rules
-                checked against gov.uk.
+- 1 Store account and price (completed)
+- 2 Pre-sale checks
+  - Goal:     The User opens the kit in Excel and Google Sheets, checks the Rates sheet against
+              gov.uk (55p mileage first), and decides on the public repo exposing TOOLKIT/.
+  - Status:   needs decision
+  - Comments: Live on Gumroad (https://jagimius.gumroad.com/l/rqybs) and Pages
+              (https://jagimius-design.github.io/-1st/).
 
 ## Sections
 
