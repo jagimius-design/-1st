@@ -12,7 +12,4 @@ PDF, nothing leaves the browser) and a landing page selling the kit.
 - 1 Invoice generator and landing page (completed)
 - 2 Landing page matches the kit (completed)
 - 3 UK MTD site (completed)
-- 4 Site matches the UK kit
-  - Goal:       Copy and screenshots match what TOOLKIT.3 ships.
-  - Status:     in progress
-  - Depends on: KIT.TOOLKIT.3, 3
+- 4 Site matches the UK kit (completed)

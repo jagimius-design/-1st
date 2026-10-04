@@ -9,8 +9,9 @@ Everything needed to put the kit on sale and get first buyers.
   Site will be https://jagimius-design.github.io/-1st/.
 
 - 1 Listing and launch copy (completed)
-- 2 UK Etsy listing and launch
-  - Goal:       Listing reworked for Etsy and the UK MTD positioning (title, £14, UK tags, images),
-                Gumroad copy kept as optional, launch posts aimed at UK sole-trader communities.
-  - Status:     not started
+- 2 UK listing and launch
+  - Goal:       Listing and launch posts reworked for the UK MTD kit and filled with the real store
+                and site URLs. Gumroad is the store (the User's choice); Etsy copy kept as an option.
+                Cover and thumbnail rebuilt from the new screenshots.
+  - Status:     in progress
   - Depends on: KIT.TOOLKIT.3, KIT.SITE.4
