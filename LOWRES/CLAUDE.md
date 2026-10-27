@@ -24,6 +24,8 @@ low resolution. Brand book in `brand.md`.
   a looping GIF of the static.
 - `mockups.py` → `options/mockups/` — flat clothing mockups (tees, hoodies, cap, tote, labels)
   of the bad-reception TV logo, `TV06[4]`.
+- `lockup.py` → `options/lockup/` — horizontal logo: the slipped orange word on the left, a
+  smaller static-only TV on the right. 10 `L(...)` configs.
 - `tests/` — `node --test LOWRES/tests/*.test.js`: bitmaps are rectangular, use known colours,
   and the stray pixel stays detached.
 
