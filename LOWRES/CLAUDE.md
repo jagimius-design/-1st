@@ -18,6 +18,8 @@ low resolution. Brand book in `brand.md`.
   plus `sheet.png` side by side). Not used by the site.
 - `dissolve.py` → `options/dissolve/` — 20 variants of option E: soft grey mosaic blocks that
   break off the word and drift. Each is a `V(...)` config at the bottom of the file.
+- `tv.py` → `options/tv/` — "low res" on a snowy pixel-art CRT: 12 `TV(...)` configs, each a
+  PNG and a looping GIF of the static.
 - `tests/` — `node --test LOWRES/tests/*.test.js`: bitmaps are rectangular, use known colours,
   and the stray pixel stays detached.
 
