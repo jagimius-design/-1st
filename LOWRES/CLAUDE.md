@@ -18,9 +18,10 @@ low resolution. Brand book in `brand.md`.
   plus `sheet.png` side by side). Not used by the site.
 - `dissolve.py` → `options/dissolve/` — 20 variants of option E: soft grey mosaic blocks that
   break off the word and drift. Each is a `V(...)` config at the bottom of the file.
-- `tv.py` → `options/tv/`, `options/tv06/` — "low res" on a snowy pixel-art CRT. `ROUND1` (12)
-  and `TV06` (10 takes on round 1's 06, orange type) are lists of `TV(...)` configs; each makes a
-  PNG and a looping GIF of the static.
+- `tv.py` → `options/tv/`, `options/tv06/`, `options/tv06-05/` — "low res" on a snowy pixel-art
+  CRT. `ROUND1` (12), `TV06` (10 takes on round 1's 06, orange type) and `TV05` (10 takes on
+  TV06's 05, bent antenna and bad reception) are lists of `TV(...)` configs; each makes a PNG and
+  a looping GIF of the static.
 - `tests/` — `node --test LOWRES/tests/*.test.js`: bitmaps are rectangular, use known colours,
   and the stray pixel stays detached.
 

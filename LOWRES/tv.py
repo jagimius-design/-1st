@@ -1,7 +1,8 @@
 """"low res" on a snowy old TV: a pixel-art CRT with rabbit ears, the screen full of static,
 the word coming through the snow.
 
-Writes options/tv/ (the first round) and options/tv06/ (ten takes on option 06): NN.png,
+Writes options/tv/ (the first round), options/tv06/ (ten takes on its 06) and options/tv06-05/
+(ten takes on that round's 05): NN.png,
 NN.gif (the snow moving) and sheet.png in each. Run: python3 tv.py
 """
 import math
@@ -35,10 +36,14 @@ class TV:
     halo: bool = True                # the static dims round the letters, so they read
     dissolve: float = 0.0            # >0: the end of the word breaks into big blocks of snow
     tracking: bool = False           # a rolling band shifts part of the picture
+    bands: tuple = ((0.42, 0.56, 0.06),)  # tracking bands: (top, bottom, shift) as screen fractions
+    wave: tuple = None               # (top, bottom, amplitude): rows in the strip ripple sideways
+    vroll: float = 0.0               # vertical hold slips: the picture rolls down this far
+    split: int = 0                   # a blue ghost of the letters, this many units to the left
     scanlines: bool = True
     bars: bool = False               # colour bars under the word
     antenna: bool = True
-    bent: bool = False               # the right antenna has a kink in it
+    bent: str = ""                   # "right", "left", "both", "snapped" or "foil"
     panel: bool = True               # side panel with knobs; without it the set is near square
     glow: bool = False               # the letters glow in their own colour instead of a dark halo
     tint: tuple = (1, 1, 1)          # colour of the static
@@ -105,17 +110,31 @@ def frame(v, mask, rng):
 
     if v.antenna:
         top = (cx0 + cx1) / 2 - side / 2
-        paint(img, line(top, cy0, top - sw * 0.28, 22, max(3, b)), v.cabinet, b)
-        paint(img, disc(top - sw * 0.28, 22, b * 1.6), v.cabinet, b)
-        if v.bent:
-            kx_, ky_ = top + sw * 0.2, cy0 - ant * 0.62
-            ex, ey = top + sw * 0.42, cy0 - ant * 0.42
-            paint(img, line(top, cy0, kx_, ky_, max(3, b)), v.cabinet, b)
-            paint(img, line(kx_, ky_, ex, ey, max(3, b)), v.cabinet, b)
-            paint(img, disc(ex, ey, b * 1.6), v.cabinet, b)
+        t = max(3, b)
+
+        def arm(*points, ball=b * 1.6, ball_color=v.cabinet):
+            for (xa, ya), (xb, yb) in zip(points, points[1:]):
+                paint(img, line(xa, ya, xb, yb, t), v.cabinet, b)
+            paint(img, disc(*points[-1], ball), ball_color, b)
+
+        if v.bent in ("left", "both"):
+            arm((top, cy0), (top - sw * 0.18, cy0 - ant * 0.65), (top - sw * 0.4, cy0 - ant * 0.45))
         else:
-            paint(img, line(top, cy0, top + sw * 0.32, 26, max(3, b)), v.cabinet, b)
-            paint(img, disc(top + sw * 0.32, 26, b * 1.6), v.cabinet, b)
+            arm((top, cy0), (top - sw * 0.28, 22))
+        right_kink = ((top, cy0), (top + sw * 0.2, cy0 - ant * 0.62), (top + sw * 0.42, cy0 - ant * 0.42))
+        if v.bent in ("right", "both"):
+            arm(*right_kink)
+        elif v.bent == "foil":
+            arm(*right_kink, ball=b * 3.2, ball_color=(196, 196, 188))
+            paint(img, disc(right_kink[2][0] - b, right_kink[2][1] - b, b * 1.1), (240, 240, 232), b)
+        elif v.bent == "snapped":
+            ex, ey = top + sw * 0.32, 26
+            paint(img, line(top, cy0, top + (ex - top) * 0.45, cy0 + (ey - cy0) * 0.45, t), v.cabinet, b)
+            # the broken-off top half, hanging from the stub
+            bx, by = top + (ex - top) * 0.45, cy0 + (ey - cy0) * 0.45
+            arm((bx + 3, by + 2), (bx + 12, by + ant * 0.45))
+        else:
+            arm((top, cy0), (top + sw * 0.32, 26))
         paint(img, disc(top, cy0, sw * 0.07), v.cabinet, b)
     # legs
     leg = round(sw * 0.05)
@@ -176,6 +195,9 @@ def frame(v, mask, rng):
         color[near] = color[near] * 0.45 + np.array(v.text) * 0.3
     color = color * (1 - chunks[..., None]) + np.array(v.text) * chunks[..., None]
     on = text & ~lost
+    if v.split:
+        ghost = np.roll(on, -v.split, axis=1) & ~on
+        color[ghost] = (43, 63, 214)
     color[on] = np.array(v.text) * (0.85 + 0.15 * noise[on])[:, None]
     if v.bars:
         bars = [(242, 237, 224), (255, 201, 60), (168, 213, 226), (62, 91, 58), (194, 55, 142), (255, 90, 31), (43, 63, 214)]
@@ -183,10 +205,19 @@ def frame(v, mask, rng):
         bw = sw / len(bars)
         for i, c in enumerate(bars):
             color[by0:by1, round(i * bw):round((i + 1) * bw)] = c
-    if v.tracking:
-        y0, y1 = round(sh * 0.42), round(sh * 0.56)
-        color[y0:y1] = np.roll(color[y0:y1], round(sw * 0.06), axis=1)
+    for y0, y1, shift in v.bands if v.tracking else ():
+        y0, y1 = round(sh * y0), round(sh * y1)
+        color[y0:y1] = np.roll(color[y0:y1], round(sw * shift), axis=1)
         color[y0 - 2:y0] = 230
+    if v.wave:
+        y0, y1 = round(sh * v.wave[0]), round(sh * v.wave[1])
+        for y in range(y0, y1):
+            color[y] = np.roll(color[y], round(v.wave[2] * math.sin((y - y0) / (y1 - y0) * math.pi * 2)), axis=0)
+    if v.vroll:
+        k = round(sh * v.vroll)
+        color = np.roll(color, k, axis=0)
+        color[k - 4:k + 2] = 12
+        color[k + 2:k + 3] = 200
     if v.scanlines:
         color[(ys // 2) % 2 == 1] *= 0.82
     # CRT vignette
@@ -228,12 +259,29 @@ TV06 = [
     TV("warm static", tint=(1.0, 0.86, 0.72), **O),
     TV("the s breaks into orange blocks", dissolve=0.3, chunks_in_text=True, **O),
     TV("pixels escape the screen", escape=6, **O),
-    TV("bent antenna, bad reception", bent=True, tracking=True, **O),
+    TV("bent antenna, bad reception", bent="right", tracking=True, **O),
     TV("70s wood set", cabinet=WOOD, trim=WOOD_DARK, knob=(214, 180, 120), **O),
     TV("all orange: orange set, orange type", cabinet=SIGNAL, trim=(150, 48, 12), knob=BONE, glow=True, **O),
     TV("square set, no knobs: for icons", panel=False, glow=True, **O),
     TV("for black tees", bg=INK, cabinet=(46, 44, 38), trim=(30, 29, 24), glow=True, **O),
-    TV("glow, escaping pixels, bent antenna", glow=True, escape=5, bent=True, **O),
+    TV("glow, escaping pixels, bent antenna", glow=True, escape=5, bent="right", **O),
+]
+
+
+# Ten takes on TV06's 05: bent antenna, bad reception.
+B = dict(O, bent="right", tracking=True)
+TV05 = [
+    TV("two tracking bands, slipping opposite ways",
+       **dict(B, bands=((0.3, 0.4, 0.05), (0.52, 0.62, -0.07)))),
+    TV("one thick slip, a long way", **dict(B, bands=((0.38, 0.62, 0.12),))),
+    TV("the band ripples", wave=(0.36, 0.66, 5), **dict(B, bands=())),
+    TV("vertical hold: the picture rolls down", vroll=0.3, **B),
+    TV("blue/orange colour split", split=6, **B),
+    TV("snapped antenna, the top half dangling", **dict(B, bent="snapped")),
+    TV("tinfoil on the antenna, still no signal", **dict(B, bent="foil")),
+    TV("both antennas bent, letters glowing", glow=True, **dict(B, bent="both")),
+    TV("for black tees", bg=INK, cabinet=(46, 44, 38), trim=(30, 29, 24), glow=True, **B),
+    TV("square set, no knobs: for icons", panel=False, **B),
 ]
 
 
@@ -269,6 +317,7 @@ def build(variants, out):
 def main():
     build(ROUND1, OUT / "tv")
     build(TV06, OUT / "tv06")
+    build(TV05, OUT / "tv06-05")
 
 
 if __name__ == "__main__":
