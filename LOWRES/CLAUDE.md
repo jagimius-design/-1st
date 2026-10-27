@@ -22,6 +22,8 @@ low resolution. Brand book in `brand.md`.
   CRT. `ROUND1` (12), `TV06` (10 takes on round 1's 06, orange type) and `TV05` (10 takes on
   TV06's 05, bent antenna and bad reception) are lists of `TV(...)` configs; each makes a PNG and
   a looping GIF of the static.
+- `mockups.py` → `options/mockups/` — flat clothing mockups (tees, hoodies, cap, tote, labels)
+  of the bad-reception TV logo, `TV06[4]`.
 - `tests/` — `node --test LOWRES/tests/*.test.js`: bitmaps are rectangular, use known colours,
   and the stray pixel stays detached.
 
