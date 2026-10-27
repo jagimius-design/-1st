@@ -16,6 +16,8 @@ low resolution. Brand book in `brand.md`.
   Rerun after changing `pixels.js` or `wordmark.js`.
 - `options.py` → `options/` — logo directions A–H for choosing between (light and dark PNGs,
   plus `sheet.png` side by side). Not used by the site.
+- `dissolve.py` → `options/dissolve/` — 20 variants of option E: soft grey mosaic blocks that
+  break off the word and drift. Each is a `V(...)` config at the bottom of the file.
 - `tests/` — `node --test LOWRES/tests/*.test.js`: bitmaps are rectangular, use known colours,
   and the stray pixel stays detached.
 
