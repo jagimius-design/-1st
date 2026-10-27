@@ -1,5 +1,5 @@
-// Draws everything on the page from the bitmaps in pixels.js: the wordmark, the
-// emblem, pixel headings and the garments. No images; every pixel is an SVG rect.
+// Draws everything on the page from the bitmaps in pixels.js and wordmark.js: the
+// wordmark, pixel headings and the garments. No images; every pixel is an SVG rect.
 (function (root) {
   "use strict";
 
@@ -56,9 +56,53 @@
     return rowsToSvg(textRows(text, data.font), function () { return "currentColor"; }, text);
   }
 
-  function emblemSvg(data) {
-    var e = data.emblem;
-    return rowsToSvg(e.rows, function (c) { return data.palette[e.colors[c]]; }, "LOW RES emblem");
+  // The wordmark on one grid of base units: each letter's pixels are `unit` units
+  // square, letters sit on a shared baseline, and the stray pixel is "A".
+  function wordmarkRows(wm) {
+    var x = 0, placed = [];
+    wm.letters.forEach(function (l, i) {
+      if (i === 3) x += wm.space;
+      placed.push({ x: x, l: l });
+      x += l.rows[0].length * l.unit + wm.gap;
+    });
+    var s = placed[placed.length - 1];
+    var stray = {
+      x: s.x + wm.stray.col * s.l.unit,
+      y: wm.height - s.l.rows.length * s.l.unit + wm.stray.row * s.l.unit,
+      size: s.l.unit
+    };
+    var w = Math.max(x - wm.gap, stray.x + stray.size);
+    var grid = [];
+    for (var y = 0; y < wm.height; y++) grid.push(new Array(w).fill("."));
+    var fill = function (x0, y0, size, c) {
+      for (var yy = 0; yy < size; yy++) for (var xx = 0; xx < size; xx++) grid[y0 + yy][x0 + xx] = c;
+    };
+    placed.forEach(function (p) {
+      var top = wm.height - p.l.rows.length * p.l.unit;
+      p.l.rows.forEach(function (row, j) {
+        Array.from(row).forEach(function (c, i) {
+          if (c === "X") fill(p.x + i * p.l.unit, top + j * p.l.unit, p.l.unit, "X");
+        });
+      });
+    });
+    fill(stray.x, stray.y, stray.size, "A");
+    return grid.map(function (r) { return r.join(""); });
+  }
+
+  function wordmarkSvg(data) {
+    return rowsToSvg(wordmarkRows(data.wordmark), function (c) {
+      return c === "A" ? data.palette.signal : "currentColor";
+    }, "low res");
+  }
+
+  // One letter of the wordmark at its own resolution, scaled to the shared height.
+  function letterSvg(letter, height) {
+    var u = letter.unit;
+    var rows = letter.rows.map(function (r) {
+      return Array.from(r).map(function (c) { return c.repeat(u); }).join("");
+    }).reduce(function (acc, r) { for (var i = 0; i < u; i++) acc.push(r); return acc; }, []);
+    while (rows.length < height) rows.unshift(".".repeat(rows[0].length));
+    return rowsToSvg(rows, function () { return "currentColor"; }, letter.char);
   }
 
   function garmentSvg(product, colorwayId, data) {
@@ -70,7 +114,8 @@
   }
 
   var api = { textRows: textRows, garmentRows: garmentRows, rowsToSvg: rowsToSvg,
-              textSvg: textSvg, emblemSvg: emblemSvg, garmentSvg: garmentSvg };
+              textSvg: textSvg, wordmarkRows: wordmarkRows, wordmarkSvg: wordmarkSvg,
+              letterSvg: letterSvg, garmentSvg: garmentSvg };
   if (typeof module !== "undefined") module.exports = api;
   if (typeof document === "undefined") return;
 
@@ -87,9 +132,17 @@
       el.classList.add("px-text");
     });
 
-    document.querySelectorAll("[data-emblem]").forEach(function (el) {
-      el.innerHTML = emblemSvg(data);
+    document.querySelectorAll("[data-wordmark]").forEach(function (el) {
+      el.innerHTML = wordmarkSvg(data);
     });
+
+    var anatomy = document.getElementById("anatomy");
+    if (anatomy) {
+      anatomy.innerHTML = data.wordmark.letters.map(function (l) {
+        return "<figure>" + letterSvg(l, data.wordmark.height) +
+          "<figcaption>" + l.rows[0].length + "×" + l.rows.length + "</figcaption></figure>";
+      }).join("");
+    }
 
     var grid = document.getElementById("drop");
     if (grid) {

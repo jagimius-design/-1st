@@ -62,7 +62,7 @@ svg { display: block; }
   background: var(--bg);
   border-bottom: 2px solid var(--line);
 }
-.brand { --px: 3px; text-decoration: none; }
+.brand { --px: 0.5px; display: block; text-decoration: none; }
 .top nav { display: flex; gap: 20px; font-size: 14px; text-transform: uppercase; letter-spacing: .06em; }
 .top nav a { text-decoration: none; }
 .top nav a:hover { color: var(--accent); }
@@ -72,8 +72,8 @@ svg { display: block; }
   padding: 72px 24px 56px;
   display: flex; flex-direction: column; align-items: flex-start; gap: 28px;
 }
-.hero-emblem { --px: clamp(6px, 1.4vw, 12px); border: calc(var(--px) * .5) solid var(--line); }
-.wordmark { --px: min(22px, calc((100vw - 48px) / 40)); flex-wrap: nowrap; }
+.wordmark { --px: min(4.5px, calc((100vw - 48px) / 230)); margin: 0; }
+.wordmark svg { overflow: visible; }
 .kicker { --px: clamp(3px, 0.9vw, 6px); color: var(--accent); }
 .lede { max-width: 56ch; margin: 0; font-size: 17px; color: var(--muted); }
 .cta { display: flex; flex-wrap: wrap; gap: 12px; }
@@ -88,14 +88,17 @@ svg { display: block; }
 .btn.ghost { background: transparent; color: var(--text); }
 
 .ladder {
-  display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 24px;
-  padding: 32px 24px;
+  display: flex; flex-direction: column; align-items: center; gap: 20px;
+  padding: 40px 24px;
   border-block: 2px solid var(--line);
   background: var(--surface);
+  text-align: center;
 }
-.rung { display: flex; flex-direction: column; gap: 8px; }
-.rung .px-text { flex-wrap: nowrap; }
-.rung small { font-size: 12px; color: var(--muted); letter-spacing: .1em; }
+.ladder p { margin: 0; color: var(--muted); font-size: 14px; }
+.anatomy { --px: min(2.5px, calc((100vw - 32px) / 260)); display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-end; gap: 24px; }
+.anatomy figure { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.anatomy figure:nth-child(4) { margin-left: 24px; }
+.anatomy figcaption { font-size: 12px; color: var(--muted); letter-spacing: .08em; }
 
 .section { max-width: 1100px; margin: 0 auto; padding: 72px 24px; }
 .section-head { display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
@@ -149,17 +152,29 @@ svg { display: block; }
   padding: 48px 24px;
   display: flex; flex-direction: column; align-items: center; gap: 20px; text-align: center;
 }
-.foot-emblem { --px: 4px; }
+.foot-mark { --px: 1px; }
 .foot-tag { --px: 3px; justify-content: center; }
 .small { margin: 0; font-size: 12px; color: var(--muted); }
 
 @media (max-width: 600px) {
   .top { padding: 12px 16px; }
   .top nav { gap: 12px; font-size: 12px; }
-  .brand { --px: 2px; }
+  .brand { --px: 0.4px; }
   .hero, .section { padding-inline: 16px; }
   .hero { padding-top: 48px; }
   .ladder { padding-inline: 16px; }
-  .rung:last-child { --px: 7px !important; }
+  .anatomy { gap: 14px; }
+  .anatomy figure:nth-child(4) { margin-left: 0; }
   .banner { padding: 56px 16px; }
+}
+
+/* The stray pixel hops now and then. */
+@media (prefers-reduced-motion: no-preference) {
+  .wordmark rect[fill="#FF5A1F"] { animation: hop 3s steps(1) infinite; }
+}
+@keyframes hop {
+  0%, 70%, 100% { transform: translate(0, 0); }
+  76% { transform: translate(0, -6px); }
+  82% { transform: translate(6px, -6px); }
+  88% { transform: translate(6px, 0); }
 }

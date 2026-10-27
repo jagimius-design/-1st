@@ -4,6 +4,7 @@ const path = require("node:path");
 
 global.window = {};
 require(path.join(__dirname, "..", "pixels.js"));
+require(path.join(__dirname, "..", "wordmark.js"));
 const data = global.window.LOWRES;
 const lowres = require(path.join(__dirname, "..", "lowres.js"));
 
@@ -16,10 +17,31 @@ test("every glyph is 5 rows of one width", () => {
   }
 });
 
-test("emblem is rectangular and every colour is in the palette", () => {
-  const e = data.emblem;
-  assert.ok(rectangular(e.rows));
-  for (const c of new Set(e.rows.join(""))) assert.ok(data.palette[e.colors[c]], c);
+test("wordmark letters each have their own resolution and share a baseline height", () => {
+  const wm = data.wordmark;
+  assert.deepStrictEqual(wm.letters.map((l) => l.char).join(""), "lowres");
+  for (const l of wm.letters) {
+    assert.ok(rectangular(l.rows), l.char);
+    assert.ok(l.rows.length * l.unit <= wm.height, l.char);
+  }
+  assert.strictEqual(wm.letters[0].rows.length * wm.letters[0].unit, wm.height);
+});
+
+test("wordmark has exactly one stray pixel, detached from the s", () => {
+  const rows = lowres.wordmarkRows(data.wordmark);
+  assert.ok(rectangular(rows));
+  assert.strictEqual(rows.length, data.wordmark.height);
+  const u = data.wordmark.letters[5].unit;
+  const stray = rows.join("").split("").filter((c) => c === "A").length;
+  assert.strictEqual(stray, u * u);
+  const y = rows.findIndex((r) => r.includes("A"));
+  const x = rows[y].indexOf("A");
+  for (let dy = -1; dy <= u; dy++) {
+    for (let dx = -1; dx <= u; dx++) {
+      const c = (rows[y + dy] || "")[x + dx];
+      assert.ok(c !== "X", "stray pixel touches a letter");
+    }
+  }
 });
 
 test("products are rectangular and use only colorway keys", () => {
@@ -30,9 +52,9 @@ test("products are rectangular and use only colorway keys", () => {
   }
 });
 
-test("wordmark is 39 pixels wide", () => {
+test("pixel text is 5 rows and rectangular", () => {
   const rows = lowres.textRows("LOW RES", data.font);
-  assert.strictEqual(rows[0].length, 39);
+  assert.strictEqual(rows.length, 5);
   assert.ok(rectangular(rows));
 });
 

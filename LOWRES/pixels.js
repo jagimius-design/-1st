@@ -3,11 +3,8 @@ window.LOWRES = {
     "ink": "#15140F",
     "bone": "#F2EDE0",
     "signal": "#FF5A1F",
-    "sun": "#FFC93C",
     "crt": "#2B3FD6",
-    "dusk": "#C2378E",
     "moss": "#3E5B3A",
-    "deepmoss": "#2C4229",
     "glacier": "#A8D5E2"
   },
 
@@ -65,28 +62,6 @@ window.LOWRES = {
     "×": ["...", "X.X", ".X.", "X.X", "..."]
   },
 
-  "emblem": {
-    "colors": {
-      "B": "crt", "P": "dusk", "O": "signal", "Y": "sun",
-      "K": "ink", "W": "bone", "G": "moss", "M": "deepmoss"
-    },
-    "rows": [
-      "BBBBBBBBBBBBBBBBBBBB",
-      "BBBBBBBBBBBBBBBBBBBB",
-      "BPBPBPBPBPBPBPBPBPBP",
-      "PPPPPPPWPPPPPPPPPPPP",
-      "PPPPPPWWWPPPPPYYPPPP",
-      "PPPPPWWKWWPPPYYYYPPP",
-      "OPOPOWKKKWOPYYYYYYOP",
-      "OOOOKKKKKKKOYYYYYYOO",
-      "OOOKKKKKKKKKOYYYKOOO",
-      "OOKKKKKKKKKKKOYKKKOO",
-      "OKKKKKKKKKKKKKKKKKKO",
-      "KKKKKKKKKKKKKKKKKKKK",
-      "GGGGGGGGGGGGGGGGGGGG",
-      "GMGMGMGMGMGMGMGMGMGM"
-    ]
-  },
 
   "colorways": {
     "ink":     { "name": "Ink",     "X": "#24231D", "S": "#15140F", "D": "#0B0A08", "A": "#FF5A1F", "L": "#F2EDE0" },

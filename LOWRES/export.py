@@ -1,6 +1,7 @@
-"""Exports the LOW RES logo, emblem and garments as PNG and SVG files in exports/.
+"""Exports the LOW RES wordmark, icon and garments as PNG and SVG files in exports/.
 
-Reads the same bitmaps the site draws from (pixels.js), so the files always match the page.
+Reads the same bitmaps the site draws from (pixels.js, wordmark.js), so the files always
+match the page.
 Run: python3 export.py
 """
 import json
@@ -12,14 +13,54 @@ HERE = Path(__file__).parent
 OUT = HERE / "exports"
 
 
-def load():
-    src = (HERE / "pixels.js").read_text()
+def read_json(name):
+    src = (HERE / name).read_text()
     return json.loads(src.split("=", 1)[1].strip().rstrip(";"))
 
 
-def text_rows(text, font):
-    glyphs = [font.get(c, font[" "]) for c in text.upper()]
-    return [".".join(g[y] for g in glyphs) for y in range(5)]
+def load():
+    data = read_json("pixels.js")
+    data["wordmark"] = read_json("wordmark.js")
+    return data
+
+
+def wordmark_rows(wm, letters=None):
+    """Letters on one grid of base units, bottoms on the baseline; the stray pixel is "A".
+
+    `letters` picks a subset by index (for the icon); the stray pixel follows the "s".
+    """
+    picked = list(enumerate(wm["letters"]))
+    if letters is not None:
+        picked = [(i, l) for i, l in picked if i in letters]
+    x, placed = 0, []
+    for i, l in picked:
+        if i == 3 and placed:
+            x += wm["space"]
+        placed.append((x, l))
+        x += len(l["rows"][0]) * l["unit"] + wm["gap"]
+    sx, s = placed[-1]
+    u = s["unit"]
+    stray_x = sx + wm["stray"]["col"] * u
+    stray_y = wm["height"] - len(s["rows"]) * u + wm["stray"]["row"] * u
+    w, h = max(x - wm["gap"], stray_x + u), wm["height"]
+    grid = [["."] * w for _ in range(h)]
+
+    def fill(x0, y0, size, c):
+        for yy in range(size):
+            for xx in range(size):
+                grid[y0 + yy][x0 + xx] = c
+
+    for x0, l in placed:
+        top = h - len(l["rows"]) * l["unit"]
+        for j, row in enumerate(l["rows"]):
+            for i, c in enumerate(row):
+                if c == "X":
+                    fill(x0 + i * l["unit"], top + j * l["unit"], l["unit"], "X")
+    fill(stray_x, stray_y, u, "A")
+    rows = ["".join(r) for r in grid]
+    while rows and set(rows[0]) == {"."}:  # the icon has no ascender
+        rows.pop(0)
+    return rows
 
 
 def garment_rows(rows, texture=None):
@@ -70,40 +111,27 @@ def to_svg(rows, color_of, path):
                 rects.append(f'<rect x="{x}" y="{y}" width="{run}" height="1" fill="{color_of(c)}"/>')
             x += run
     path.write_text(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}" '
-                    f'width="{w * 20}" height="{h * 20}" shape-rendering="crispEdges">'
+                    f'width="{w * 4}" height="{h * 4}" shape-rendering="crispEdges">'
                     + "".join(rects) + "</svg>\n")
-
-
-def lockup(data):
-    """Emblem centred over the wordmark, as one bitmap with per-pixel colour keys."""
-    emblem = data["emblem"]["rows"]
-    word = text_rows("LOW RES", data["font"])
-    w = max(len(emblem[0]), len(word[0]))
-    centre = lambda r: [("." * ((w - len(r[0])) // 2) + line).ljust(w, ".") for line in r]
-    word = [line.replace("X", "T") for line in centre(word)]
-    return centre(emblem) + ["." * w] * 2 + word
 
 
 def main():
     data = load()
     pal = data["palette"]
     OUT.mkdir(exist_ok=True)
-    emblem_color = lambda c: pal[data["emblem"]["colors"][c]]
-
-    word = text_rows("LOW RES", data["font"])
-    for name, color in (("ink", pal["ink"]), ("bone", pal["bone"]), ("signal", pal["signal"])):
-        to_png(word, lambda c: color, OUT / f"wordmark-{name}.png", 24, pad=2)
-        to_svg(word, lambda c: color, OUT / f"wordmark-{name}.svg")
-
-    to_png(data["emblem"]["rows"], emblem_color, OUT / "emblem.png", 32)
-    to_svg(data["emblem"]["rows"], emblem_color, OUT / "emblem.svg")
-
-    for name, ink in (("light", pal["ink"]), ("dark", pal["bone"])):
-        rows = lockup(data)
-        color = lambda c, ink=ink: ink if c == "T" else emblem_color(c)
-        bg = pal["bone"] if name == "light" else pal["ink"]
-        to_png(rows, color, OUT / f"lockup-{name}.png", 24, pad=4, bg=bg)
-        to_svg(rows, color, OUT / f"lockup-{name}.svg")
+    word = wordmark_rows(data["wordmark"])
+    icon = wordmark_rows(data["wordmark"], letters={5})
+    # (name, letter colour, stray-pixel colour, background)
+    schemes = (("ink", pal["ink"], pal["signal"], pal["bone"]),
+               ("bone", pal["bone"], pal["signal"], pal["ink"]),
+               ("signal", pal["signal"], pal["ink"], pal["bone"]))
+    for name, ink, stray, bg in schemes:
+        color = lambda c, ink=ink, stray=stray: stray if c == "A" else ink
+        to_png(word, color, OUT / f"wordmark-{name}.png", 4, pad=12)
+        to_png(word, color, OUT / f"wordmark-{name}-on-bg.png", 4, pad=24, bg=bg)
+        to_svg(word, color, OUT / f"wordmark-{name}.svg")
+        to_png(icon, color, OUT / f"icon-{name}.png", 12, pad=6, bg=bg)
+        to_svg(icon, color, OUT / f"icon-{name}.svg")
 
     for p in data["products"]:
         rows = garment_rows(p["rows"], p.get("texture"))

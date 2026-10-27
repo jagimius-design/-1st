@@ -7,11 +7,12 @@
   <meta name="description" content="LOW RES: lo-fi gear for hi-def places. Streetwear cut for the outdoors, made to be repaired.">
   <link rel="stylesheet" href="style.css">
   <script src="pixels.js" defer></script>
+  <script src="wordmark.js" defer></script>
   <script src="lowres.js" defer></script>
 </head>
 <body>
   <header class="top">
-    <a class="brand" href="#" aria-label="LOW RES home"><span data-px="LOW RES"></span></a>
+    <a class="brand" href="#" aria-label="low res home"><span data-wordmark></span></a>
     <nav>
       <a href="#shop">Shop</a>
       <a href="#rerender">Re-Render</a>
@@ -21,8 +22,7 @@
 
   <main>
     <section class="hero">
-      <div class="hero-emblem" data-emblem></div>
-      <h1 class="wordmark" data-px="LOW RES"></h1>
+      <h1 class="wordmark" data-wordmark aria-label="low res"></h1>
       <p class="kicker" data-px="LOWER RESOLUTION. HIGHER QUALITY."></p>
       <p class="lede">Streetwear cut for the mountains. Heavy fabric, few seams, nothing you'll need
         to replace. We cut the detail and kept the parts that last.</p>
@@ -32,11 +32,9 @@
       </div>
     </section>
 
-    <section class="ladder" aria-label="The logo at four resolutions">
-      <div class="rung" style="--px:2px"><span data-px="LOW RES"></span><small>1080P</small></div>
-      <div class="rung" style="--px:4px"><span data-px="LOW RES"></span><small>480P</small></div>
-      <div class="rung" style="--px:7px"><span data-px="LOW RES"></span><small>240P</small></div>
-      <div class="rung" style="--px:11px"><span data-px="LOW RES"></span><small>144P</small></div>
+    <section class="ladder" aria-label="Each letter of the logo at its own resolution">
+      <div class="anatomy" id="anatomy"></div>
+      <p>Six letters, six resolutions. And one pixel that got away.</p>
     </section>
 
     <section id="shop" class="section">
@@ -90,7 +88,7 @@
   </main>
 
   <footer class="foot">
-    <div class="foot-emblem" data-emblem></div>
+    <div class="foot-mark" data-wordmark></div>
     <p class="foot-tag" data-px="LO-FI GEAR FOR HI-DEF PLACES"></p>
     <p class="small">LOW RES Supply Co. A brand concept. No pixels were upscaled in the making of this page.</p>
   </footer>
