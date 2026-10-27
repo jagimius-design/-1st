@@ -14,6 +14,8 @@ low resolution. Brand book in `brand.md`.
   `--px` sets the size of one logo pixel per element.
 - `export.py` — writes wordmark, icon and garment PNG/SVG files to `exports/` (needs Pillow).
   Rerun after changing `pixels.js` or `wordmark.js`.
+- `options.py` → `options/` — logo directions A–H for choosing between (light and dark PNGs,
+  plus `sheet.png` side by side). Not used by the site.
 - `tests/` — `node --test LOWRES/tests/*.test.js`: bitmaps are rectangular, use known colours,
   and the stray pixel stays detached.
 
