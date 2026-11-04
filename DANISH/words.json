@@ -1,0 +1,104 @@
+[
+  {
+    "id": "holde",
+    "word": "holde",
+    "pos": "vb.",
+    "forms": "holder, holdt, holdt",
+    "gloss": "hold, keep",
+    "senses": [],
+    "phrases": [
+      { "da": "holde tilbage", "senses": [
+        { "en": "give way", "note": "i trafikken", "ex_en": "He did not know when to give way to another car", "ex_da": "Han vidste ikke, hvornår han skulle holde tilbage for en anden bil" } ] },
+      { "da": "holde tæt", "senses": [
+        { "en": "keep tight", "note": "ikke lække", "ex_en": "They realized that the bottle did not keep tight", "ex_da": "De blev klar over, at flasken ikke holdt tæt" },
+        { "en": "keep one's mouth shut", "note": "om hemmelighed", "ex_en": "He was told to keep his mouth shut", "ex_da": "Han blev bedt om at holde tæt" } ] },
+      { "da": "holde ud", "senses": [
+        { "en": "stand", "ex_en": "He could not stand his brother's wife", "ex_da": "Han kunne ikke holde sin brors kone ud" },
+        { "en": "endure", "ex_en": "He could not endure the pain", "ex_da": "Han kunne ikke holde smerten ud" } ] },
+      { "da": "holde ud fra sig", "senses": [
+        { "en": "hold at arm's length", "ex_en": "He held her at arm's length and looked at her", "ex_da": "Han holdt hende ud fra sig og så på hende" } ] },
+      { "da": "holde udenfor", "senses": [
+        { "en": "leave out", "ex_en": "They were asked not to leave out the new boy", "ex_da": "De blev bedt om ikke at holde den nye dreng udenfor" } ] },
+      { "da": "holde ved lige", "senses": [
+        { "en": "maintain", "ex_en": "They make sure to maintain their garden", "ex_da": "De sørger for at holde deres have ved lige" } ] }
+    ]
+  },
+  {
+    "id": "bemyndigelse",
+    "word": "bemyndigelse",
+    "pos": "sb.",
+    "forms": "-n, -r, -rne",
+    "gloss": "authorisation, empowerment",
+    "senses": [
+      { "en": "empowerment", "ex_en": "He has empowerment to represent all employees at the meeting" },
+      { "en": "authorisation", "note": "US: authorization", "ex_en": "They refused to give him the authorisation needed" },
+      { "en": "warrant", "note": "fra myndighederne", "ex_en": "He has a warrant to do this" }
+    ],
+    "phrases": [
+      { "da": "give bemyndigelse", "senses": [
+        { "en": "authorise (vb.)", "ex_en": "They authorised him to make the deal" } ] },
+      { "da": "ikke have bemyndigelse til at", "senses": [
+        { "en": "have no authority to + inf" },
+        { "en": "not be at liberty to", "ex_en": "I am not at liberty to tell you that." } ] }
+    ]
+  },
+  {
+    "id": "koge",
+    "word": "koge",
+    "pos": "vb.",
+    "forms": "-r, kogte, kogt",
+    "gloss": "boil, simmer",
+    "senses": [
+      { "en": "boil", "ex_en": "The water had begun to boil" },
+      { "en": "simmer", "note": "simre", "ex_en": "The stew simmered for hours before it was ready" }
+    ],
+    "phrases": [
+      { "da": "koge ind", "senses": [
+        { "en": "boil down", "ex_en": "She boiled down the sauce till it was thick" } ] },
+      { "da": "koge ned", "senses": [
+        { "en": "boil down", "note": "figurativt", "ex_en": "It can all be boiled down to one single statement" } ] },
+      { "da": "koge over", "senses": [
+        { "en": "boil over", "ex_en": "The porridge is boiling over!" },
+        { "en": "boil over", "note": "figurativt", "ex_en": "His feelings boiled over when he saw them together" } ] },
+      { "da": "koge suppe på noget", "senses": [
+        { "en": "keep bringing something up", "note": "figurativt", "ex_en": "They kept bringing up the same old problems" } ] }
+    ]
+  },
+  {
+    "id": "styrke",
+    "word": "styrke",
+    "pos": "vb.",
+    "forms": "-r, -de, -t",
+    "gloss": "strengthen, fortify",
+    "senses": [
+      { "en": "strengthen", "ex_en": "The company needs to strengthen its position in the market", "ex_da": "Virksomheden er nødt til at styrke sin position på markedet" },
+      { "en": "fortify", "note": "forstærke", "ex_en": "We should fortify our defences before the enemy attacks", "ex_da": "Vi bør styrke vores forsvarsværker før fjenden angriber" }
+    ],
+    "phrases": [
+      { "da": "styrke sig på noget", "senses": [
+        { "en": "fortify oneself", "ex_en": "I need to fortify myself with a shot of whisky", "ex_da": "Jeg må styrke mig på en stiv whisky" } ] },
+      { "da": "have brug for ngt at styrke sig på", "senses": [
+        { "en": "I need something to sustain me." } ] },
+      { "da": "styrke familiesammenholdet", "senses": [
+        { "en": "strengthen the family" },
+        { "en": "strengthen family unity" } ] },
+      { "da": "styrke ngs mistanke", "senses": [
+        { "en": "reinforce sby's suspicion" } ] },
+      { "da": "styrke sig med", "senses": [
+        { "en": "fortify oneself with [pots of black coffee]" } ] }
+    ]
+  },
+  {
+    "id": "synliggoere",
+    "word": "synliggøre",
+    "pos": "vb.",
+    "forms": "synliggør, synliggjorde, synliggjort",
+    "gloss": "make visible, visualise",
+    "senses": [
+      { "en": "render visible", "ex_en": "The marketing campaign is designed to render the product visible" },
+      { "en": "make visible", "ex_en": "They hired a marketing company to make the event visible" },
+      { "en": "visualise", "note": "US: visualize", "ex_en": "The colorimetric change was visualised on the CO2 meter" }
+    ],
+    "phrases": []
+  }
+]

@@ -1,0 +1,405 @@
+<title>Mine danske ord</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,650;1,6..72,400&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: one reading column; sticky search on top; words grouped under Danish letters A–Å, each word a fold-open dictionary card. */
+:root {
+  --paper: #eef2f4; --card: #ffffff; --ink: #13222c; --muted: #586b78; --line: #d9e1e6;
+  --accent: #0d5878; --accent-soft: #e0edf3; --red: #c8102e; --red-soft: #fbe6e9; --ok: #1d7a4c; --ok-soft: #e1f2e9;
+  --mark: rgba(13, 88, 120, .18);
+  --f-head: "Newsreader", "Iowan Old Style", Georgia, serif;
+  --f-ui: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #0e151a; --card: #162129; --ink: #e5edf2; --muted: #93a4b0; --line: #26343e;
+  --accent: #74bddd; --accent-soft: #1b3240; --red: #ff6f80; --red-soft: #3a1f25; --ok: #6fd3a0; --ok-soft: #173327;
+  --mark: rgba(116, 189, 221, .26); color-scheme: dark } }
+:root[data-theme="dark"] {
+  --paper: #0e151a; --card: #162129; --ink: #e5edf2; --muted: #93a4b0; --line: #26343e;
+  --accent: #74bddd; --accent-soft: #1b3240; --red: #ff6f80; --red-soft: #3a1f25; --ok: #6fd3a0; --ok-soft: #173327;
+  --mark: rgba(116, 189, 221, .26); color-scheme: dark }
+
+body { background: var(--paper); color: var(--ink); font: 15px/1.5 var(--f-ui); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
+.wrap { max-width: 860px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 64px; }
+header { display: grid; gap: 6px; }
+.eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); display: flex; gap: 8px; align-items: center; }
+.eyebrow .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); }
+h1 { font: 650 clamp(30px, 6vw, 44px)/1.05 var(--f-head); margin: 0; text-wrap: balance; letter-spacing: -.01em; }
+.stats { color: var(--muted); font-variant-numeric: tabular-nums; }
+.stats b { color: var(--ink); font-weight: 600; }
+
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--paper); padding-block: 14px 10px; margin-top: 14px; display: grid; gap: 10px; }
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.tab { font: 600 14px var(--f-ui); color: var(--muted); background: transparent; border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px; cursor: pointer; }
+.tab[aria-selected="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.tab:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.search { display: flex; align-items: center; gap: 8px; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 0 12px; }
+.search svg { flex: none; color: var(--muted); }
+.search input { flex: 1; min-width: 0; border: 0; background: transparent; color: var(--ink); font: 16px var(--f-ui); padding: 11px 0; }
+.search input:focus { outline: none; }
+.search:focus-within { border-color: var(--accent); }
+.filters { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.chip { font: 500 13px var(--f-ui); color: var(--muted); background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: 4px 10px; cursor: pointer; }
+.chip[aria-pressed="true"] { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+.letters { display: flex; gap: 2px; flex-wrap: wrap; margin-left: auto; }
+.letters a { font: 600 13px var(--f-head); color: var(--accent); text-decoration: none; padding: 2px 6px; border-radius: 4px; }
+.letters a:hover { background: var(--accent-soft); }
+
+.notice { color: var(--muted); background: var(--card); border: 1px dashed var(--line); border-radius: 10px; padding: 18px; margin-top: 12px; }
+.group { margin-top: 18px; }
+.group h2 { font: 650 22px var(--f-head); color: var(--accent); margin: 0 0 6px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+.list { display: grid; gap: 8px; }
+
+.word { background: var(--card); border: 1px solid var(--line); border-radius: 10px; }
+.word > summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; padding: 12px 16px; align-items: baseline; }
+.word > summary::-webkit-details-marker { display: none; }
+.head { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; min-width: 0; }
+.hw { font: 650 23px/1.15 var(--f-head); color: var(--ink); }
+.pos { font-size: 13px; color: var(--muted); }
+.forms { font-size: 13px; color: var(--muted); }
+.gloss { grid-column: 1 / -1; color: var(--ink); min-width: 0; }
+.gloss .n { color: var(--muted); }
+.pill { font: 600 11px var(--f-ui); letter-spacing: .06em; text-transform: uppercase; border-radius: 999px; padding: 2px 8px; white-space: nowrap; }
+.pill.new { color: var(--red); background: var(--red-soft); }
+.pill.learning { color: var(--accent); background: var(--accent-soft); }
+.pill.known { color: var(--ok); background: var(--ok-soft); }
+
+.body { padding: 0 16px 16px; display: grid; gap: 14px; border-top: 1px solid var(--line); padding-top: 12px; }
+.sec-title { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 6px; }
+.senses { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.sense { display: grid; gap: 2px; min-width: 0; }
+.sense .en { font-weight: 600; }
+.note { font-weight: 400; color: var(--muted); font-size: 13px; }
+.ex { color: var(--muted); }
+.ex-da { font: italic 400 16px/1.4 var(--f-head); color: var(--ink); }
+.phrase { display: grid; gap: 6px; padding-left: 12px; border-left: 2px solid var(--line); min-width: 0; }
+.phrase .da { font: 650 17px var(--f-head); color: var(--accent); }
+.tools { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.btn { font: 600 13px var(--f-ui); color: var(--accent); background: var(--accent-soft); border: 0; border-radius: 6px; padding: 6px 10px; cursor: pointer; text-decoration: none; display: inline-flex; gap: 6px; align-items: center; }
+.btn.ghost { background: transparent; border: 1px solid var(--line); color: var(--muted); }
+mark { background: var(--mark); color: inherit; border-radius: 2px; padding: 0 1px; }
+
+/* Practice */
+.practice { display: grid; gap: 14px; margin-top: 12px; }
+.deck-opts { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; color: var(--muted); }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 28px 22px; min-height: 260px; display: grid; gap: 14px; align-content: start; text-align: center; }
+.card .q { font: 650 clamp(28px, 7vw, 40px)/1.15 var(--f-head); text-wrap: balance; }
+.card .q.en { font-family: var(--f-ui); font-weight: 600; font-size: clamp(22px, 5vw, 30px); }
+.card .kind { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.card .a { display: grid; gap: 10px; text-align: left; border-top: 1px solid var(--line); padding-top: 14px; }
+.card-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.big { font: 600 15px var(--f-ui); border: 0; border-radius: 10px; padding: 12px 22px; cursor: pointer; }
+.big.reveal { background: var(--ink); color: var(--paper); }
+.big.again { background: var(--red-soft); color: var(--red); }
+.big.good { background: var(--ok-soft); color: var(--ok); }
+.progress { height: 6px; background: var(--line); border-radius: 999px; overflow: hidden; }
+.progress i { display: block; height: 100%; background: var(--accent); width: 0; transition: width .3s; }
+.boxes { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; font-variant-numeric: tabular-nums; }
+.boxes div { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 8px; text-align: center; }
+.boxes b { display: block; font: 650 20px var(--f-head); }
+.boxes span { font-size: 11px; color: var(--muted); }
+
+/* Add form */
+form.add { display: grid; gap: 12px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 18px; margin-top: 12px; }
+.row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+label { display: grid; gap: 4px; font-size: 13px; font-weight: 600; color: var(--muted); }
+input.f, select.f, textarea.f { font: 15px var(--f-ui); color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 9px 10px; min-width: 0; }
+textarea.f { min-height: 110px; resize: vertical; }
+.hint { font-size: 13px; color: var(--muted); }
+.toast { min-height: 1.5em; font-weight: 600; color: var(--ok); }
+.toast.err { color: var(--red); }
+footer { margin-top: 36px; color: var(--muted); font-size: 13px; }
+footer a { color: var(--accent); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+@media (max-width: 520px) { .letters { margin-left: 0; width: 100%; } .boxes span { font-size: 10px; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow"><span class="dot"></span>Dansk → engelsk · fra mine skærmbilleder</div>
+    <h1>Mine danske ord</h1>
+    <div class="stats" id="stats">Henter ord…</div>
+  </header>
+
+  <div class="bar">
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" id="tab-list" aria-selected="true" data-view="list">Ordliste</button>
+      <button class="tab" role="tab" id="tab-practice" aria-selected="false" data-view="practice">Øv</button>
+      <button class="tab" role="tab" id="tab-add" aria-selected="false" data-view="add" hidden>+ Tilføj ord</button>
+    </div>
+    <div id="list-controls" style="display:grid;gap:10px">
+      <div class="search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="q" type="search" placeholder="Søg på dansk eller engelsk — fx “holde ud” eller “boil”" autocomplete="off" aria-label="Søg">
+      </div>
+      <div class="filters">
+        <button class="chip" data-filter="all" aria-pressed="true">Alle</button>
+        <button class="chip" data-filter="new" aria-pressed="false">Ny</button>
+        <button class="chip" data-filter="learning" aria-pressed="false">Lærer</button>
+        <button class="chip" data-filter="known" aria-pressed="false">Kan</button>
+        <nav class="letters" id="letters" aria-label="Bogstaver"></nav>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <section id="view-list"><div id="groups"></div></section>
+
+    <section id="view-practice" hidden>
+      <div class="practice">
+        <div class="deck-opts">
+          <span>Retning:</span>
+          <button class="chip" data-dir="da" aria-pressed="true">Dansk → engelsk</button>
+          <button class="chip" data-dir="en" aria-pressed="false">Engelsk → dansk</button>
+        </div>
+        <div class="progress" aria-hidden="true"><i id="bar"></i></div>
+        <div class="card" id="card"></div>
+        <div class="boxes" id="boxes"></div>
+        <p class="hint">Kort du kan, kommer igen efter 1, 3, 7 og 21 dage. Kort du ikke kan, kommer igen i dag. <span id="save-note"></span></p>
+      </div>
+    </section>
+
+    <section id="view-add" hidden>
+      <form class="add" id="add-form" autocomplete="off">
+        <div class="row">
+          <label for="a-word">Dansk ord<input class="f" id="a-word" required placeholder="fx overveje"></label>
+          <label for="a-pos">Ordklasse
+            <select class="f" id="a-pos"><option value="vb.">verbum (vb.)</option><option value="sb.">substantiv (sb.)</option><option value="adj.">adjektiv (adj.)</option><option value="adv.">adverbium (adv.)</option><option value="præp.">præposition (præp.)</option><option value="udtryk">udtryk</option></select>
+          </label>
+          <label for="a-forms">Bøjning<input class="f" id="a-forms" placeholder="fx -r, -de, -t"></label>
+        </div>
+        <label for="a-senses">Betydninger — én pr. linje, eksempel efter |
+          <textarea class="f" id="a-senses" required placeholder="consider | We need to consider all options&#10;think over"></textarea>
+        </label>
+        <label for="a-phrases">Udtryk (valgfrit) — dansk = engelsk, én pr. linje
+          <textarea class="f" id="a-phrases" placeholder="overveje nøje = consider carefully"></textarea>
+        </label>
+        <div class="tools"><button class="big reveal" type="submit">Gem ord</button><span class="toast" id="toast" role="status"></span></div>
+      </form>
+    </section>
+  </main>
+
+  <footer>Opslag fra ordbogen.com, skrevet ind fra dine skærmbilleder. Tryk “DDO” på et ord for at slå det op i Den Danske Ordbog.</footer>
+</div>
+
+<script>
+(() => {
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const coll = new Intl.Collator("da", { sensitivity: "base" });
+  const DAY = 864e5, STEPS = [0, 1, 3, 7, 21];
+
+  let words = [], progress = {}, uid = null, db = null, progRef = null;
+  let filter = "all", query = "", dir = "da", deck = [], cur = 0, shown = false, done = 0;
+
+  const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const norm = s => String(s ?? "").toLocaleLowerCase("da");
+  const hl = s => {
+    const t = esc(s); if (!query) return t;
+    const q = esc(query).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    return t.replace(new RegExp(q, "gi"), m => `<mark>${m}</mark>`);
+  };
+  const slug = s => norm(s).replace(/æ/g, "ae").replace(/ø/g, "oe").replace(/å/g, "aa").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  const firstLetter = w => { const c = (w || "?")[0].toLocaleUpperCase("da"); return c === "Ø" || c === "Æ" || c === "Å" || /[A-Z]/.test(c) ? c : "#"; };
+
+  // ---------- cards & progress ----------
+  const cardsOf = w => {
+    const out = [];
+    if (w.senses?.length) out.push({ key: w.id, word: w, da: w.word, senses: w.senses, kind: w.pos || "ord" });
+    (w.phrases || []).forEach(p => out.push({ key: w.id + "|" + p.da, word: w, da: p.da, senses: p.senses || [], kind: "udtryk" }));
+    if (!out.length) out.push({ key: w.id, word: w, da: w.word, senses: [{ en: w.gloss }], kind: w.pos || "ord" });
+    return out;
+  };
+  const allCards = () => words.flatMap(cardsOf);
+  const boxOf = k => progress[k]?.box ?? 0;
+  const statusOf = w => {
+    const cs = cardsOf(w), seen = cs.filter(c => progress[c.key]);
+    if (!seen.length) return "new";
+    return cs.every(c => boxOf(c.key) >= 3) ? "known" : "learning";
+  };
+  const label = { new: "Ny", learning: "Lærer", known: "Kan" };
+
+  let saveTimer = null, saving = Promise.resolve();
+  function saveProgress() {
+    try { localStorage.setItem("danske-ord-progress", JSON.stringify(progress)); } catch (e) {}
+    if (!progRef) return;
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => { saving = saving.then(() => progRef.set({ cards: progress, updated: new Date().toISOString() })).catch(() => {}); }, 800);
+  }
+
+  // ---------- list view ----------
+  function matches(w) {
+    if (filter !== "all" && statusOf(w) !== filter) return false;
+    if (!query) return true;
+    const q = norm(query);
+    const hay = [w.word, w.forms, w.gloss,
+      ...(w.senses || []).flatMap(s => [s.en, s.note, s.ex_en, s.ex_da]),
+      ...(w.phrases || []).flatMap(p => [p.da, ...(p.senses || []).flatMap(s => [s.en, s.note, s.ex_en, s.ex_da])])];
+    return hay.some(h => norm(h).includes(q));
+  }
+  const senseHTML = s => `<li class="sense"><div class="en">${hl(s.en)}${s.note ? ` <span class="note">(${hl(s.note)})</span>` : ""}</div>${s.ex_en ? `<div class="ex">${hl(s.ex_en)}</div>` : ""}${s.ex_da ? `<div class="ex-da">${hl(s.ex_da)}</div>` : ""}</li>`;
+  function wordHTML(w) {
+    const st = statusOf(w);
+    const nP = (w.phrases || []).length;
+    const open = query ? " open" : "";
+    return `<details class="word" id="w-${esc(w.id)}"${open}>
+      <summary>
+        <div class="head"><span class="hw">${hl(w.word)}</span><span class="pos">${esc(w.pos || "")}</span>${w.forms ? `<span class="forms">‹${hl(w.forms)}›</span>` : ""}</div>
+        <span class="pill ${st}">${label[st]}</span>
+        <div class="gloss">${hl(w.gloss || (w.senses || []).map(s => s.en).join(", "))}${nP ? ` <span class="n">· ${nP} udtryk</span>` : ""}</div>
+      </summary>
+      <div class="body">
+        ${w.senses?.length ? `<div><p class="sec-title">Betydninger</p><ul class="senses">${w.senses.map(senseHTML).join("")}</ul></div>` : ""}
+        ${nP ? `<div><p class="sec-title">Udtryk</p><div class="senses">${w.phrases.map(p => `<div class="phrase"><div class="da">${hl(p.da)}</div><ul class="senses">${(p.senses || []).map(senseHTML).join("")}</ul></div>`).join("")}</div></div>` : ""}
+        <div class="tools">
+          ${"speechSynthesis" in window ? `<button class="btn" type="button" data-say="${esc(w.word)}">▶ Udtal</button>` : ""}
+          <a class="btn ghost" href="https://ordnet.dk/ddo/ordbog?query=${encodeURIComponent(w.word)}" target="_blank" rel="noopener">DDO ↗</a>
+          <button class="btn ghost" type="button" data-drill="${esc(w.id)}">Øv dette ord</button>
+        </div>
+      </div>
+    </details>`;
+  }
+  function renderList() {
+    const shownWords = words.filter(matches);
+    const groups = new Map();
+    shownWords.forEach(w => { const L = firstLetter(w.word); if (!groups.has(L)) groups.set(L, []); groups.get(L).push(w); });
+    const el = $("#groups");
+    if (!words.length) { el.innerHTML = `<div class="notice">${loadMsg}</div>`; }
+    else if (!shownWords.length) { el.innerHTML = `<div class="notice">Ingen ord matcher “${esc(query)}”${filter !== "all" ? ` under “${label[filter]}”` : ""}. Prøv et kortere søgeord, eller vælg “Alle”.</div>`; }
+    else el.innerHTML = [...groups].map(([L, ws]) => `<div class="group" id="L-${L}"><h2>${L}</h2><div class="list">${ws.map(wordHTML).join("")}</div></div>`).join("");
+    $("#letters").innerHTML = [...groups.keys()].map(L => `<a href="#L-${L}" data-letter="${L}">${L}</a>`).join("");
+    renderStats();
+  }
+  function renderStats() {
+    if (!words.length) return;
+    const cs = allCards(), now = Date.now();
+    const due = cs.filter(c => (progress[c.key]?.due ?? 0) <= now).length;
+    const known = words.filter(w => statusOf(w) === "known").length;
+    const nP = words.reduce((n, w) => n + (w.phrases || []).length, 0);
+    $("#stats").innerHTML = `<b>${words.length}</b> ord · <b>${nP}</b> udtryk · <b>${known}</b> lært · <b>${due}</b> kort at øve i dag`;
+  }
+
+  // ---------- practice ----------
+  function buildDeck(onlyId) {
+    const now = Date.now();
+    let cs = allCards();
+    if (onlyId) cs = cs.filter(c => c.word.id === onlyId);
+    else cs = cs.filter(c => (progress[c.key]?.due ?? 0) <= now);
+    cs.sort((a, b) => boxOf(a.key) - boxOf(b.key) || Math.random() - .5);
+    deck = cs.slice(0, 20); cur = 0; shown = false; done = 0;
+  }
+  function renderCard() {
+    const el = $("#card");
+    $("#bar").style.width = deck.length ? (done / deck.length * 100) + "%" : "0";
+    renderBoxes();
+    if (!words.length) { el.innerHTML = `<p class="hint">${loadMsg}</p>`; return; }
+    if (cur >= deck.length) {
+      const next = allCards().map(c => progress[c.key]?.due).filter(d => d > Date.now()).sort((a, b) => a - b)[0];
+      el.innerHTML = `<div class="kind">Færdig for nu</div><div class="q">Godt gået!</div>
+        <p class="hint">${deck.length ? `Du gennemgik ${deck.length} kort.` : "Ingen kort skal øves lige nu."}${next ? ` Næste kort er klar ${new Date(next).toLocaleDateString("da-DK", { weekday: "long", day: "numeric", month: "long" })}.` : ""}</p>
+        <div class="card-actions"><button class="big ghost btn" type="button" id="all-again">Øv alle kort alligevel</button></div>`;
+      $("#all-again").onclick = () => { deck = allCards().sort(() => Math.random() - .5).slice(0, 20); cur = 0; done = 0; shown = false; renderCard(); };
+      return;
+    }
+    const c = deck[cur];
+    const en = c.senses.map(s => s.en + (s.note ? ` (${s.note})` : "")).join(" · ");
+    const front = dir === "da" ? `<div class="q">${esc(c.da)}</div>` : `<div class="q en">${esc(en)}</div>`;
+    const answer = dir === "da"
+      ? `<ul class="senses">${c.senses.map(senseHTML).join("")}</ul>`
+      : `<div class="q" style="text-align:center">${esc(c.da)}</div>${c.senses.filter(s => s.ex_da).map(s => `<div class="ex-da">${esc(s.ex_da)}</div>`).join("")}`;
+    el.innerHTML = `<div class="kind">${esc(c.kind)}${c.kind === "udtryk" ? " · " + esc(c.word.word) : ""} · kort ${cur + 1} af ${deck.length}</div>${front}
+      ${shown ? `<div class="a">${answer}</div><div class="card-actions"><button class="big again" type="button" data-grade="0">Igen</button><button class="big good" type="button" data-grade="1">Kunne det</button></div>`
+              : `<div class="card-actions"><button class="big reveal" type="button" id="reveal">Vis svar</button></div>`}`;
+    const r = $("#reveal"); if (r) { r.onclick = () => { shown = true; renderCard(); }; r.focus({ preventScroll: true }); }
+  }
+  function grade(ok) {
+    const c = deck[cur]; if (!c) return;
+    const box = ok ? Math.min(boxOf(c.key) + 1, STEPS.length - 1) : 0;
+    progress[c.key] = { box, due: ok ? Date.now() + STEPS[box] * DAY : Date.now() };
+    if (!ok) deck.push(c);
+    saveProgress(); cur++; done++; shown = false; renderCard(); renderStats();
+  }
+  function renderBoxes() {
+    const cs = allCards(), n = [0, 0, 0, 0, 0];
+    cs.forEach(c => n[boxOf(c.key)]++);
+    const names = ["Nye", "1 dag", "3 dage", "7 dage", "21 dage"];
+    $("#boxes").innerHTML = n.map((v, i) => `<div><b>${v}</b><span>${names[i]}</span></div>`).join("");
+  }
+
+  // ---------- views ----------
+  function show(view) {
+    $$(".tab").forEach(t => t.setAttribute("aria-selected", String(t.dataset.view === view)));
+    $("#view-list").hidden = view !== "list"; $("#view-practice").hidden = view !== "practice"; $("#view-add").hidden = view !== "add";
+    $("#list-controls").hidden = view !== "list";
+    if (view === "practice" && cur >= deck.length) { buildDeck(); }
+    if (view === "practice") renderCard();
+  }
+  $$(".tab").forEach(t => t.onclick = () => show(t.dataset.view));
+  $$("[data-filter]").forEach(b => b.onclick = () => { filter = b.dataset.filter; $$("[data-filter]").forEach(x => x.setAttribute("aria-pressed", String(x === b))); renderList(); });
+  $$("[data-dir]").forEach(b => b.onclick = () => { dir = b.dataset.dir; $$("[data-dir]").forEach(x => x.setAttribute("aria-pressed", String(x === b))); shown = false; renderCard(); });
+  let qt; $("#q").addEventListener("input", e => { clearTimeout(qt); qt = setTimeout(() => { query = e.target.value.trim(); renderList(); }, 120); });
+  document.addEventListener("click", e => {
+    const say = e.target.closest("[data-say]");
+    if (say) { try { const u = new SpeechSynthesisUtterance(say.dataset.say); u.lang = "da-DK"; u.rate = .9; speechSynthesis.cancel(); speechSynthesis.speak(u); } catch (er) {} }
+    const drill = e.target.closest("[data-drill]");
+    if (drill) { buildDeck(drill.dataset.drill); show("practice"); }
+    const g = e.target.closest("[data-grade]");
+    if (g) grade(g.dataset.grade === "1");
+    const L = e.target.closest("[data-letter]");
+    if (L) { e.preventDefault(); document.getElementById("L-" + L.dataset.letter)?.scrollIntoView({ behavior: "smooth", block: "start" }); }
+  });
+  document.addEventListener("keydown", e => {
+    if ($("#view-practice").hidden || e.target.matches("input,textarea,select")) return;
+    if (e.key === " " && !shown && cur < deck.length) { e.preventDefault(); shown = true; renderCard(); }
+    else if (shown && (e.key === "1" || e.key === "ArrowLeft")) grade(false);
+    else if (shown && (e.key === "2" || e.key === "ArrowRight")) grade(true);
+  });
+
+  // ---------- add form (owner/editors) ----------
+  $("#add-form").addEventListener("submit", async e => {
+    e.preventDefault();
+    const t = $("#toast"); t.className = "toast";
+    if (!db) { t.className = "toast err"; t.textContent = "Ordbogen kan ikke gemme her. Åbn siden på claude.ai."; return; }
+    const word = $("#a-word").value.trim();
+    const senses = $("#a-senses").value.split("\n").map(l => l.trim()).filter(Boolean).map(l => { const [en, ex] = l.split("|").map(s => s.trim()); return ex ? { en, ex_en: ex } : { en }; });
+    const phrases = $("#a-phrases").value.split("\n").map(l => l.trim()).filter(Boolean).map(l => { const [da, en] = l.split("=").map(s => s.trim()); return { da, senses: [{ en: en || "" }] }; });
+    const id = slug(word);
+    if (!id || !senses.length) { t.className = "toast err"; t.textContent = "Skriv både ordet og mindst én betydning."; return; }
+    try {
+      await db.collection("words").doc(id).set({ id, word, pos: $("#a-pos").value, forms: $("#a-forms").value.trim(), gloss: senses.slice(0, 2).map(s => s.en).join(", "), senses, phrases, source: "tilføjet i hånden", added: new Date().toISOString().slice(0, 10) });
+      e.target.reset(); t.textContent = `Gemt: ${word}`;
+    } catch (er) { t.className = "toast err"; t.textContent = "Ordet blev ikke gemt (" + (er.code || "fejl") + "). Prøv igen om lidt."; }
+  });
+
+  // ---------- data ----------
+  let loadMsg = "Henter dine ord…";
+  try { progress = JSON.parse(localStorage.getItem("danske-ord-progress") || "{}") || {}; } catch (e) { progress = {}; }
+  renderList();
+
+  (async () => {
+    const c = window.claude;
+    if (!c?.use) { loadMsg = "Ordlisten ligger i siden på claude.ai. Åbn den der for at se dine ord."; renderList(); renderCard(); $("#stats").textContent = "Ingen forbindelse til ordlisten"; return; }
+    const [dbNs, user] = await Promise.all([c.use("db"), c.use("user")]);
+    db = dbNs;
+    if (user && (await user.canEdit())) $("#tab-add").hidden = false;
+    if (!db) { loadMsg = "Ordlisten kan ikke hentes i denne visning. Log ind på claude.ai og åbn siden igen."; renderList(); $("#stats").textContent = "Ingen forbindelse til ordlisten"; return; }
+    uid = user ? await user.id() : null;
+    if (uid) {
+      progRef = db.doc("data/users/" + uid + "/progress");
+      try { const s = await progRef.get(); if (s.exists) { progress = { ...progress, ...(s.data().cards || {}) }; renderList(); } } catch (e) {}
+      $("#save-note").textContent = "Dine fremskridt gemmes på din konto.";
+    } else $("#save-note").textContent = "Dine fremskridt gemmes kun i denne browser.";
+
+    const timer = setTimeout(() => { if (!words.length) { loadMsg = "Ordlisten svarer ikke endnu. Den dukker op her, så snart forbindelsen er der."; renderList(); } }, 10000);
+    db.collection("words").onSnapshot(snap => {
+      if (!snap.metadata.fromCache) clearTimeout(timer);
+      words = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => coll.compare(a.word, b.word));
+      if (!words.length && !snap.metadata.fromCache) loadMsg = "Ingen ord endnu. Tilføj dit første ord under “+ Tilføj ord”, eller send Claude flere skærmbilleder.";
+      renderList();
+      if (!$("#view-practice").hidden) renderCard();
+    }, err => { clearTimeout(timer); loadMsg = "Ordlisten kunne ikke hentes (" + err.code + "). Genindlæs siden senere."; renderList(); });
+  })();
+})();
+</script>
