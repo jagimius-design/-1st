@@ -1,15 +1,21 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Mine danske ord</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,650;1,6..72,400&family=Figtree:wght@400;500;600;700&display=swap">
 <style>
-/* Layout: one reading column; sticky search on top; words grouped under Danish letters A–Å, each word a fold-open dictionary card. */
+/* Layout: one reading column; sticky tabs + controls on top. Views: word list (A–Å or by frequency), swipe game, flashcards, add form. */
 :root {
   --paper: #eef2f4; --card: #ffffff; --ink: #13222c; --muted: #586b78; --line: #d9e1e6;
   --accent: #0d5878; --accent-soft: #e0edf3; --red: #c8102e; --red-soft: #fbe6e9; --ok: #1d7a4c; --ok-soft: #e1f2e9;
   --mark: rgba(13, 88, 120, .18);
   --f-head: "Newsreader", "Iowan Old Style", Georgia, serif;
   --f-ui: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: light;
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
   --paper: #0e151a; --card: #162129; --ink: #e5edf2; --muted: #93a4b0; --line: #26343e;
@@ -20,9 +26,12 @@
   --accent: #74bddd; --accent-soft: #1b3240; --red: #ff6f80; --red-soft: #3a1f25; --ok: #6fd3a0; --ok-soft: #173327;
   --mark: rgba(116, 189, 221, .26); color-scheme: dark }
 
-body { background: var(--paper); color: var(--ink); font: 15px/1.5 var(--f-ui); }
+* { box-sizing: border-box; }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 15px/1.5 var(--f-ui); }
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
-.wrap { max-width: 860px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 64px; }
+[hidden] { display: none !important; }
+.wrap { max-width: 860px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-top: calc(28px + env(safe-area-inset-top, 0px)); padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px)); }
 header { display: grid; gap: 6px; }
 .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); display: flex; gap: 8px; align-items: center; }
 .eyebrow .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); }
@@ -34,7 +43,7 @@ h1 { font: 650 clamp(30px, 6vw, 44px)/1.05 var(--f-head); margin: 0; text-wrap: 
 .tabs { display: flex; gap: 6px; flex-wrap: wrap; }
 .tab { font: 600 14px var(--f-ui); color: var(--muted); background: transparent; border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px; cursor: pointer; }
 .tab[aria-selected="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-.tab:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, a:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .search { display: flex; align-items: center; gap: 8px; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 0 12px; }
 .search svg { flex: none; color: var(--muted); }
 .search input { flex: 1; min-width: 0; border: 0; background: transparent; color: var(--ink); font: 16px var(--f-ui); padding: 11px 0; }
@@ -43,30 +52,50 @@ h1 { font: 650 clamp(30px, 6vw, 44px)/1.05 var(--f-head); margin: 0; text-wrap: 
 .filters { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
 .chip { font: 500 13px var(--f-ui); color: var(--muted); background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: 4px 10px; cursor: pointer; }
 .chip[aria-pressed="true"] { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
-.letters { display: flex; gap: 2px; flex-wrap: wrap; margin-left: auto; }
+select.sel { font: 500 13px var(--f-ui); color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: 4px 8px; }
+.letters { display: flex; gap: 2px; flex-wrap: wrap; }
 .letters a { font: 600 13px var(--f-head); color: var(--accent); text-decoration: none; padding: 2px 6px; border-radius: 4px; }
 .letters a:hover { background: var(--accent-soft); }
 
 .notice { color: var(--muted); background: var(--card); border: 1px dashed var(--line); border-radius: 10px; padding: 18px; margin-top: 12px; }
 .group { margin-top: 18px; }
-.group h2 { font: 650 22px var(--f-head); color: var(--accent); margin: 0 0 6px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+.group h2 { font: 650 22px var(--f-head); color: var(--accent); margin: 0 0 6px; padding-bottom: 4px; border-bottom: 1px solid var(--line); display: flex; gap: 10px; align-items: baseline; }
+.group h2 small { font: 500 13px var(--f-ui); color: var(--muted); }
 .list { display: grid; gap: 8px; }
+.more { margin: 12px auto 0; display: block; }
 
 .word { background: var(--card); border: 1px solid var(--line); border-radius: 10px; }
-.word > summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; padding: 12px 16px; align-items: baseline; }
+.word > summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; padding: 12px 16px; align-items: center; }
 .word > summary::-webkit-details-marker { display: none; }
-.head { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; min-width: 0; }
+.head { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: center; min-width: 0; }
 .hw { font: 650 23px/1.15 var(--f-head); color: var(--ink); }
-.pos { font-size: 13px; color: var(--muted); }
-.forms { font-size: 13px; color: var(--muted); }
+.pos, .forms { font-size: 13px; color: var(--muted); }
 .gloss { grid-column: 1 / -1; color: var(--ink); min-width: 0; }
 .gloss .n { color: var(--muted); }
+.side { display: flex; gap: 8px; align-items: center; }
 .pill { font: 600 11px var(--f-ui); letter-spacing: .06em; text-transform: uppercase; border-radius: 999px; padding: 2px 8px; white-space: nowrap; }
 .pill.new { color: var(--red); background: var(--red-soft); }
 .pill.learning { color: var(--accent); background: var(--accent-soft); }
 .pill.known { color: var(--ok); background: var(--ok-soft); }
 
-.body { padding: 0 16px 16px; display: grid; gap: 14px; border-top: 1px solid var(--line); padding-top: 12px; }
+/* frequency meter: 4 bars, filled = more common */
+.freq { display: inline-flex; gap: 6px; align-items: center; font-size: 12px; color: var(--muted); white-space: nowrap; }
+.meter { display: inline-flex; gap: 2px; align-items: flex-end; height: 12px; }
+.meter i { width: 4px; border-radius: 1px; background: var(--line); }
+.meter i:nth-child(1) { height: 5px; } .meter i:nth-child(2) { height: 7px; } .meter i:nth-child(3) { height: 9px; } .meter i:nth-child(4) { height: 12px; }
+.meter i.on { background: var(--accent); }
+
+.say { flex: none; width: 34px; height: 34px; border-radius: 50%; border: 0; background: var(--accent-soft); color: var(--accent); display: inline-grid; place-items: center; cursor: pointer; padding: 0; }
+.say.sm { width: 26px; height: 26px; }
+.say svg { width: 18px; height: 18px; }
+.say.sm svg { width: 14px; height: 14px; }
+.say.speaking { background: var(--accent); color: var(--paper); }
+.ddo { flex: none; height: 34px; padding: 0 10px; border-radius: 999px; border: 1px solid var(--accent-soft); color: var(--accent); display: inline-flex; align-items: center; gap: 4px; font: 600 12px var(--f-ui); letter-spacing: .04em; text-decoration: none; cursor: pointer; }
+.ddo:hover { background: var(--accent-soft); }
+.ddo.sm { height: 26px; padding: 0 8px; font-size: 11px; }
+.ddo svg { width: 12px; height: 12px; }
+
+.body { padding: 12px 16px 16px; display: grid; gap: 14px; border-top: 1px solid var(--line); }
 .sec-title { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 6px; }
 .senses { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
 .sense { display: grid; gap: 2px; min-width: 0; }
@@ -75,14 +104,12 @@ h1 { font: 650 clamp(30px, 6vw, 44px)/1.05 var(--f-head); margin: 0; text-wrap: 
 .ex { color: var(--muted); }
 .ex-da { font: italic 400 16px/1.4 var(--f-head); color: var(--ink); }
 .phrase { display: grid; gap: 6px; padding-left: 12px; border-left: 2px solid var(--line); min-width: 0; }
-.phrase .da { font: 650 17px var(--f-head); color: var(--accent); }
+.phrase .da { font: 650 17px var(--f-head); color: var(--accent); display: flex; gap: 8px; align-items: center; }
 .tools { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 .btn { font: 600 13px var(--f-ui); color: var(--accent); background: var(--accent-soft); border: 0; border-radius: 6px; padding: 6px 10px; cursor: pointer; text-decoration: none; display: inline-flex; gap: 6px; align-items: center; }
 .btn.ghost { background: transparent; border: 1px solid var(--line); color: var(--muted); }
 mark { background: var(--mark); color: inherit; border-radius: 2px; padding: 0 1px; }
-.group-by { display: inline-flex; gap: 6px; align-items: center; color: var(--muted); font-size: 13px; }
 .chip .n { font-variant-numeric: tabular-nums; opacity: .7; margin-left: 4px; }
-.group h2 .sub { font: 400 14px var(--f-ui); color: var(--muted); margin-left: 8px; }
 .syns { display: flex; flex-wrap: wrap; gap: 6px; }
 .syn { font: 500 14px var(--f-ui); color: var(--accent); background: var(--accent-soft); border: 0; border-radius: 999px; padding: 3px 10px; cursor: pointer; }
 .callout { border-radius: 8px; padding: 10px 12px; display: grid; gap: 4px; font-size: 14px; }
@@ -93,11 +120,47 @@ mark { background: var(--mark); color: inherit; border-radius: 2px; padding: 0 1
 .callout.info b { color: var(--accent); }
 .flag { font: 600 11px var(--f-ui); color: var(--red); white-space: nowrap; }
 
-/* Practice */
+/* Swipe game */
+.sw { display: grid; gap: 14px; margin-top: 12px; }
+.sw-top { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; color: var(--muted); font-size: 14px; }
+.sw-top label { display: inline-flex; gap: 6px; align-items: center; }
+.sw-score { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; font-variant-numeric: tabular-nums; }
+.sw-score div { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; text-align: center; }
+.sw-score b { display: block; font: 650 20px var(--f-head); }
+.sw-score span { font-size: 11px; color: var(--muted); letter-spacing: .04em; text-transform: uppercase; }
+.stage { position: relative; height: clamp(260px, calc(100vh - 330px), 440px); height: clamp(260px, calc(100svh - 330px), 440px); }
+body.game header { display: none; }
+body.game .bar { margin-top: 0; padding-top: 6px; }
+body.game .wrap { padding-top: calc(10px + env(safe-area-inset-top, 0px)); }
+body.game .sw { gap: 10px; margin-top: 4px; }
+.sw-card { position: absolute; inset: 0; background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 22px 20px; display: grid; grid-template-rows: auto auto 1fr auto; gap: 10px; text-align: center; touch-action: none; user-select: none; -webkit-user-select: none; cursor: grab; box-shadow: 0 10px 28px rgba(19, 34, 44, .12); overflow: hidden; }
+.sw-card.under { transform: scale(.95) translateY(10px); opacity: .7; box-shadow: none; pointer-events: none; }
+.sw-card.dragging { cursor: grabbing; }
+.sw-kind { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; align-items: center; }
+.sw-word { font: 650 clamp(32px, 9vw, 48px)/1.1 var(--f-head); text-wrap: balance; display: flex; gap: 12px; justify-content: center; align-items: center; flex-wrap: wrap; }
+.sw-word.ph { font-size: clamp(24px, 6.5vw, 34px); }
+.sw-back { text-align: left; overflow: auto; border-top: 1px solid var(--line); padding-top: 12px; display: grid; gap: 10px; align-content: start; }
+.sw-hint { color: var(--muted); font-size: 13px; align-self: end; }
+.stamp { position: absolute; top: 18px; font: 700 18px var(--f-ui); letter-spacing: .08em; padding: 4px 10px; border: 3px solid; border-radius: 8px; opacity: 0; pointer-events: none; }
+.stamp.yes { left: 18px; color: var(--ok); transform: rotate(-12deg); }
+.stamp.no { right: 18px; color: var(--red); transform: rotate(12deg); }
+.sw-actions { display: flex; gap: 14px; justify-content: center; align-items: center; }
+.round { width: 64px; height: 64px; border-radius: 50%; border: 0; cursor: pointer; font: 700 26px var(--f-ui); display: grid; place-items: center; }
+.round.no { background: var(--red-soft); color: var(--red); }
+.round.yes { background: var(--ok-soft); color: var(--ok); }
+.round.flip { width: 48px; height: 48px; font-size: 18px; background: var(--accent-soft); color: var(--accent); }
+.sw-legend { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); }
+.sw-end { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 24px 20px; display: grid; gap: 14px; }
+.sw-end h3 { font: 650 28px var(--f-head); margin: 0; }
+.miss { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.miss li { display: flex; gap: 10px; align-items: center; border-top: 1px solid var(--line); padding-top: 8px; }
+.miss b { font: 650 18px var(--f-head); }
+
+/* Flashcards */
 .practice { display: grid; gap: 14px; margin-top: 12px; }
 .deck-opts { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; color: var(--muted); }
 .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 28px 22px; min-height: 260px; display: grid; gap: 14px; align-content: start; text-align: center; }
-.card .q { font: 650 clamp(28px, 7vw, 40px)/1.15 var(--f-head); text-wrap: balance; }
+.card .q { font: 650 clamp(28px, 7vw, 40px)/1.15 var(--f-head); text-wrap: balance; display: flex; gap: 12px; justify-content: center; align-items: center; flex-wrap: wrap; }
 .card .q.en { font-family: var(--f-ui); font-weight: 600; font-size: clamp(22px, 5vw, 30px); }
 .card .kind { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 .card .a { display: grid; gap: 10px; text-align: left; border-top: 1px solid var(--line); padding-top: 14px; }
@@ -106,6 +169,7 @@ mark { background: var(--mark); color: inherit; border-radius: 2px; padding: 0 1
 .big.reveal { background: var(--ink); color: var(--paper); }
 .big.again { background: var(--red-soft); color: var(--red); }
 .big.good { background: var(--ok-soft); color: var(--ok); }
+.big.plain { background: var(--accent-soft); color: var(--accent); }
 .progress { height: 6px; background: var(--line); border-radius: 999px; overflow: hidden; }
 .progress i { display: block; height: 100%; background: var(--accent); width: 0; transition: width .3s; }
 .boxes { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; font-variant-numeric: tabular-nums; }
@@ -113,21 +177,58 @@ mark { background: var(--mark); color: inherit; border-radius: 2px; padding: 0 1
 .boxes b { display: block; font: 650 20px var(--f-head); }
 .boxes span { font-size: 11px; color: var(--muted); }
 
-/* Add form */
+/* Texts game: read a short article and fill each gap from four options */
+.rd { display: grid; gap: 14px; margin-top: 12px; }
+.rd-grid { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); }
+.rd-item { text-align: left; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; cursor: pointer; display: grid; gap: 4px; font: inherit; color: inherit; }
+.rd-item:hover { border-color: var(--accent); }
+.rd-item b { font: 650 20px/1.2 var(--f-head); }
+.rd-item .meta { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; font-size: 13px; color: var(--muted); }
+.lvl { font: 600 11px var(--f-ui); letter-spacing: .06em; text-transform: uppercase; border-radius: 999px; padding: 2px 8px; color: var(--accent); background: var(--accent-soft); }
+.lvl.Let { color: var(--ok); background: var(--ok-soft); } .lvl.Svær { color: var(--red); background: var(--red-soft); }
+.rd-head { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.rd-head h3 { font: 650 26px/1.15 var(--f-head); margin: 0; flex: 1; min-width: 0; }
+.rd-text { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 20px 20px 8px; font: 400 19px/1.75 var(--f-head); }
+.rd-text p { margin: 0 0 14px; }
+.gap { font: 600 16px var(--f-ui); color: var(--muted); background: var(--paper); border: 1px dashed var(--muted); border-radius: 6px; padding: 0 8px; min-width: 64px; cursor: pointer; line-height: 1.6; vertical-align: baseline; }
+.gap sup { font-size: 10px; margin-left: 2px; }
+.gap.on { border: 2px solid var(--accent); color: var(--accent); background: var(--accent-soft); }
+.gap.ok, .gap.bad { font: 650 19px var(--f-head); border-style: solid; padding: 0 4px; min-width: 0; }
+.gap.ok { color: var(--ok); background: var(--ok-soft); border-color: transparent; }
+.gap.bad { color: var(--red); background: var(--red-soft); border-color: transparent; }
+.rd-opts { position: sticky; bottom: 0; z-index: 4; background: var(--paper); padding: 10px 0 calc(10px + env(safe-area-inset-bottom, 0px)); display: grid; gap: 8px; border-top: 1px solid var(--line); }
+.rd-opts .lbl { font-size: 13px; color: var(--muted); display: flex; justify-content: space-between; gap: 8px; }
+.opt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.opt { font: 600 17px var(--f-ui); color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 12px 10px; cursor: pointer; }
+.opt:hover { border-color: var(--accent); }
+.opt.wrong { color: var(--red); background: var(--red-soft); border-color: transparent; text-decoration: line-through; cursor: default; }
+.opt.right { color: var(--ok); background: var(--ok-soft); border-color: var(--ok); }
+.opt kbd { font: 500 11px var(--f-ui); color: var(--muted); margin-right: 6px; }
+@keyframes shake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+.opt.wrong.now { animation: shake .25s 2; }
+.rd-tr { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px 20px; color: var(--muted); }
+.rd-tr p { margin: 0 0 10px; }
+.rd-res { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; display: grid; gap: 12px; }
+.rd-res h3 { font: 650 26px var(--f-head); margin: 0; }
+.btn.listen svg { width: 16px; height: 16px; }
+.btn.listen.speaking { background: var(--accent); color: var(--paper); }
+
 form.add { display: grid; gap: 12px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 18px; margin-top: 12px; }
 .row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
-label { display: grid; gap: 4px; font-size: 13px; font-weight: 600; color: var(--muted); }
+label.fl { display: grid; gap: 4px; font-size: 13px; font-weight: 600; color: var(--muted); }
 input.f, select.f, textarea.f { font: 15px var(--f-ui); color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 9px 10px; min-width: 0; }
 textarea.f { min-height: 110px; resize: vertical; }
 .hint { font-size: 13px; color: var(--muted); }
 .toast { min-height: 1.5em; font-weight: 600; color: var(--ok); }
 .toast.err { color: var(--red); }
-footer { margin-top: 36px; color: var(--muted); font-size: 13px; }
+.flash { position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); max-width: min(92vw, 520px); background: var(--ink); color: var(--paper); padding: 10px 14px; border-radius: 10px; font-size: 14px; z-index: 20; }
+footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; gap: 6px; }
 footer a { color: var(--accent); }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
-@media (max-width: 520px) { .letters { margin-left: 0; width: 100%; } .boxes span { font-size: 10px; } }
+@media (max-width: 520px) { .boxes span { font-size: 10px; } .round { width: 58px; height: 58px; } }
 </style>
-
+</head>
+<body>
 <div class="wrap">
   <header>
     <div class="eyebrow"><span class="dot"></span>Dansk → engelsk · fra mine skærmbilleder</div>
@@ -137,9 +238,11 @@ footer a { color: var(--accent); }
 
   <div class="bar">
     <div class="tabs" role="tablist">
-      <button class="tab" role="tab" id="tab-list" aria-selected="true" data-view="list">Ordliste</button>
-      <button class="tab" role="tab" id="tab-practice" aria-selected="false" data-view="practice">Øv</button>
-      <button class="tab" role="tab" id="tab-add" aria-selected="false" data-view="add" hidden>+ Tilføj ord</button>
+      <button class="tab" role="tab" aria-selected="true" data-view="list">Ordliste</button>
+      <button class="tab" role="tab" aria-selected="false" data-view="swipe">Swipe-spil</button>
+      <button class="tab" role="tab" aria-selected="false" data-view="read">Tekster</button>
+      <button class="tab" role="tab" aria-selected="false" data-view="practice">Kort</button>
+      <button class="tab" role="tab" aria-selected="false" data-view="add" id="tab-add" hidden>+ Tilføj ord</button>
     </div>
     <div id="list-controls" style="display:grid;gap:10px">
       <div class="search">
@@ -153,17 +256,41 @@ footer a { color: var(--accent); }
         <button class="chip" data-filter="learning" aria-pressed="false">Lærer</button>
         <button class="chip" data-filter="known" aria-pressed="false">Kan</button>
         <button class="chip" data-filter="check" aria-pressed="false">Med rettelser</button>
-        <span class="group-by">Sortér:
-          <button class="chip" data-group="pos" aria-pressed="true">Ordklasse</button>
-          <button class="chip" data-group="alpha" aria-pressed="false">A–Å</button>
-        </span>
-        <nav class="letters" id="letters" aria-label="Spring til"></nav>
+        <select class="sel" id="band" aria-label="Hvor brugt er ordet"><option value="all">Alle hyppigheder</option></select>
+        <select class="sel" id="sort" aria-label="Sortering"><option value="pos">Efter ordklasse</option><option value="az">A–Å</option><option value="freq">Mest brugte først</option></select>
       </div>
+      <nav class="letters" id="letters" aria-label="Bogstaver"></nav>
     </div>
   </div>
 
   <main>
     <section id="view-list"><div id="groups"></div></section>
+
+    <section id="view-swipe" hidden>
+      <div class="sw">
+        <div class="sw-top">
+          <label>Spil med: <select class="sel" id="sw-type"><option value="w">Ord</option><option value="p">Udtryk</option><option value="b" selected>Ord og udtryk</option></select></label>
+          <label>Hyppighed: <select class="sel" id="sw-band"><option value="all">Alle hyppigheder</option></select></label>
+          <label>Runde: <select class="sel" id="sw-size"><option>10</option><option selected>20</option><option>40</option></select></label>
+          <label><input type="checkbox" id="sw-auto"> Læs ordet op automatisk</label>
+        </div>
+        <div class="progress" aria-hidden="true"><i id="sw-bar"></i></div>
+        <div class="sw-score"><div><b id="sw-known">0</b><span>Kan</span></div><div><b id="sw-unknown">0</b><span>Kan ikke</span></div><div><b id="sw-streak">0</b><span>Stime</span></div></div>
+        <div id="sw-play">
+          <div class="stage" id="stage"></div>
+          <div class="sw-legend"><span>← Kan ikke</span><span>Tryk på kortet for betydning</span><span>Kan →</span></div>
+          <div class="sw-actions">
+            <button class="round no" type="button" id="sw-no" aria-label="Kan ikke">✕</button>
+            <button class="round flip" type="button" id="sw-flip" aria-label="Vis betydning">↻</button>
+            <button class="round yes" type="button" id="sw-yes" aria-label="Kan">✓</button>
+          </div>
+        </div>
+        <div id="sw-end" hidden></div>
+        <p class="hint">Swipe til højre, hvis du kender ordet, og til venstre, hvis du ikke gør. Ord du ikke kan, kommer igen senere i runden. På computer: ← og → eller mellemrum for at vende kortet.</p>
+      </div>
+    </section>
+
+    <section id="view-read" hidden><div class="rd" id="rd"></div></section>
 
     <section id="view-practice" hidden>
       <div class="practice">
@@ -182,16 +309,16 @@ footer a { color: var(--accent); }
     <section id="view-add" hidden>
       <form class="add" id="add-form" autocomplete="off">
         <div class="row">
-          <label for="a-word">Dansk ord<input class="f" id="a-word" required placeholder="fx overveje"></label>
-          <label for="a-pos">Ordklasse
+          <label class="fl" for="a-word">Dansk ord<input class="f" id="a-word" required placeholder="fx overveje"></label>
+          <label class="fl" for="a-pos">Ordklasse
             <select class="f" id="a-pos"><option value="vb.">verbum (vb.)</option><option value="sb.">substantiv (sb.)</option><option value="adj.">adjektiv (adj.)</option><option value="adv.">adverbium (adv.)</option><option value="præp.">præposition (præp.)</option><option value="udtryk">udtryk</option></select>
           </label>
-          <label for="a-forms">Bøjning<input class="f" id="a-forms" placeholder="fx -r, -de, -t"></label>
+          <label class="fl" for="a-forms">Bøjning<input class="f" id="a-forms" placeholder="fx -r, -de, -t"></label>
         </div>
-        <label for="a-senses">Betydninger — én pr. linje, eksempel efter |
+        <label class="fl" for="a-senses">Betydninger — én pr. linje, eksempel efter |
           <textarea class="f" id="a-senses" required placeholder="consider | We need to consider all options&#10;think over"></textarea>
         </label>
-        <label for="a-phrases">Udtryk (valgfrit) — dansk = engelsk, én pr. linje
+        <label class="fl" for="a-phrases">Udtryk (valgfrit) — dansk = engelsk, én pr. linje
           <textarea class="f" id="a-phrases" placeholder="overveje nøje = consider carefully"></textarea>
         </label>
         <div class="tools"><button class="big reveal" type="submit">Gem ord</button><span class="toast" id="toast" role="status"></span></div>
@@ -199,8 +326,13 @@ footer a { color: var(--accent); }
     </section>
   </main>
 
-  <footer>Opslag fra ordbogen.com, skrevet ind fra dine skærmbilleder. Synonymer, “Godt at vide” og rettelser er tilføjet af Claude og er ikke fra ordbogen. Tryk “DDO” på et ord for at slå det op i Den Danske Ordbog.</footer>
+  <footer>
+    <span>Opslag fra ordbogen.com, skrevet ind fra dine skærmbilleder. Tryk på højttaleren for at høre et ord, eller “DDO” for at slå det op i Den Danske Ordbog.</span>
+    <span>Ordklasser, synonymer, “Godt at vide” og rettelser er tilføjet af Claude og kommer ikke fra ordbogen. Rettelserne dækker fejl i ordbogen og fejl fra indlæsningen af skærmbillederne.</span>
+    <span>Hvor brugt et ord er, bygger på hvor ofte ordet og dets bøjede former forekommer i danske film- og tv-undertekster (<a href="https://github.com/hermitdave/FrequencyWords" target="_blank" rel="noopener">FrequencyWords</a>, OpenSubtitles 2018, CC BY-SA 4.0).</span>
+  </footer>
 </div>
+<div class="flash" id="flash" role="status" hidden></div>
 
 <script>
 (() => {
@@ -208,17 +340,19 @@ footer a { color: var(--accent); }
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const coll = new Intl.Collator("da", { sensitivity: "base" });
   const DAY = 864e5, STEPS = [0, 1, 3, 7, 21];
+  const BANDS = { 1: "Meget almindeligt", 2: "Almindeligt", 3: "Mindre almindeligt", 4: "Sjældent" };
+  const BAND_HINT = { 1: "over 50 pr. million ord", 2: "10–50 pr. million", 3: "2–10 pr. million", 4: "under 2 pr. million" };
 
-  let words = [], progress = {}, uid = null, db = null, progRef = null;
-  let filter = "all", query = "", dir = "da", deck = [], cur = 0, shown = false, done = 0;
-  let posFilter = "all", groupBy = "pos";
+  let words = [], baseWords = [], dbWords = [], freq = {}, progress = {}, uid = null, db = null, progRef = null;
+  let filter = "all", band = "all", sortBy = "pos", query = "", dir = "da", deck = [], cur = 0, shown = false, done = 0, listLimit = 150;
+  let posFilter = "all";
+  // Word classes in the order the list shows them: [abbreviation, name, Danish grammar term]
   const POS = [
     ["vb.", "Verber", "udsagnsord"], ["sb.", "Navneord", "substantiver"], ["adj.", "Tillægsord", "adjektiver"],
     ["adv.", "Biord", "adverbier"], ["præp.", "Forholdsord", "præpositioner"], ["pron.", "Stedord", "pronominer"],
-    ["udtryk", "Udtryk", "faste vendinger"]];
-  const posName = p => (POS.find(x => x[0] === p) || [p, "Andet", ""])[1];
+    ["konj.", "Bindeord", "konjunktioner"], ["interj.", "Udråbsord", "interjektioner"], ["udtryk", "Faste udtryk", "vendinger"]];
+  const posInfo = p => POS.find(x => x[0] === p) || [p || "?", "Andet", ""];
   const posRank = p => { const i = POS.findIndex(x => x[0] === p); return i < 0 ? 99 : i; };
-  const posSlug = p => "P-" + (posRank(p) < 99 ? posRank(p) : "x");
 
   const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const norm = s => String(s ?? "").toLocaleLowerCase("da");
@@ -229,13 +363,107 @@ footer a { color: var(--accent); }
   };
   const slug = s => norm(s).replace(/æ/g, "ae").replace(/ø/g, "oe").replace(/å/g, "aa").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
   const firstLetter = w => { const c = (w || "?")[0].toLocaleUpperCase("da"); return c === "Ø" || c === "Æ" || c === "Å" || /[A-Z]/.test(c) ? c : "#"; };
+  const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  let flashT; const flash = msg => { const f = $("#flash"); f.textContent = msg; f.hidden = false; clearTimeout(flashT); flashT = setTimeout(() => f.hidden = true, 5000); };
+
+  // ---------- pronunciation ----------
+  const SPK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>`;
+  const canSpeak = "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;
+  let daVoice = null, warned = false;
+  const pickVoice = () => { try { const vs = speechSynthesis.getVoices(); daVoice = vs.find(v => /^da([-_]|$)/i.test(v.lang)) || null; return vs.length; } catch (e) { return 0; } };
+  if (canSpeak) { pickVoice(); try { speechSynthesis.addEventListener("voiceschanged", pickVoice); } catch (e) {} }
+  // Recorded clips: lyd/<id>.bin holds the word and its phrases (Danish voice, IMA ADPCM), played with Web Audio so it works without built-in speech.
+  const clipOwner = new Map();   // text -> word id whose file has it
+  const clipFiles = new Map();   // id -> Promise<Map(text -> clip)>
+  const clipBufs = new Map();    // text -> AudioBuffer
+  let actx = null;
+  const ADP_STEP = [7,8,9,10,11,12,13,14,16,17,19,21,23,25,28,31,34,37,41,45,50,55,60,66,73,80,88,97,107,118,130,143,157,173,190,209,230,253,279,307,337,371,408,449,494,544,598,658,724,796,876,963,1060,1166,1282,1411,1552,1707,1878,2066,2272,2499,2749,3024,3327,3660,4026,4428,4871,5358,5894,6484,7132,7845,8630,9493,10442,11487,12635,13899,15289,16818,18500,20350,22385,24623,27086,29794,32767];
+  const ADP_IDX = [-1,-1,-1,-1,2,4,6,8,-1,-1,-1,-1,2,4,6,8];
+  const indexClips = list => { clipOwner.clear(); for (const w of list) { if (!w.id || !w.word) continue; if (!clipOwner.has(w.word)) clipOwner.set(w.word, w.id); for (const p of w.phrases || []) if (p.da && !clipOwner.has(p.da)) clipOwner.set(p.da, w.id); } };
+  let clipIndex = {};            // id -> bundle number (lyd/bNNN.json holds two words' clips)
+  const clipIndexReady = fetch("lyd/index.json").then(r => r.ok ? r.json() : {}).then(j => { clipIndex = j || {}; }).catch(() => {});
+  function loadClips(id) {
+    const n = clipIndex[id]; if (n == null) return clipIndexReady.then(() => clipIndex[id] == null ? null : loadClips(id));
+    return loadBundle("b" + String(n).padStart(3, "0"));
+  }
+  function loadBundle(name) {
+    if (!clipFiles.has(name)) clipFiles.set(name, fetch("lyd/" + name + ".json").then(r => { if (!r.ok) throw 0; return r.json(); }).then(b64 => {
+      const bin = atob(b64), u8 = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+      const buf = u8.buffer;
+      const v = new DataView(buf), m = new Map(), td = new TextDecoder();
+      if (td.decode(new Uint8Array(buf, 0, 3)) !== "DA1") throw 0;
+      let p = 4; const count = v.getUint16(p, true); p += 2;
+      for (let k = 0; k < count; k++) {
+        const tl = v.getUint16(p, true); p += 2; const text = td.decode(new Uint8Array(buf, p, tl)); p += tl;
+        const n = v.getUint32(p, true), rate = v.getUint16(p + 4, true), pred = v.getInt16(p + 6, true), idx = v.getUint8(p + 8); p += 9;
+        m.set(text, { n, rate, pred, idx, data: new Uint8Array(buf, p, (n + 1) >> 1) }); p += (n + 1) >> 1;
+      }
+      return m;
+    }).catch(() => { clipFiles.delete(name); return null; }));
+    return clipFiles.get(name);
+  }
+  const preload = text => { const id = clipOwner.get(text); if (id) loadClips(id); };
+  function toBuffer(text, c) {
+    if (clipBufs.has(text)) return clipBufs.get(text);
+    const b = actx.createBuffer(1, Math.max(1, c.n), c.rate), out = b.getChannelData(0);
+    let pred = c.pred, idx = c.idx;
+    for (let i = 0; i < c.n; i++) {
+      const code = (c.data[i >> 1] >> ((i & 1) * 4)) & 15, step = ADP_STEP[idx];
+      let dq = step >> 3; if (code & 4) dq += step; if (code & 2) dq += step >> 1; if (code & 1) dq += step >> 2;
+      pred += code & 8 ? -dq : dq; pred = pred < -32768 ? -32768 : pred > 32767 ? 32767 : pred;
+      idx += ADP_IDX[code]; idx = idx < 0 ? 0 : idx > 88 ? 88 : idx;
+      out[i] = pred / 32768;
+    }
+    clipBufs.set(text, b); return b;
+  }
+  let playing = null;
+  const unlockAudio = () => { try { if (!actx) { const AC = window.AudioContext || window.webkitAudioContext; if (AC) actx = new AC(); } if (actx && actx.state === "suspended") actx.resume(); } catch (e) {} };
+  async function playClip(text, el, bundle) {
+    const id = bundle ? null : clipOwner.get(text); if ((!id && !bundle) || !actx) return false;
+    const m = await (bundle ? loadBundle(bundle) : loadClips(id)); const c = m && m.get(text); if (!c) return false;
+    try {
+      if (actx.state === "suspended") await actx.resume();
+      if (playing) try { playing.stop(); } catch (e) {}
+      if (canSpeak) try { speechSynthesis.cancel(); } catch (e) {}
+      const src = actx.createBufferSource(); src.buffer = toBuffer(text, c); src.connect(actx.destination);
+      $$(".say.speaking").forEach(b => b.classList.remove("speaking"));
+      if (el) { el.classList.add("speaking"); src.onended = () => el.classList.remove("speaking"); }
+      src.start(); playing = src; return true;
+    } catch (e) { return false; }
+  }
+  // Same rewrite the clips were recorded from: drop "ren(t)"-style endings, expand ng/ngt, read "/" as a pause.
+  const spoken = t => t.replace(/(?<=\p{L})\([^)]*\)/gu, "").replace(/[()]/g, "").replace(/\bngt\b/g, "noget").replace(/\bngs\b/g, "nogens").replace(/\bng\b/g, "nogen").replace(/\s*\/\s*/g, ", ").replace(/\s+/g, " ").trim();
+  // Opens the word in Den Danske Ordbog (one per word; a word listed in two word classes shares it) (recorded pronunciation, full definitions) in a new tab.
+  const EXT = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4 11 13"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>`;
+  const ddoBtn = (text, sm) => `<a class="ddo${sm ? " sm" : ""}" href="https://ordnet.dk/ddo/ordbog?query=${encodeURIComponent(text)}" target="_blank" rel="noopener" aria-label="Slå ${esc(text)} op i Den Danske Ordbog" title="Slå op i Den Danske Ordbog (ordnet.dk)">DDO ${EXT}</a>`;
+  const sayBtn = (text, sm) => `<button class="say${sm ? " sm" : ""}" type="button" data-say="${esc(text)}" aria-label="Hør udtalen af ${esc(text)}" title="Hør udtalen">${SPK}</button>`;
+  async function say(text, el) {
+    unlockAudio();
+    if (await playClip(text, el)) return;
+    if (!canSpeak) { flash("Der er ingen optagelse af dette ord, og din browser kan ikke læse op."); return; }
+    text = spoken(text);
+    try {
+      const n = pickVoice();
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = "da-DK"; if (daVoice) u.voice = daVoice; u.rate = .85;
+      if (el) { $$(".say.speaking").forEach(b => b.classList.remove("speaking")); el.classList.add("speaking"); u.onend = u.onerror = () => el.classList.remove("speaking"); }
+      speechSynthesis.speak(u);
+      if (!daVoice && n && !warned) { warned = true; flash("Din enhed har ingen dansk stemme, så udtalen kan lyde forkert. Tilføj “Dansk” under tekst-til-tale i enhedens indstillinger."); }
+    } catch (e) { flash("Oplæsning virker ikke her."); }
+  }
+
+  // ---------- frequency ----------
+  const fq = w => freq[w.id] || null;
+  const bandOf = w => fq(w)?.b || 4;
+  const meter = b => `<span class="meter" aria-hidden="true">${[1, 2, 3, 4].map(i => `<i class="${i <= 5 - b ? "on" : ""}"></i>`).join("")}</span>`;
+  const freqTag = (w, short) => { const b = bandOf(w); return `<span class="freq" title="${BANDS[b]} — ${BAND_HINT[b]}">${meter(b)}${short ? "" : BANDS[b]}</span>`; };
 
   // ---------- cards & progress ----------
+  const mainSenses = w => w.senses?.length ? w.senses : (w.phrases || []).flatMap(p => (p.senses || []).slice(0, 1).map(s => ({ ...s, en: `${p.da}: ${s.en}` }))).slice(0, 3).concat(w.senses?.length || w.phrases?.length ? [] : [{ en: w.gloss || "" }]);
   const cardsOf = w => {
-    const out = [];
-    if (w.senses?.length) out.push({ key: w.id, word: w, da: w.word, senses: w.senses, kind: w.pos || "ord" });
-    (w.phrases || []).forEach(p => out.push({ key: w.id + "|" + p.da, word: w, da: p.da, senses: p.senses || [], kind: "udtryk" }));
-    if (!out.length) out.push({ key: w.id, word: w, da: w.word, senses: [{ en: w.gloss }], kind: w.pos || "ord" });
+    const out = [{ key: w.id, word: w, da: w.word, senses: mainSenses(w), kind: w.pos || "ord" }];
+    (w.phrases || []).forEach(p => { if (p.senses?.length) out.push({ key: w.id + "|" + p.da, word: w, da: p.da, senses: p.senses, kind: "udtryk" }); });
     return out;
   };
   const allCards = () => words.flatMap(cardsOf);
@@ -243,9 +471,14 @@ footer a { color: var(--accent); }
   const statusOf = w => {
     const cs = cardsOf(w), seen = cs.filter(c => progress[c.key]);
     if (!seen.length) return "new";
-    return cs.every(c => boxOf(c.key) >= 3) ? "known" : "learning";
+    return boxOf(w.id) >= 3 && seen.every(c => boxOf(c.key) >= 3) ? "known" : "learning";
   };
   const label = { new: "Ny", learning: "Lærer", known: "Kan" };
+  function setProgress(key, ok) {
+    const box = ok ? Math.min(boxOf(key) + 1, STEPS.length - 1) : 0;
+    progress[key] = { box, due: ok ? Date.now() + STEPS[box] * DAY : Date.now() };
+    saveProgress();
+  }
 
   let saveTimer = null, saving = Promise.resolve();
   function saveProgress() {
@@ -260,6 +493,7 @@ footer a { color: var(--accent); }
     if (filter === "check") { if (!w.check) return false; }
     else if (filter !== "all" && statusOf(w) !== filter) return false;
     if (posFilter !== "all" && w.pos !== posFilter) return false;
+    if (band !== "all" && String(bandOf(w)) !== band) return false;
     if (!query) return true;
     const q = norm(query);
     const hay = [w.word, w.forms, w.gloss, ...(w.synonyms || []), w.extra,
@@ -269,25 +503,23 @@ footer a { color: var(--accent); }
   }
   const senseHTML = s => `<li class="sense"><div class="en">${hl(s.en)}${s.note ? ` <span class="note">(${hl(s.note)})</span>` : ""}</div>${s.ex_en ? `<div class="ex">${hl(s.ex_en)}</div>` : ""}${s.ex_da ? `<div class="ex-da">${hl(s.ex_da)}</div>` : ""}</li>`;
   function wordHTML(w) {
-    const st = statusOf(w);
-    const nP = (w.phrases || []).length;
-    const open = query ? " open" : "";
+    const st = statusOf(w), nP = (w.phrases || []).length, open = query ? " open" : "";
     return `<details class="word" id="w-${esc(w.id)}"${open}>
       <summary>
-        <div class="head"><span class="hw">${hl(w.word)}</span><span class="pos">${esc(w.pos || "")}</span>${w.forms ? `<span class="forms">‹${hl(w.forms)}›</span>` : ""}</div>
-        <span class="pill ${st}">${label[st]}</span>
+        <div class="head">${sayBtn(w.word)}<span class="hw">${hl(w.word)}</span><span class="pos">${esc(w.pos || "")}</span>${w.forms ? `<span class="forms">‹${hl(w.forms)}›</span>` : ""}</div>
+        <div class="side">${ddoBtn(w.word, true)}${freqTag(w, true)}<span class="pill ${st}">${label[st]}</span></div>
         <div class="gloss">${hl(w.gloss || (w.senses || []).map(s => s.en).join(", "))}${nP ? ` <span class="n">· ${nP} udtryk</span>` : ""}${w.check ? ` <span class="flag">● rettelse</span>` : ""}</div>
       </summary>
       <div class="body">
+        <div class="freq">${freqTag(w)} <span>· ${BAND_HINT[bandOf(w)]}</span></div>
         ${w.senses?.length ? `<div><p class="sec-title">Betydninger</p><ul class="senses">${w.senses.map(senseHTML).join("")}</ul></div>` : ""}
-        ${nP ? `<div><p class="sec-title">Udtryk</p><div class="senses">${w.phrases.map(p => `<div class="phrase"><div class="da">${hl(p.da)}</div><ul class="senses">${(p.senses || []).map(senseHTML).join("")}</ul></div>`).join("")}</div></div>` : ""}
+        ${nP ? `<div><p class="sec-title">Udtryk</p><div class="senses">${w.phrases.map(p => `<div class="phrase"><div class="da">${sayBtn(p.da, true)}${hl(p.da)}</div><ul class="senses">${(p.senses || []).map(senseHTML).join("")}</ul></div>`).join("")}</div></div>` : ""}
         ${w.synonyms?.length ? `<div><p class="sec-title">Synonymer</p><div class="syns">${w.synonyms.map(s => `<button class="syn" type="button" data-syn="${esc(s.replace(/\s*\(.*?\)\s*/g, " ").trim())}">${hl(s)}</button>`).join("")}</div></div>` : ""}
         ${w.extra ? `<div class="callout info"><b>Godt at vide</b><span>${hl(w.extra)}</span></div>` : ""}
         ${w.check ? `<div class="callout check"><b>Tjekket af Claude: rettelse</b><span>${hl(w.check)}</span></div>` : ""}
-        ${w.note ? `<p class="hint">${esc(w.note)}</p>` : ""}
+        ${w.note ? `<p class="hint" style="margin:0">${esc(w.note)}</p>` : ""}
         <div class="tools">
-          ${"speechSynthesis" in window ? `<button class="btn" type="button" data-say="${esc(w.word)}">▶ Udtal</button>` : ""}
-          <a class="btn ghost" href="https://ordnet.dk/ddo/ordbog?query=${encodeURIComponent(w.word)}" target="_blank" rel="noopener">DDO ↗</a>
+          <a class="btn ghost" href="https://ordnet.dk/ddo/ordbog?query=${encodeURIComponent(w.word)}" target="_blank" rel="noopener">Se i Den Danske Ordbog ↗</a>
           <button class="btn ghost" type="button" data-drill="${esc(w.id)}">Øv dette ord</button>
         </div>
       </div>
@@ -296,43 +528,260 @@ footer a { color: var(--accent); }
   function renderPosFilters() {
     const counts = {}; words.forEach(w => counts[w.pos] = (counts[w.pos] || 0) + 1);
     const present = Object.keys(counts).sort((a, b) => posRank(a) - posRank(b));
-    $("#pos-filters").innerHTML = `<button class="chip" data-pos="all" aria-pressed="${posFilter === "all"}">Alle ordklasser<span class="n">${words.length}</span></button>` +
-      present.map(p => `<button class="chip" data-pos="${esc(p)}" aria-pressed="${posFilter === p}">${esc(posName(p))}<span class="n">${counts[p]}</span></button>`).join("");
+    $("#pos-filters").innerHTML = `<button class="chip" type="button" data-pos="all" aria-pressed="${posFilter === "all"}">Alle ordklasser<span class="n">${words.length}</span></button>` +
+      present.map(p => `<button class="chip" type="button" data-pos="${esc(p)}" aria-pressed="${posFilter === p}">${esc(posInfo(p)[1])}<span class="n">${counts[p]}</span></button>`).join("");
   }
   function renderList() {
-    const shownWords = words.filter(matches);
-    const groups = new Map();
-    const byPos = groupBy === "pos";
-    const sorted = byPos ? [...shownWords].sort((a, b) => posRank(a.pos) - posRank(b.pos) || coll.compare(a.word, b.word)) : shownWords;
-    sorted.forEach(w => { const K = byPos ? w.pos : firstLetter(w.word); if (!groups.has(K)) groups.set(K, []); groups.get(K).push(w); });
-    const el = $("#groups");
     renderPosFilters();
-    if (!words.length) { el.innerHTML = `<div class="notice">${loadMsg}</div>`; }
-    else if (!shownWords.length) { el.innerHTML = `<div class="notice">Ingen ord matcher${query ? ` “${esc(query)}”` : ""} med de valgte filtre. Prøv et kortere søgeord, eller vælg “Alle”.</div>`; }
-    else el.innerHTML = [...groups].map(([K, ws]) => {
-      const id = byPos ? posSlug(K) : "L-" + K;
-      const title = byPos ? `${esc(posName(K))}<span class="sub">${esc((POS.find(x => x[0] === K) || [])[2] || "")} · ${ws.length}</span>` : K;
-      return `<div class="group" id="${id}"><h2>${title}</h2><div class="list">${ws.map(wordHTML).join("")}</div></div>`;
-    }).join("");
-    $("#letters").innerHTML = byPos ? "" : [...groups.keys()].map(L => `<a href="#L-${L}" data-letter="${L}">${L}</a>`).join("");
+    if (sortBy === "pos") return renderByPos();
+    const shownWords = words.filter(matches);
+    if (sortBy === "freq") shownWords.sort((a, b) => (fq(b)?.f || 0) - (fq(a)?.f || 0) || coll.compare(a.word, b.word));
+    const el = $("#groups");
+    if (!words.length) { el.innerHTML = `<div class="notice">${loadMsg}</div>`; $("#letters").innerHTML = ""; renderStats(); return; }
+    if (!shownWords.length) { el.innerHTML = `<div class="notice">Ingen ord matcher dit valg${query ? ` “${esc(query)}”` : ""}. Prøv et kortere søgeord, eller vælg “Alle”.</div>`; $("#letters").innerHTML = ""; renderStats(); return; }
+    const visible = shownWords.slice(0, query ? 400 : listLimit);
+    const groups = new Map();
+    visible.forEach(w => { const G = sortBy === "freq" ? "b" + bandOf(w) : firstLetter(w.word); if (!groups.has(G)) groups.set(G, []); groups.get(G).push(w); });
+    const counts = {}; if (sortBy === "freq") shownWords.forEach(w => counts[bandOf(w)] = (counts[bandOf(w)] || 0) + 1);
+    el.innerHTML = [...groups].map(([G, ws]) => `<div class="group" id="L-${G}"><h2>${sortBy === "freq" ? `${BANDS[G[1]]} <small>${counts[G[1]]} ord · ${BAND_HINT[G[1]]}</small>` : G}</h2><div class="list">${ws.map(wordHTML).join("")}</div></div>`).join("")
+      + (shownWords.length > visible.length ? `<button class="big plain more" type="button" id="more">Vis flere (${shownWords.length - visible.length} tilbage)</button>` : "");
+    $("#letters").innerHTML = sortBy === "freq" ? "" : [...new Set(shownWords.map(w => firstLetter(w.word)))].map(L => `<a href="#L-${L}" data-letter="${L}">${L}</a>`).join("");
+    renderStats();
+  }
+  // Groups the list by word class (verbs, nouns, …), A–Å inside each class.
+  function renderByPos() {
+    const el = $("#groups");
+    const shownWords = words.filter(matches).sort((a, b) => posRank(a.pos) - posRank(b.pos) || coll.compare(a.word, b.word));
+    $("#letters").innerHTML = "";
+    if (!words.length) { el.innerHTML = `<div class="notice">${loadMsg}</div>`; renderStats(); return; }
+    if (!shownWords.length) { el.innerHTML = `<div class="notice">Ingen ord matcher dit valg${query ? ` “${esc(query)}”` : ""}. Prøv et kortere søgeord, eller vælg “Alle”.</div>`; renderStats(); return; }
+    const visible = shownWords;   // every class visible at once; cards are collapsed, so the full list stays light
+    const counts = {}; shownWords.forEach(w => counts[w.pos] = (counts[w.pos] || 0) + 1);
+    const groups = new Map(); visible.forEach(w => { if (!groups.has(w.pos)) groups.set(w.pos, []); groups.get(w.pos).push(w); });
+    el.innerHTML = [...groups].map(([p, ws]) => { const [, name, term] = posInfo(p);
+      return `<div class="group" id="P-${posRank(p)}"><h2>${esc(name)} <small>${esc(term)} · ${counts[p]} ord</small></h2><div class="list">${ws.map(wordHTML).join("")}</div></div>`; }).join("")
+      + (shownWords.length > visible.length ? `<button class="big plain more" type="button" id="more">Vis flere (${shownWords.length - visible.length} tilbage)</button>` : "");
+    $("#letters").innerHTML = [...new Set(shownWords.map(w => w.pos))].map(p => `<a href="#P-${posRank(p)}" data-posjump="${esc(p)}">${esc(posInfo(p)[1])}</a>`).join("");
     renderStats();
   }
   function renderStats() {
     if (!words.length) return;
-    const cs = allCards(), now = Date.now();
+    const now = Date.now(), cs = allCards();
     const due = cs.filter(c => (progress[c.key]?.due ?? 0) <= now).length;
     const known = words.filter(w => statusOf(w) === "known").length;
     const nP = words.reduce((n, w) => n + (w.phrases || []).length, 0);
     $("#stats").innerHTML = `<b>${words.length}</b> ord · <b>${nP}</b> udtryk · <b>${known}</b> lært · <b>${due}</b> kort at øve i dag`;
   }
+  function fillBandSelects() {
+    const counts = { 1: 0, 2: 0, 3: 0, 4: 0 }; words.forEach(w => counts[bandOf(w)]++);
+    const opts = `<option value="all">Alle hyppigheder</option>` + [1, 2, 3, 4].map(b => `<option value="${b}">${BANDS[b]} (${counts[b]})</option>`).join("");
+    ["#band", "#sw-band"].forEach(id => { const s = $(id), v = s.value; s.innerHTML = opts; s.value = v || "all"; });
+  }
 
-  // ---------- practice ----------
+  // ---------- swipe game ----------
+  const sw = { deck: [], i: 0, known: 0, unknown: [], requeued: new Set(), streak: 0, best: 0, flipped: false, total: 0 };
+  // The deck holds cards (a word or one of its phrases), the same cards the flashcards use, so progress is shared.
+  function swNewRound(onlyKeys) {
+    const size = +$("#sw-size").value, b = $("#sw-band").value, type = $("#sw-type").value;
+    let pool = onlyKeys ? allCards().filter(c => onlyKeys.includes(c.key))
+      : words.filter(w => b === "all" || String(bandOf(w)) === b).flatMap(cardsOf).filter(c => type === "b" || (type === "p") === (c.kind === "udtryk"));
+    const now = Date.now();
+    // unseen and due cards first, then the rest; random within each group
+    pool = shuffle(pool).sort((x, y) => (((progress[x.key]?.due ?? 0) > now) - ((progress[y.key]?.due ?? 0) > now)) || boxOf(x.key) - boxOf(y.key));
+    Object.assign(sw, { deck: shuffle(pool.slice(0, size)), i: 0, known: 0, unknown: [], requeued: new Set(), streak: 0, best: 0, flipped: false });
+    sw.total = sw.deck.length;
+    $("#sw-end").hidden = true; $("#sw-play").hidden = false;
+    swRender();
+  }
+  function swBack(c) {
+    const ss = c.senses.slice(0, 4);
+    const ex = ss.find(s => s.ex_en || s.ex_da);
+    return `<div class="sw-back"><ul class="senses">${ss.map(s => `<li class="sense"><div class="en">${esc(s.en)}${s.note ? ` <span class="note">(${esc(s.note)})</span>` : ""}</div></li>`).join("")}</ul>
+      ${ex ? `<div>${ex.ex_da ? `<div class="ex-da">${esc(ex.ex_da)}</div>` : ""}${ex.ex_en ? `<div class="ex">${esc(ex.ex_en)}</div>` : ""}</div>` : ""}</div>`;
+  }
+  function swCardHTML(c, under) {
+    const w = c.word, ph = c.kind === "udtryk";
+    return `<div class="sw-card${under ? " under" : ""}"${under ? ' aria-hidden="true"' : ' id="swc" tabindex="0" role="group" aria-label="Ordkort"'}>
+      <span class="stamp yes">KAN</span><span class="stamp no">KAN IKKE</span>
+      <div class="sw-kind"><span>${ph ? "udtryk · " + esc(w.word) : esc(w.pos || "ord")}</span>${freqTag(w)}</div>
+      <div class="sw-word${ph ? " ph" : ""}">${esc(c.da)}${under ? "" : sayBtn(c.da) + ddoBtn(w.word)}</div>
+      ${!under && sw.flipped ? swBack(c) : `<div></div>`}
+      <div class="sw-hint">${sw.flipped || under ? "" : "Tryk for at se betydningen"}</div>
+    </div>`;
+  }
+  function swRender(speak) {
+    $("#sw-known").textContent = sw.known; $("#sw-unknown").textContent = sw.unknown.length; $("#sw-streak").textContent = sw.streak;
+    $("#sw-bar").style.width = sw.total ? Math.min(100, sw.i / sw.deck.length * 100) + "%" : "0";
+    if (!words.length) { $("#stage").innerHTML = `<div class="notice">${loadMsg}</div>`; return; }
+    if (sw.i >= sw.deck.length) return swEnd();
+    const w = sw.deck[sw.i], nx = sw.deck[sw.i + 1];
+    $("#stage").innerHTML = (nx ? swCardHTML(nx, true) : "") + swCardHTML(w, false);
+    bindDrag($("#swc"));
+    preload(w.da); if (nx) preload(nx.da);
+    if (speak && $("#sw-auto").checked) say(w.da, $("#swc .say"));
+  }
+  function swDecide(ok) {
+    const w = sw.deck[sw.i]; if (!w) return;
+    const card = $("#swc");
+    if (card) { card.style.transition = "transform .28s ease-out, opacity .28s"; card.style.transform = `translateX(${ok ? 140 : -140}%) rotate(${ok ? 18 : -18}deg)`; card.style.opacity = "0"; }
+    setProgress(w.key, ok);
+    if (ok) { sw.streak++; sw.best = Math.max(sw.best, sw.streak); if (!sw.unknown.some(u => u.key === w.key)) sw.known++; }
+    else {
+      sw.streak = 0;
+      if (!sw.unknown.some(u => u.key === w.key)) sw.unknown.push(w);
+      if (!sw.requeued.has(w.key)) { sw.requeued.add(w.key); sw.deck.splice(Math.min(sw.i + 5, sw.deck.length), 0, w); }
+    }
+    sw.i++; sw.flipped = false;
+    setTimeout(() => { swRender(true); renderStats(); }, card ? 220 : 0);
+  }
+  function swFlip() { if (sw.i >= sw.deck.length) return; sw.flipped = !sw.flipped; swRender(false); }
+  function swEnd() {
+    $("#sw-play").hidden = true; const e = $("#sw-end"); e.hidden = false;
+    const n = sw.total, k = sw.known;
+    e.innerHTML = `<div class="sw-end"><div class="sw-kind">Runden er slut</div><h3>Du kunne ${k} af ${n}</h3>
+      <p class="hint">Længste stime: ${sw.best} i træk.${sw.unknown.length ? " Her er dem, du skal øve:" : " Flot — du kendte dem alle!"}</p>
+      ${sw.unknown.length ? `<ul class="miss">${sw.unknown.map(c => `<li>${sayBtn(c.da, true)}<b>${esc(c.da)}</b>${ddoBtn(c.word.word, true)}<span class="hint">${esc(c.senses.map(s => s.en).join(", "))}</span></li>`).join("")}</ul>` : ""}
+      <div class="card-actions">${sw.unknown.length ? `<button class="big again" type="button" id="sw-retry">Øv de ${sw.unknown.length} ukendte igen</button>` : ""}<button class="big reveal" type="button" id="sw-again">Ny runde</button></div></div>`;
+    $("#sw-again").onclick = () => swNewRound();
+    const r = $("#sw-retry"); if (r) r.onclick = () => swNewRound(sw.unknown.map(c => c.key));
+    $("#sw-bar").style.width = "100%";
+  }
+  function bindDrag(card) {
+    if (!card) return;
+    let x0 = null, y0 = 0, dx = 0, moved = false, id = null;
+    const yes = card.querySelector(".stamp.yes"), no = card.querySelector(".stamp.no");
+    card.addEventListener("pointerdown", e => {
+      if (e.target.closest(".say, .ddo")) return;
+      x0 = e.clientX; y0 = e.clientY; dx = 0; moved = false; id = e.pointerId;
+      try { card.setPointerCapture(id); } catch (er) {}
+      card.classList.add("dragging"); card.style.transition = "none";
+    });
+    card.addEventListener("pointermove", e => {
+      if (x0 === null || e.pointerId !== id) return;
+      dx = e.clientX - x0; if (Math.abs(dx) > 6 || Math.abs(e.clientY - y0) > 6) moved = true;
+      card.style.transform = `translateX(${dx}px) rotate(${dx / 18}deg)`;
+      yes.style.opacity = Math.max(0, Math.min(1, dx / 90)); no.style.opacity = Math.max(0, Math.min(1, -dx / 90));
+    });
+    const end = e => {
+      if (x0 === null || (e && e.pointerId !== id)) return;
+      card.classList.remove("dragging"); x0 = null;
+      if (Math.abs(dx) > Math.min(110, card.offsetWidth * .28)) { swDecide(dx > 0); return; }
+      card.style.transition = "transform .2s"; card.style.transform = ""; yes.style.opacity = 0; no.style.opacity = 0;
+      if (!moved && e && e.type === "pointerup" && !e.target.closest(".say")) swFlip();
+    };
+    card.addEventListener("pointerup", end); card.addEventListener("pointercancel", end);
+  }
+
+  // ---------- texts game ----------
+  // tekster.json: articles whose gaps are written [right|wrong|wrong|wrong>headword]; lyd/<id>.json holds the whole text read aloud.
+  let texts = [], rd = null, rdScores = {};
+  try { rdScores = JSON.parse(localStorage.getItem("danske-ord-tekster") || "{}") || {}; } catch (e) {}
+  const textsReady = fetch("tekster.json").then(r => r.ok ? r.json() : []).then(j => { texts = Array.isArray(j) ? j : []; }).catch(() => {});
+  const RD_TOPICS = ["Videnskab", "Kultur", "Historie", "Hverdag"];
+  const wordByHead = h => words.find(w => w.word === h) || null;
+  function rdOpen(id) {
+    const a = texts.find(t => t.id === id); if (!a) return;
+    const gaps = [];
+    const paras = a.text.split(/\n\n/).map(p => p.split(/\[([^\]]+)\]/).map((s, k) => {
+      if (k % 2 === 0) return s;
+      const [o, head] = s.split(">"), opts = o.split("|");
+      gaps.push({ answer: opts[0], head: head || opts[0], opts: shuffle(opts), state: null, tried: new Set() });
+      return gaps.length - 1;
+    }));
+    rd = { a, paras, gaps, cur: 0, tr: false, last: null };
+    rdRender(); window.scrollTo(0, 0);
+  }
+  const rdDone = () => rd.gaps.every(g => g.state);
+  function rdText() {
+    return rd.paras.map(p => `<p>${p.map(x => typeof x === "string" ? esc(x).replace(/\n/g, "<br>") : (() => {
+      const g = rd.gaps[x];
+      if (g.state) return `<button class="gap ${g.state === "ok" ? "ok" : "bad"}" type="button" data-gap="${x}" title="Hør ${esc(g.head)}">${esc(g.answer)}</button>`;
+      return `<button class="gap${x === rd.cur ? " on" : ""}" type="button" data-gap="${x}" aria-label="Hul ${x + 1}">____<sup>${x + 1}</sup></button>`;
+    })()).join("")}</p>`).join("");
+  }
+  function rdRender() {
+    const el = $("#rd");
+    if (!rd) {
+      if (!texts.length) { el.innerHTML = `<div class="notice">Henter tekster…</div>`; textsReady.then(() => { if (!rd && view === "read") rdRender(); }); return; }
+      el.innerHTML = `<p class="hint" style="margin:0">Læs en kort tekst og vælg det rigtige ord i hvert hul. Alle ordene er fra din ordliste. Ord du svarer forkert på, kommer med i dine kort.</p>
+        ${RD_TOPICS.map(topic => { const ts = texts.filter(t => (t.emne || "Hverdag") === topic); return ts.length ? `<div class="group"><h2>${topic} <small>${ts.length} tekster</small></h2><div class="rd-grid">${ts.map(t => { const s = rdScores[t.id], n = (t.text.match(/\[/g) || []).length;
+          return `<button class="rd-item" type="button" data-text="${t.id}"><b>${esc(t.title)}</b><span class="hint">${esc(t.en)}</span>
+            <span class="meta"><span class="lvl ${esc(t.level)}">${esc(t.level)}</span><span>${n} huller</span>${s ? `<span>· bedste: ${s.best}/${n}</span>` : ""}</span></button>`; }).join("")}</div></div>` : ""; }).join("")}`;
+      return;
+    }
+    const a = rd.a, done = rdDone(), n = rd.gaps.length, okN = rd.gaps.filter(g => g.state === "ok").length;
+    const head = `<div class="rd-head"><button class="btn ghost" type="button" id="rd-back">← Alle tekster</button><span class="lvl ${esc(a.level)}">${esc(a.level)}</span></div>
+      <div class="rd-head"><h3>${esc(a.title)}</h3><button class="btn listen" type="button" id="rd-listen">${SPK} Lyt</button><button class="btn ghost" type="button" id="rd-tr">${rd.tr ? "Skjul" : "Vis"} oversættelse</button></div>`;
+    const tr = rd.tr ? `<div class="rd-tr">${a.translation.split(/\n\n/).map(p => `<p>${esc(p).replace(/\n/g, "<br>")}</p>`).join("")}</div>` : "";
+    let bottom;
+    if (!done) {
+      const g = rd.gaps[rd.cur], left = rd.gaps.filter(x => !x.state).length;
+      bottom = `<div class="rd-opts" id="rd-opts"><div class="lbl"><span>Hul ${rd.cur + 1} af ${n}</span><span>${okN} rigtige · ${left} tilbage</span></div>
+        <div class="opt-grid">${g.opts.map((o, i) => `<button class="opt${g.tried.has(o) ? " wrong" + (rd.last === o ? " now" : "") : ""}" type="button" data-opt="${esc(o)}"${g.tried.has(o) ? " disabled" : ""}><kbd>${i + 1}</kbd>${esc(o)}</button>`).join("")}</div></div>`;
+    } else {
+      const missed = rd.gaps.filter(g => g.state === "miss");
+      const seen = new Set(), list = missed.filter(g => !seen.has(g.head) && seen.add(g.head));
+      const next = texts[(texts.indexOf(a) + 1) % texts.length];
+      bottom = `<div class="rd-res"><div class="sw-kind">Teksten er færdig</div><h3>${okN} af ${n} rigtige i første forsøg</h3>
+        ${list.length ? `<p class="hint" style="margin:0">Disse ord er lagt i dine kort, så du øver dem igen:</p><ul class="miss">${list.map(g => { const w = wordByHead(g.head);
+          return `<li>${sayBtn(g.head, true)}<b>${esc(g.answer)}</b>${g.answer !== g.head ? `<span class="hint">(${esc(g.head)})</span>` : ""}${ddoBtn(g.head, true)}<span class="hint">${esc(w ? w.gloss || mainSenses(w).map(s => s.en).join(", ") : "")}</span></li>`; }).join("")}</ul>`
+          : `<p class="hint" style="margin:0">Flot — alle rigtige i første forsøg! Tryk på et ord i teksten for at høre det.</p>`}
+        <div class="card-actions"><button class="big plain" type="button" id="rd-again">Prøv igen</button><button class="big reveal" type="button" id="rd-next">Næste tekst: ${esc(next.title)}</button></div></div>`;
+    }
+    el.innerHTML = head + `<div class="rd-text">${rdText()}</div>` + tr + bottom;
+    rd.last = null;
+    $("#rd-back").onclick = () => { stopAudio(); rd = null; rdRender(); window.scrollTo(0, 0); };
+    $("#rd-tr").onclick = () => { rd.tr = !rd.tr; rdRender(); };
+    $("#rd-listen").onclick = e => rdListen(e.currentTarget);
+    if (playing && playing._rd === a.id && !playing._done) $("#rd-listen").classList.add("speaking");
+    const ag = $("#rd-again"); if (ag) ag.onclick = () => rdOpen(a.id);
+    const nx = $("#rd-next"); if (nx) nx.onclick = () => { stopAudio(); rdOpen(texts[(texts.indexOf(a) + 1) % texts.length].id); };
+    if (!done) rdReveal();
+  }
+  // Keep the active gap visible above the sticky answer panel.
+  function rdReveal() {
+    const g = $(".gap.on"), p = $("#rd-opts"); if (!g || !p) return;
+    const r = g.getBoundingClientRect(), limit = innerHeight - p.offsetHeight - 16;
+    if (r.bottom > limit) window.scrollBy({ top: r.bottom - limit + 40, behavior: "smooth" });
+    else if (r.top < 70) window.scrollBy({ top: r.top - 90, behavior: "smooth" });
+  }
+  function rdPick(o) {
+    const g = rd.gaps[rd.cur]; if (!g || g.state || g.tried.has(o)) return;
+    if (o !== g.answer) { g.tried.add(o); rd.last = o; rdRender(); return; }
+    g.state = g.tried.size ? "miss" : "ok";
+    const w = wordByHead(g.head);
+    if (w && g.state === "miss") { setProgress(w.id, false); renderStats(); }
+    if (rdDone()) {
+      const okN = rd.gaps.filter(x => x.state === "ok").length, s = rdScores[rd.a.id];
+      rdScores[rd.a.id] = { best: Math.max(okN, s?.best || 0), last: okN, at: Date.now() };
+      try { localStorage.setItem("danske-ord-tekster", JSON.stringify(rdScores)); } catch (e) {}
+      rdRender(); setTimeout(() => $(".rd-res")?.scrollIntoView({ behavior: "smooth", block: "nearest" }), 50); return;
+    }
+    const n = rd.gaps.length; for (let k = 1; k <= n; k++) { const j = (rd.cur + k) % n; if (!rd.gaps[j].state) { rd.cur = j; break; } }
+    rdRender();
+  }
+  const stopAudio = () => { if (playing) try { playing.stop(); } catch (e) {} playing = null; if (canSpeak) try { speechSynthesis.cancel(); } catch (e) {} $$(".speaking").forEach(b => b.classList.remove("speaking")); };
+  async function rdListen(btn) {
+    if (btn.classList.contains("speaking")) { stopAudio(); return; }
+    unlockAudio(); btn.classList.add("speaking");
+    if (await playClip(rd.a.id, btn, rd.a.id)) {
+      const src = playing; src._rd = rd.a.id;
+      src.addEventListener("ended", () => { src._done = true; $("#rd-listen")?.classList.remove("speaking"); });
+      return;
+    }
+    btn.classList.remove("speaking");
+    // No recording: read the text with the device's voice instead, gaps filled in.
+    if (!canSpeak) { flash("Oplæsning virker ikke her."); return; }
+    const plain = rd.a.text.replace(/\[([^|\]]+)[^\]]*\]/g, "$1").replace(/[»«]/g, "");
+    try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(plain); u.lang = "da-DK"; if (daVoice) u.voice = daVoice; u.rate = .9; btn.classList.add("speaking"); u.onend = u.onerror = () => btn.classList.remove("speaking"); speechSynthesis.speak(u); } catch (e) {}
+  }
+
+  // ---------- flashcards ----------
   function buildDeck(onlyId) {
     const now = Date.now();
     let cs = allCards();
-    if (onlyId) cs = cs.filter(c => c.word.id === onlyId);
-    else cs = cs.filter(c => (progress[c.key]?.due ?? 0) <= now);
-    cs.sort((a, b) => boxOf(a.key) - boxOf(b.key) || Math.random() - .5);
+    cs = onlyId ? cs.filter(c => c.word.id === onlyId) : cs.filter(c => (progress[c.key]?.due ?? 0) <= now);
+    cs = shuffle(cs).sort((a, b) => boxOf(a.key) - boxOf(b.key));
     deck = cs.slice(0, 20); cur = 0; shown = false; done = 0;
   }
   function renderCard() {
@@ -340,20 +789,21 @@ footer a { color: var(--accent); }
     $("#bar").style.width = deck.length ? (done / deck.length * 100) + "%" : "0";
     renderBoxes();
     if (!words.length) { el.innerHTML = `<p class="hint">${loadMsg}</p>`; return; }
+    if (deck[cur]?.da) preload(deck[cur].da);
     if (cur >= deck.length) {
       const next = allCards().map(c => progress[c.key]?.due).filter(d => d > Date.now()).sort((a, b) => a - b)[0];
       el.innerHTML = `<div class="kind">Færdig for nu</div><div class="q">Godt gået!</div>
         <p class="hint">${deck.length ? `Du gennemgik ${deck.length} kort.` : "Ingen kort skal øves lige nu."}${next ? ` Næste kort er klar ${new Date(next).toLocaleDateString("da-DK", { weekday: "long", day: "numeric", month: "long" })}.` : ""}</p>
-        <div class="card-actions"><button class="big ghost btn" type="button" id="all-again">Øv alle kort alligevel</button></div>`;
-      $("#all-again").onclick = () => { deck = allCards().sort(() => Math.random() - .5).slice(0, 20); cur = 0; done = 0; shown = false; renderCard(); };
+        <div class="card-actions"><button class="big plain" type="button" id="all-again">Øv 20 tilfældige kort alligevel</button></div>`;
+      $("#all-again").onclick = () => { deck = shuffle(allCards()).slice(0, 20); cur = 0; done = 0; shown = false; renderCard(); };
       return;
     }
     const c = deck[cur];
     const en = c.senses.map(s => s.en + (s.note ? ` (${s.note})` : "")).join(" · ");
-    const front = dir === "da" ? `<div class="q">${esc(c.da)}</div>` : `<div class="q en">${esc(en)}</div>`;
+    const front = dir === "da" ? `<div class="q">${esc(c.da)}${sayBtn(c.da)}${ddoBtn(c.word.word)}</div>` : `<div class="q en">${esc(en)}</div>`;
     const answer = dir === "da"
       ? `<ul class="senses">${c.senses.map(senseHTML).join("")}</ul>`
-      : `<div class="q" style="text-align:center">${esc(c.da)}</div>${c.senses.filter(s => s.ex_da).map(s => `<div class="ex-da">${esc(s.ex_da)}</div>`).join("")}`;
+      : `<div class="q">${esc(c.da)}${sayBtn(c.da)}${ddoBtn(c.word.word)}</div>${c.senses.filter(s => s.ex_da).map(s => `<div class="ex-da">${esc(s.ex_da)}</div>`).join("")}`;
     el.innerHTML = `<div class="kind">${esc(c.kind)}${c.kind === "udtryk" ? " · " + esc(c.word.word) : ""} · kort ${cur + 1} af ${deck.length}</div>${front}
       ${shown ? `<div class="a">${answer}</div><div class="card-actions"><button class="big again" type="button" data-grade="0">Igen</button><button class="big good" type="button" data-grade="1">Kunne det</button></div>`
               : `<div class="card-actions"><button class="big reveal" type="button" id="reveal">Vis svar</button></div>`}`;
@@ -361,47 +811,94 @@ footer a { color: var(--accent); }
   }
   function grade(ok) {
     const c = deck[cur]; if (!c) return;
-    const box = ok ? Math.min(boxOf(c.key) + 1, STEPS.length - 1) : 0;
-    progress[c.key] = { box, due: ok ? Date.now() + STEPS[box] * DAY : Date.now() };
+    setProgress(c.key, ok);
     if (!ok) deck.push(c);
-    saveProgress(); cur++; done++; shown = false; renderCard(); renderStats();
+    cur++; done++; shown = false; renderCard(); renderStats();
   }
   function renderBoxes() {
-    const cs = allCards(), n = [0, 0, 0, 0, 0];
-    cs.forEach(c => n[boxOf(c.key)]++);
+    const n = [0, 0, 0, 0, 0]; allCards().forEach(c => n[boxOf(c.key)]++);
     const names = ["Nye", "1 dag", "3 dage", "7 dage", "21 dage"];
     $("#boxes").innerHTML = n.map((v, i) => `<div><b>${v}</b><span>${names[i]}</span></div>`).join("");
   }
 
-  // ---------- views ----------
-  function show(view) {
-    $$(".tab").forEach(t => t.setAttribute("aria-selected", String(t.dataset.view === view)));
-    $("#view-list").hidden = view !== "list"; $("#view-practice").hidden = view !== "practice"; $("#view-add").hidden = view !== "add";
-    $("#list-controls").hidden = view !== "list";
-    if (view === "practice" && cur >= deck.length) { buildDeck(); }
-    if (view === "practice") renderCard();
+  // ---------- views & events ----------
+  let view = "list";
+  function show(v) {
+    view = v;
+    $$(".tab").forEach(t => t.setAttribute("aria-selected", String(t.dataset.view === v)));
+    ["list", "swipe", "read", "practice", "add"].forEach(n => $("#view-" + n).hidden = n !== v);
+    $("#list-controls").hidden = v !== "list";
+    document.body.classList.toggle("game", v === "swipe" || v === "read");
+    if (v !== "read") stopAudio();
+    if (v === "read") rdRender();
+    if (v === "practice") { if (cur >= deck.length) buildDeck(); renderCard(); }
+    if (v === "swipe" && (!sw.deck.length || sw.i >= sw.deck.length && $("#sw-end").hidden)) swNewRound();
+    if (v === "list") renderList();
   }
   $$(".tab").forEach(t => t.onclick = () => show(t.dataset.view));
-  $$("[data-filter]").forEach(b => b.onclick = () => { filter = b.dataset.filter; $$("[data-filter]").forEach(x => x.setAttribute("aria-pressed", String(x === b))); renderList(); });
-  $$("[data-group]").forEach(b => b.onclick = () => { groupBy = b.dataset.group; $$("[data-group]").forEach(x => x.setAttribute("aria-pressed", String(x === b))); renderList(); });
+  $$("[data-filter]").forEach(b => b.onclick = () => { filter = b.dataset.filter; $$("[data-filter]").forEach(x => x.setAttribute("aria-pressed", String(x === b))); listLimit = 150; renderList(); });
+  $("#band").onchange = e => { band = e.target.value; listLimit = 150; renderList(); };
+  $("#sort").onchange = e => { sortBy = e.target.value; listLimit = 150; renderList(); };
+  $("#sw-band").onchange = () => swNewRound();
+  $("#sw-size").onchange = () => swNewRound();
+  $("#sw-type").onchange = () => swNewRound();
+  $("#sw-no").onclick = () => swDecide(false);
+  $("#sw-yes").onclick = () => swDecide(true);
+  $("#sw-flip").onclick = () => swFlip();
   $$("[data-dir]").forEach(b => b.onclick = () => { dir = b.dataset.dir; $$("[data-dir]").forEach(x => x.setAttribute("aria-pressed", String(x === b))); shown = false; renderCard(); });
-  let qt; $("#q").addEventListener("input", e => { clearTimeout(qt); qt = setTimeout(() => { query = e.target.value.trim(); renderList(); }, 120); });
+  let qt; $("#q").addEventListener("input", e => { clearTimeout(qt); qt = setTimeout(() => { query = e.target.value.trim(); renderList(); }, 150); });
+  // Start loading a word's clips as soon as a finger or mouse goes down on its speaker or row, so the sound is ready by the click.
+  document.addEventListener("pointerdown", e => {
+    unlockAudio();
+    const s = e.target.closest("[data-say]"); if (s) { preload(s.dataset.say); return; }
+    const hw = e.target.closest("details, .card")?.querySelector("[data-say]"); if (hw) preload(hw.dataset.say);
+  }, true);
+  // The list renders in pages; if the letter's section isn't on the page yet, render through the end of that letter first, then scroll.
+  function jumpToLetter(letter) {
+    if (!query) {
+      const list = words.filter(matches);
+      let last = -1; list.forEach((w, i) => { if (firstLetter(w.word) === letter) last = i; });
+      if (last >= listLimit) { listLimit = last + 1; renderList(); }
+    }
+    const g = document.getElementById("L-" + letter); if (!g) return;
+    // Smooth scrolling over very long distances can stop short, so jump directly when the section is far away.
+    g.scrollIntoView({ behavior: Math.abs(g.getBoundingClientRect().top) > 2500 ? "auto" : "smooth", block: "start" });
+  }
   document.addEventListener("click", e => {
-    const say = e.target.closest("[data-say]");
-    if (say) { try { const u = new SpeechSynthesisUtterance(say.dataset.say); u.lang = "da-DK"; u.rate = .9; speechSynthesis.cancel(); speechSynthesis.speak(u); } catch (er) {} }
+    if (e.target.closest(".ddo")) { e.stopPropagation(); return; }   // follow the link; don't open/close the word
+    const s = e.target.closest("[data-say]");
+    if (s) { e.preventDefault(); e.stopPropagation(); say(s.dataset.say, s); return; }
+    const tx = e.target.closest("[data-text]"); if (tx) { rdOpen(tx.dataset.text); return; }
+    const op = e.target.closest("[data-opt]"); if (op && rd) { rdPick(op.dataset.opt); return; }
+    const gp = e.target.closest("[data-gap]");
+    if (gp && rd) { const i = +gp.dataset.gap, g = rd.gaps[i]; if (g.state) say(g.head, gp); else { rd.cur = i; rdRender(); } return; }
     const drill = e.target.closest("[data-drill]");
     if (drill) { buildDeck(drill.dataset.drill); show("practice"); }
     const g = e.target.closest("[data-grade]");
     if (g) grade(g.dataset.grade === "1");
+    if (e.target.id === "more") { listLimit += 300; renderList(); }
     const pf = e.target.closest("[data-pos]");
-    if (pf) { posFilter = pf.dataset.pos; renderList(); }
+    if (pf) { posFilter = pf.dataset.pos; listLimit = 150; renderList(); return; }
     const sy = e.target.closest("[data-syn]");
-    if (sy) { const q = $("#q"); q.value = sy.dataset.syn; query = q.value; renderList(); window.scrollTo({ top: 0, behavior: "smooth" }); }
+    if (sy) { const q = $("#q"); q.value = sy.dataset.syn; query = q.value; renderList(); window.scrollTo({ top: 0, behavior: "smooth" }); return; }
+    const pj = e.target.closest("[data-posjump]");
+    if (pj) { e.preventDefault(); const p = pj.dataset.posjump, list = words.filter(matches).sort((a, b) => posRank(a.pos) - posRank(b.pos) || coll.compare(a.word, b.word));
+      let last = -1; list.forEach((w, i) => { if (w.pos === p) last = i; }); if (!query && last >= listLimit) { listLimit = last + 1; renderList(); }
+      document.getElementById("P-" + posRank(p))?.scrollIntoView({ behavior: "smooth", block: "start" }); return; }
     const L = e.target.closest("[data-letter]");
-    if (L) { e.preventDefault(); document.getElementById("L-" + L.dataset.letter)?.scrollIntoView({ behavior: "smooth", block: "start" }); }
-  });
+    if (L) { e.preventDefault(); jumpToLetter(L.dataset.letter); }
+  }, true);
   document.addEventListener("keydown", e => {
-    if ($("#view-practice").hidden || e.target.matches("input,textarea,select")) return;
+    if (e.target.matches("input,textarea,select")) return;
+    if (view === "swipe" && !$("#sw-play").hidden) {
+      if (e.key === "ArrowLeft") { e.preventDefault(); swDecide(false); }
+      else if (e.key === "ArrowRight") { e.preventDefault(); swDecide(true); }
+      else if (e.key === " " || e.key === "ArrowUp" || e.key === "ArrowDown") { e.preventDefault(); swFlip(); }
+      else if (e.key.toLowerCase() === "s" && sw.deck[sw.i]) say(sw.deck[sw.i].da, $("#swc .say"));
+      return;
+    }
+    if (view === "read" && rd && !rdDone() && /^[1-4]$/.test(e.key)) { const o = rd.gaps[rd.cur].opts[+e.key - 1]; if (o) rdPick(o); return; }
+    if (view !== "practice") return;
     if (e.key === " " && !shown && cur < deck.length) { e.preventDefault(); shown = true; renderCard(); }
     else if (shown && (e.key === "1" || e.key === "ArrowLeft")) grade(false);
     else if (shown && (e.key === "2" || e.key === "ArrowRight")) grade(true);
@@ -426,30 +923,43 @@ footer a { color: var(--accent); }
   // ---------- data ----------
   let loadMsg = "Henter dine ord…";
   try { progress = JSON.parse(localStorage.getItem("danske-ord-progress") || "{}") || {}; } catch (e) { progress = {}; }
+  const mergeWords = () => {
+    const m = new Map(baseWords.map(w => [w.id, w]));
+    dbWords.forEach(w => m.set(w.id, w));
+    words = [...m.values()].sort((a, b) => coll.compare(a.word, b.word));
+    fillBandSelects();
+    if (view === "list") renderList(); else renderStats();
+    if (view === "practice") renderCard();
+    if (view === "swipe" && !sw.deck.length) swNewRound();
+  };
   renderList();
+  Promise.all([
+    fetch("words.json").then(r => r.ok ? r.json() : []).catch(() => []),
+    fetch("freq.json").then(r => r.ok ? r.json() : {}).catch(() => ({}))
+  ]).then(([a, f]) => {
+    baseWords = Array.isArray(a) ? a : []; freq = f || {}; indexClips(baseWords);
+    if (!baseWords.length && !dbWords.length) loadMsg = "Ordlisten kunne ikke hentes. Genindlæs siden.";
+    mergeWords();
+  });
 
   (async () => {
     const c = window.claude;
-    if (!c?.use) { loadMsg = "Ordlisten ligger i siden på claude.ai. Åbn den der for at se dine ord."; renderList(); renderCard(); $("#stats").textContent = "Ingen forbindelse til ordlisten"; return; }
-    const [dbNs, user] = await Promise.all([c.use("db"), c.use("user")]);
-    db = dbNs;
-    if (user && (await user.canEdit())) $("#tab-add").hidden = false;
-    if (!db) { loadMsg = "Ordlisten kan ikke hentes i denne visning. Log ind på claude.ai og åbn siden igen."; renderList(); $("#stats").textContent = "Ingen forbindelse til ordlisten"; return; }
-    uid = user ? await user.id() : null;
-    if (uid) {
-      progRef = db.doc("data/users/" + uid + "/progress");
-      try { const s = await progRef.get(); if (s.exists) { progress = { ...progress, ...(s.data().cards || {}) }; renderList(); } } catch (e) {}
-      $("#save-note").textContent = "Dine fremskridt gemmes på din konto.";
-    } else $("#save-note").textContent = "Dine fremskridt gemmes kun i denne browser.";
-
-    const timer = setTimeout(() => { if (!words.length) { loadMsg = "Ordlisten svarer ikke endnu. Den dukker op her, så snart forbindelsen er der."; renderList(); } }, 10000);
-    db.collection("words").onSnapshot(snap => {
-      if (!snap.metadata.fromCache) clearTimeout(timer);
-      words = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => coll.compare(a.word, b.word));
-      if (!words.length && !snap.metadata.fromCache) loadMsg = "Ingen ord endnu. Tilføj dit første ord under “+ Tilføj ord”, eller send Claude flere skærmbilleder.";
-      renderList();
-      if (!$("#view-practice").hidden) renderCard();
-    }, err => { clearTimeout(timer); loadMsg = "Ordlisten kunne ikke hentes (" + err.code + "). Genindlæs siden senere."; renderList(); });
+    if (!c?.use) { $("#save-note").textContent = "Dine fremskridt gemmes kun i denne browser."; return; }
+    try {
+      const [dbNs, user] = await Promise.all([c.use("db"), c.use("user")]);
+      db = dbNs;
+      if (user && (await user.canEdit())) $("#tab-add").hidden = false;
+      if (!db) return;
+      uid = user ? await user.id() : null;
+      if (uid) {
+        progRef = db.doc("data/users/" + uid + "/progress");
+        try { const s = await progRef.get(); if (s.exists) { progress = { ...progress, ...(s.data().cards || {}) }; if (view === "list") renderList(); renderStats(); } } catch (e) {}
+        $("#save-note").textContent = "Dine fremskridt gemmes på din konto.";
+      } else $("#save-note").textContent = "Dine fremskridt gemmes kun i denne browser.";
+      db.collection("words").onSnapshot(snap => { dbWords = snap.docs.map(d => ({ id: d.id, ...d.data() })); mergeWords(); }, () => {});
+    } catch (e) {}
   })();
 })();
 </script>
+</body>
+</html>
