@@ -15,7 +15,17 @@ A notebook of the Danish words taken from dictionary screenshots (ordbogen.com).
   "phrases": [{ "da": "koge over", "senses": [{ "en": "boil over" }] }] }
 ```
 
-`id` is the word in lowercase ASCII (æ → ae, ø → oe, å → aa).
+`id` is the word in lowercase ASCII (æ → ae, ø → oe, å → aa). A word that is in the dictionary as two word classes gets a suffix, such as `nytte` (noun) and `nytte-vb` (verb).
+
+Fields added by Claude, not taken from the dictionary:
+
+- `synonyms`: Danish synonyms.
+- `extra`: "Godt at vide", extra usage notes.
+- `check`: corrections and cautions from Claude's accuracy check of the dictionary entry.
+- `note`: what was cut off in the screenshot or filled in by Claude.
+- `screens`: which uploaded screenshots the entry came from.
+
+Dictionary screenshots are in `screenshots/`.
 
 ## Adding words
 

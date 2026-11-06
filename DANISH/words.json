@@ -1,104 +1,4238 @@
 [
-  {
-    "id": "holde",
-    "word": "holde",
-    "pos": "vb.",
-    "forms": "holder, holdt, holdt",
-    "gloss": "hold, keep",
-    "senses": [],
-    "phrases": [
-      { "da": "holde tilbage", "senses": [
-        { "en": "give way", "note": "i trafikken", "ex_en": "He did not know when to give way to another car", "ex_da": "Han vidste ikke, hvornår han skulle holde tilbage for en anden bil" } ] },
-      { "da": "holde tæt", "senses": [
-        { "en": "keep tight", "note": "ikke lække", "ex_en": "They realized that the bottle did not keep tight", "ex_da": "De blev klar over, at flasken ikke holdt tæt" },
-        { "en": "keep one's mouth shut", "note": "om hemmelighed", "ex_en": "He was told to keep his mouth shut", "ex_da": "Han blev bedt om at holde tæt" } ] },
-      { "da": "holde ud", "senses": [
-        { "en": "stand", "ex_en": "He could not stand his brother's wife", "ex_da": "Han kunne ikke holde sin brors kone ud" },
-        { "en": "endure", "ex_en": "He could not endure the pain", "ex_da": "Han kunne ikke holde smerten ud" } ] },
-      { "da": "holde ud fra sig", "senses": [
-        { "en": "hold at arm's length", "ex_en": "He held her at arm's length and looked at her", "ex_da": "Han holdt hende ud fra sig og så på hende" } ] },
-      { "da": "holde udenfor", "senses": [
-        { "en": "leave out", "ex_en": "They were asked not to leave out the new boy", "ex_da": "De blev bedt om ikke at holde den nye dreng udenfor" } ] },
-      { "da": "holde ved lige", "senses": [
-        { "en": "maintain", "ex_en": "They make sure to maintain their garden", "ex_da": "De sørger for at holde deres have ved lige" } ] }
-    ]
-  },
-  {
-    "id": "bemyndigelse",
-    "word": "bemyndigelse",
-    "pos": "sb.",
-    "forms": "-n, -r, -rne",
-    "gloss": "authorisation, empowerment",
+ {
+  "id": "holde",
+  "word": "holde",
+  "pos": "vb.",
+  "forms": "holder, holdt, holdt",
+  "gloss": "hold, keep",
+  "senses": [],
+  "phrases": [
+   {
+    "da": "holde tilbage",
     "senses": [
-      { "en": "empowerment", "ex_en": "He has empowerment to represent all employees at the meeting" },
-      { "en": "authorisation", "note": "US: authorization", "ex_en": "They refused to give him the authorisation needed" },
-      { "en": "warrant", "note": "fra myndighederne", "ex_en": "He has a warrant to do this" }
-    ],
-    "phrases": [
-      { "da": "give bemyndigelse", "senses": [
-        { "en": "authorise (vb.)", "ex_en": "They authorised him to make the deal" } ] },
-      { "da": "ikke have bemyndigelse til at", "senses": [
-        { "en": "have no authority to + inf" },
-        { "en": "not be at liberty to", "ex_en": "I am not at liberty to tell you that." } ] }
+     {
+      "en": "give way",
+      "note": "i trafikken",
+      "ex_en": "He did not know when to give way to another car",
+      "ex_da": "Han vidste ikke, hvornår han skulle holde tilbage for en anden bil"
+     }
     ]
-  },
-  {
-    "id": "koge",
-    "word": "koge",
-    "pos": "vb.",
-    "forms": "-r, kogte, kogt",
-    "gloss": "boil, simmer",
+   },
+   {
+    "da": "holde tæt",
     "senses": [
-      { "en": "boil", "ex_en": "The water had begun to boil" },
-      { "en": "simmer", "note": "simre", "ex_en": "The stew simmered for hours before it was ready" }
-    ],
-    "phrases": [
-      { "da": "koge ind", "senses": [
-        { "en": "boil down", "ex_en": "She boiled down the sauce till it was thick" } ] },
-      { "da": "koge ned", "senses": [
-        { "en": "boil down", "note": "figurativt", "ex_en": "It can all be boiled down to one single statement" } ] },
-      { "da": "koge over", "senses": [
-        { "en": "boil over", "ex_en": "The porridge is boiling over!" },
-        { "en": "boil over", "note": "figurativt", "ex_en": "His feelings boiled over when he saw them together" } ] },
-      { "da": "koge suppe på noget", "senses": [
-        { "en": "keep bringing something up", "note": "figurativt", "ex_en": "They kept bringing up the same old problems" } ] }
+     {
+      "en": "keep tight",
+      "note": "ikke lække",
+      "ex_en": "They realized that the bottle did not keep tight",
+      "ex_da": "De blev klar over, at flasken ikke holdt tæt"
+     },
+     {
+      "en": "keep one's mouth shut",
+      "note": "om hemmelighed",
+      "ex_en": "He was told to keep his mouth shut",
+      "ex_da": "Han blev bedt om at holde tæt"
+     }
     ]
-  },
-  {
-    "id": "styrke",
-    "word": "styrke",
-    "pos": "vb.",
-    "forms": "-r, -de, -t",
-    "gloss": "strengthen, fortify",
+   },
+   {
+    "da": "holde ud",
     "senses": [
-      { "en": "strengthen", "ex_en": "The company needs to strengthen its position in the market", "ex_da": "Virksomheden er nødt til at styrke sin position på markedet" },
-      { "en": "fortify", "note": "forstærke", "ex_en": "We should fortify our defences before the enemy attacks", "ex_da": "Vi bør styrke vores forsvarsværker før fjenden angriber" }
-    ],
-    "phrases": [
-      { "da": "styrke sig på noget", "senses": [
-        { "en": "fortify oneself", "ex_en": "I need to fortify myself with a shot of whisky", "ex_da": "Jeg må styrke mig på en stiv whisky" } ] },
-      { "da": "have brug for ngt at styrke sig på", "senses": [
-        { "en": "I need something to sustain me." } ] },
-      { "da": "styrke familiesammenholdet", "senses": [
-        { "en": "strengthen the family" },
-        { "en": "strengthen family unity" } ] },
-      { "da": "styrke ngs mistanke", "senses": [
-        { "en": "reinforce sby's suspicion" } ] },
-      { "da": "styrke sig med", "senses": [
-        { "en": "fortify oneself with [pots of black coffee]" } ] }
+     {
+      "en": "stand",
+      "ex_en": "He could not stand his brother's wife",
+      "ex_da": "Han kunne ikke holde sin brors kone ud"
+     },
+     {
+      "en": "endure",
+      "ex_en": "He could not endure the pain",
+      "ex_da": "Han kunne ikke holde smerten ud"
+     }
     ]
-  },
-  {
-    "id": "synliggoere",
-    "word": "synliggøre",
-    "pos": "vb.",
-    "forms": "synliggør, synliggjorde, synliggjort",
-    "gloss": "make visible, visualise",
+   },
+   {
+    "da": "holde ud fra sig",
     "senses": [
-      { "en": "render visible", "ex_en": "The marketing campaign is designed to render the product visible" },
-      { "en": "make visible", "ex_en": "They hired a marketing company to make the event visible" },
-      { "en": "visualise", "note": "US: visualize", "ex_en": "The colorimetric change was visualised on the CO2 meter" }
-    ],
-    "phrases": []
-  }
+     {
+      "en": "hold at arm's length",
+      "ex_en": "He held her at arm's length and looked at her",
+      "ex_da": "Han holdt hende ud fra sig og så på hende"
+     }
+    ]
+   },
+   {
+    "da": "holde udenfor",
+    "senses": [
+     {
+      "en": "leave out",
+      "ex_en": "They were asked not to leave out the new boy",
+      "ex_da": "De blev bedt om ikke at holde den nye dreng udenfor"
+     }
+    ]
+   },
+   {
+    "da": "holde ved lige",
+    "senses": [
+     {
+      "en": "maintain",
+      "ex_en": "They make sure to maintain their garden",
+      "ex_da": "De sørger for at holde deres have ved lige"
+     }
+    ]
+   }
+  ],
+  "synonyms": [
+   "beholde",
+   "fastholde",
+   "bevare",
+   "udholde (holde ud)",
+   "vedligeholde (holde ved lige)"
+  ],
+  "screens": [
+   82
+  ],
+  "note": "Toppen af skærmbilledet er afskåret; 'holde tilbage' og grundbetydningen 'hold, keep' er tilføjet af Claude.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "bemyndigelse",
+  "word": "bemyndigelse",
+  "pos": "sb.",
+  "forms": "-n, -r, -rne",
+  "gloss": "authorisation, empowerment",
+  "senses": [
+   {
+    "en": "empowerment",
+    "ex_en": "He has empowerment to represent all employees at the meeting"
+   },
+   {
+    "en": "authorisation",
+    "note": "US: authorization",
+    "ex_en": "They refused to give him the authorisation needed"
+   },
+   {
+    "en": "warrant",
+    "note": "fra myndighederne",
+    "ex_en": "He has a warrant to do this"
+   }
+  ],
+  "phrases": [
+   {
+    "da": "give bemyndigelse",
+    "senses": [
+     {
+      "en": "authorise (vb.)",
+      "ex_en": "They authorised him to make the deal"
+     }
+    ]
+   },
+   {
+    "da": "ikke have bemyndigelse til at",
+    "senses": [
+     {
+      "en": "have no authority to + inf"
+     },
+     {
+      "en": "not be at liberty to",
+      "ex_en": "I am not at liberty to tell you that."
+     }
+    ]
+   }
+  ],
+  "synonyms": [
+   "fuldmagt",
+   "autorisation",
+   "tilladelse",
+   "beføjelse"
+  ],
+  "screens": [
+   83
+  ],
+  "check": "Ordbogen lister '(amerikansk) authorize', men det er et verbum; navneordet hedder 'authorization'. 'He has empowerment to represent…' er unaturligt engelsk; skriv 'He is authorised to represent…'.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "koge",
+  "word": "koge",
+  "pos": "vb.",
+  "forms": "-r, kogte, kogt",
+  "gloss": "boil, simmer",
+  "senses": [
+   {
+    "en": "boil",
+    "ex_en": "The water had begun to boil"
+   },
+   {
+    "en": "simmer",
+    "note": "simre",
+    "ex_en": "The stew simmered for hours before it was ready"
+   }
+  ],
+  "phrases": [
+   {
+    "da": "koge ind",
+    "senses": [
+     {
+      "en": "boil down",
+      "ex_en": "She boiled down the sauce till it was thick"
+     }
+    ]
+   },
+   {
+    "da": "koge ned",
+    "senses": [
+     {
+      "en": "boil down",
+      "note": "figurativt",
+      "ex_en": "It can all be boiled down to one single statement"
+     }
+    ]
+   },
+   {
+    "da": "koge over",
+    "senses": [
+     {
+      "en": "boil over",
+      "ex_en": "The porridge is boiling over!"
+     },
+     {
+      "en": "boil over",
+      "note": "figurativt",
+      "ex_en": "His feelings boiled over when he saw them together"
+     }
+    ]
+   },
+   {
+    "da": "koge suppe på noget",
+    "senses": [
+     {
+      "en": "keep bringing something up",
+      "note": "figurativt",
+      "ex_en": "They kept bringing up the same old problems"
+     }
+    ]
+   }
+  ],
+  "synonyms": [
+   "syde",
+   "simre (simmer)",
+   "småkoge"
+  ],
+  "screens": [
+   84
+  ],
+  "check": "'simmer' svarer egentlig til 'simre' eller 'småkoge', ikke 'koge'. 'koge suppe på noget' betyder også at gøre et stort nummer ud af noget lille.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "styrke",
+  "word": "styrke",
+  "pos": "vb.",
+  "forms": "-r, -de, -t",
+  "gloss": "strengthen, fortify",
+  "senses": [
+   {
+    "en": "strengthen",
+    "ex_en": "The company needs to strengthen its position in the market",
+    "ex_da": "Virksomheden er nødt til at styrke sin position på markedet"
+   },
+   {
+    "en": "fortify",
+    "note": "forstærke",
+    "ex_en": "We should fortify our defences before the enemy attacks",
+    "ex_da": "Vi bør styrke vores forsvarsværker før fjenden angriber"
+   }
+  ],
+  "phrases": [
+   {
+    "da": "styrke sig på noget",
+    "senses": [
+     {
+      "en": "fortify oneself",
+      "ex_en": "I need to fortify myself with a shot of whisky",
+      "ex_da": "Jeg må styrke mig på en stiv whisky"
+     }
+    ]
+   },
+   {
+    "da": "have brug for ngt at styrke sig på",
+    "senses": [
+     {
+      "en": "I need something to sustain me."
+     }
+    ]
+   },
+   {
+    "da": "styrke familiesammenholdet",
+    "senses": [
+     {
+      "en": "strengthen the family"
+     },
+     {
+      "en": "strengthen family unity"
+     }
+    ]
+   },
+   {
+    "da": "styrke ngs mistanke",
+    "senses": [
+     {
+      "en": "reinforce sby's suspicion"
+     }
+    ]
+   },
+   {
+    "da": "styrke sig med",
+    "senses": [
+     {
+      "en": "fortify oneself with [pots of black coffee]"
+     }
+    ]
+   }
+  ],
+  "synonyms": [
+   "forstærke",
+   "befæste",
+   "støtte",
+   "opmuntre"
+  ],
+  "screens": [
+   85
+  ],
+  "extra": "Også navneord: en styrke (strength, force). 'tage til i styrke' = increase in strength.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "synliggoere",
+  "word": "synliggøre",
+  "pos": "vb.",
+  "forms": "synliggør, synliggjorde, synliggjort",
+  "gloss": "make visible, visualise",
+  "senses": [
+   {
+    "en": "render visible",
+    "ex_en": "The marketing campaign is designed to render the product visible"
+   },
+   {
+    "en": "make visible",
+    "ex_en": "They hired a marketing company to make the event visible"
+   },
+   {
+    "en": "visualise",
+    "note": "US: visualize",
+    "ex_en": "The colorimetric change was visualised on the CO2 meter"
+   }
+  ],
+  "phrases": [],
+  "synonyms": [
+   "tydeliggøre",
+   "fremhæve",
+   "vise",
+   "eksponere"
+  ],
+  "screens": [
+   86
+  ],
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "stand",
+  "word": "stand",
+  "pos": "sb.",
+  "forms": "",
+  "gloss": "condition, state",
+  "senses": [],
+  "phrases": [
+   {
+    "da": "holde stand",
+    "senses": [
+     {
+      "en": "stand one's ground",
+      "ex_en": "The castle turned out to stand its ground despite hours of attacks",
+      "ex_da": "Slottet så ud til at holde stand på trods af timelange angreb"
+     }
+    ]
+   },
+   {
+    "da": "i stand til",
+    "senses": [
+     {
+      "en": "able to",
+      "ex_en": "The cat was not able to climb the tree",
+      "ex_da": "Katten var ikke i stand til at klatre op i træet"
+     },
+     {
+      "en": "capable of",
+      "ex_en": "I believe that he is capable of committing murder",
+      "ex_da": "Jeg mener, at han er i stand til at begå mord"
+     }
+    ]
+   },
+   {
+    "da": "komme i stand",
+    "senses": [
+     {
+      "en": "be finalised",
+      "note": "US: be finalized",
+      "ex_en": "The deal was finalised last night",
+      "ex_da": "Aftalen kom i stand i går aftes"
+     }
+    ]
+   },
+   {
+    "da": "sætte i stand",
+    "senses": [
+     {
+      "en": "restore (vb.)",
+      "ex_en": "He did his best to restore the old paintings",
+      "ex_da": "Han gjorde sit bedste for at sætte de gamle malerier i stand"
+     }
+    ]
+   },
+   {
+    "da": "ude af stand til",
+    "senses": [
+     {
+      "en": "unable to",
+      "ex_en": "He was unable to save her"
+     }
+    ]
+   }
+  ],
+  "synonyms": [
+   "tilstand",
+   "forfatning"
+  ],
+  "screens": [
+   2
+  ],
+  "note": "Opslagsordet ses ikke på skærmbilledet; kun udtrykkene. Grundbetydningen 'condition, state' er tilføjet af Claude.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "dukke",
+  "word": "dukke",
+  "pos": "vb.",
+  "forms": "-r, -de, -t",
+  "gloss": "dip",
+  "senses": [
+   {
+    "en": "dip",
+    "ex_en": "She dipped the doll in cold water",
+    "ex_da": "Hun dukkede dukken i vand"
+   }
+  ],
+  "phrases": [
+   {
+    "da": "dukke frem",
+    "senses": [
+     {
+      "en": "come out",
+      "ex_en": "The car suddenly came out of the dark",
+      "ex_da": "Bilen dukkede pludselig frem fra mørket"
+     }
+    ]
+   },
+   {
+    "da": "dukke op",
+    "senses": [
+     {
+      "en": "turn up",
+      "ex_en": "He turned up at her door one day",
+      "ex_da": "Han dukkede op foran hendes dør en dag"
+     },
+     {
+      "en": "surface"
+     },
+     {
+      "en": "come up",
+      "ex_en": "A new problem has come up."
+     },
+     {
+      "en": "show up",
+      "ex_en": "Call me if they show up. (they refers to keys that have gone missing)"
+     }
+    ]
+   },
+   {
+    "da": "dukke sig",
+    "senses": [
+     {
+      "en": "duck",
+      "ex_en": "He ducked when she threw the ball at him"
+     }
+    ]
+   }
+  ],
+  "synonyms": [
+   "dyppe",
+   "komme til syne (dukke op)"
+  ],
+  "screens": [
+   3
+  ],
+  "note": "Ordbogens forklaring 'they refererer til nøgler, der er blevet væk' er oversat til engelsk.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "snyde",
+  "word": "snyde",
+  "pos": "vb.",
+  "forms": "-r, snød, snydt",
+  "gloss": "cheat, trick",
+  "senses": [
+   {
+    "en": "cheat",
+    "ex_en": "He cheated at the exam and was caught",
+    "ex_da": "Han snød til eksamenen, men blev snuppet"
+   },
+   {
+    "en": "trick",
+    "note": "narre",
+    "ex_en": "They easily tricked the elderly lady",
+    "ex_da": "De snød den gamle dame ganske nemt"
+   },
+   {
+    "en": "fool",
+    "note": "narre",
+    "ex_en": "They got into the club by fooling the doorman",
+    "ex_da": "De kom ind på klubben ved at snyde dørmanden"
+   },
+   {
+    "en": "deceive",
+    "note": "narre",
+    "ex_en": "The spy deceived the enemy",
+    "ex_da": "Spionen snød fjenden"
+   },
+   {
+    "en": "hoodwink",
+    "note": "narre",
+    "ex_en": "He managed to hoodwink his teacher"
+   }
+  ],
+  "phrases": [],
+  "synonyms": [
+   "narre",
+   "bedrage",
+   "franarre",
+   "lure"
+  ],
+  "screens": [
+   4
+  ],
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "uimodstaaelig",
+  "word": "uimodståelig",
+  "pos": "adj.",
+  "forms": "-t, -e",
+  "gloss": "irresistible",
+  "senses": [
+   {
+    "en": "irresistible",
+    "ex_en": "The temptation was irresistible",
+    "ex_da": "Fristelsen var uimodståelig"
+   }
+  ],
+  "phrases": [],
+  "synonyms": [
+   "fristende",
+   "betagende"
+  ],
+  "screens": [
+   5
+  ],
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "modstaa",
+  "word": "modstå",
+  "pos": "vb.",
+  "forms": "-r, modstod, -et",
+  "gloss": "resist, withstand",
+  "senses": [
+   {
+    "en": "resist",
+    "ex_en": "She was unable to resist his charming behaviour"
+   },
+   {
+    "en": "withstand",
+    "ex_en": "The chair was built to withstand a lot of weight"
+   },
+   {
+    "en": "stand",
+    "note": "udholde",
+    "ex_en": "She could stand the pressure"
+   }
+  ],
+  "phrases": [
+   {
+    "da": "kunne modstå høje temperaturer",
+    "senses": [
+     {
+      "en": "be resistant to high temperatures"
+     }
+    ]
+   },
+   {
+    "da": "modstå fristelsen (til at)",
+    "senses": [
+     {
+      "en": "resist the temptation (to + inf)"
+     }
+    ]
+   },
+   {
+    "da": "modstå gruppepres",
+    "senses": [
+     {
+      "en": "resist peer pressure"
+     }
+    ]
+   },
+   {
+    "da": "modstå havets angreb",
+    "senses": [
+     {
+      "en": "withstand the sea's onslaught"
+     }
+    ]
+   }
+  ],
+  "synonyms": [
+   "udholde",
+   "tåle",
+   "stå imod"
+  ],
+  "screens": [
+   6
+  ],
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "angaa",
+  "word": "angå",
+  "pos": "vb.",
+  "forms": "-r, angik, -et",
+  "gloss": "concern, relate to",
+  "senses": [
+   {
+    "en": "concern",
+    "ex_en": "The charges do not concern me",
+    "ex_da": "Anklagerne angår ikke mig"
+   },
+   {
+    "en": "relate to",
+    "ex_en": "This relates to us as well",
+    "ex_da": "Dette angår også os"
+   },
+   {
+    "en": "have reference to",
+    "ex_en": "This has no reference to today's events",
+    "ex_da": "Dette angår ikke dagens hændelser"
+   }
+  ],
+  "phrases": [
+   {
+    "da": "for så vidt angår",
+    "senses": [
+     {
+      "en": "with regard to",
+      "ex_en": "I support you with regard to your current plans",
+      "ex_da": "Jeg støtter dig, for så vidt angår dine nuværende planer"
+     }
+    ]
+   },
+   {
+    "da": "hvad angår",
+    "senses": [
+     {
+      "en": "as regards, as for"
+     }
+    ]
+   }
+  ],
+  "synonyms": [
+   "vedrøre",
+   "omhandle",
+   "handle om"
+  ],
+  "screens": [
+   7
+  ],
+  "note": "'hvad angår' er afskåret på skærmbilledet; betydningen 'as regards, as for' er tilføjet af Claude.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "angaaende",
+  "word": "angående",
+  "pos": "præp.",
+  "forms": "",
+  "gloss": "concerning, regarding",
+  "senses": [
+   {
+    "en": "concerning",
+    "ex_en": "In matters concerning our product line, please contact our customer service",
+    "ex_da": "Ved sager angående vores produktlinje, kontakt venligst vores kundeservice"
+   },
+   {
+    "en": "regarding",
+    "ex_en": "They had no doubts regarding the environmentally friendly petrol",
+    "ex_da": "De havde ingen betænkeligheder angående den miljøvenlige benzin"
+   },
+   {
+    "en": "about",
+    "ex_en": "What did they do about the strike?",
+    "ex_da": "Hvad gjorde de angående strejken?"
+   }
+  ],
+  "phrases": [],
+  "synonyms": [
+   "vedrørende",
+   "om",
+   "hvad angår"
+  ],
+  "screens": [
+   8
+  ],
+  "extra": "Forkortes ang.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "underholdning",
+  "word": "underholdning",
+  "pos": "sb.",
+  "forms": "-en, -er, -erne",
+  "gloss": "entertainment, amusement",
+  "senses": [
+   {
+    "en": "entertainment",
+    "ex_en": "The entertainment at the party was excellent",
+    "ex_da": "Underholdningen til festen var fremragende"
+   },
+   {
+    "en": "amusement",
+    "ex_en": "This is not my idea of amusement",
+    "ex_da": "Dette er ikke min opfattelse af underholdning"
+   }
+  ],
+  "phrases": [
+   {
+    "da": "den musikalske underholdning",
+    "senses": [
+     {
+      "en": "the musical entertainment"
+     }
+    ]
+   }
+  ],
+  "synonyms": [
+   "morskab",
+   "adspredelse",
+   "fornøjelse"
+  ],
+  "screens": [
+   9
+  ],
+  "note": "Udtrykkets engelske eksempel er afskåret; oversættelsen er tilføjet af Claude.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "skilt",
+  "word": "skilt",
+  "pos": "sb.",
+  "forms": "et; -et, -e, -ene",
+  "gloss": "sign, signboard",
+  "senses": [
+   {
+    "en": "sign",
+    "ex_en": "The sign told them to make a full stop"
+   },
+   {
+    "en": "signboard",
+    "ex_en": "The signboard had the shop's name on it"
+   },
+   {
+    "en": "plate",
+    "note": "navneskilt",
+    "ex_en": "His name and title were engraved on the plate"
+   },
+   {
+    "en": "signpost",
+    "note": "på vejen",
+    "ex_en": "They could not read the words on the signpost"
+   },
+   {
+    "en": "notice",
+    "note": "i vindue"
+   }
+  ],
+  "phrases": [],
+  "synonyms": [
+   "tavle",
+   "plakat",
+   "vejviser (på vejen)"
+  ],
+  "screens": [
+   10
+  ],
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "knap",
+  "word": "knap",
+  "pos": "adv.",
+  "forms": "",
+  "gloss": "barely, hardly",
+  "senses": [
+   {
+    "en": "barely",
+    "ex_en": "He can barely walk anymore",
+    "ex_da": "Han kan knap gå mere"
+   },
+   {
+    "en": "scarcely",
+    "ex_en": "She scarcely knew the man before meeting him in person",
+    "ex_da": "Hun kendte knap manden, før hun mødte ham personligt"
+   },
+   {
+    "en": "hardly",
+    "ex_en": "He could hardly lift the heavy trunk",
+    "ex_da": "Han kunne knap løfte den tunge træstamme"
+   },
+   {
+    "en": "not quite",
+    "note": "ikke helt",
+    "ex_en": "The roast is not quite done yet",
+    "ex_da": "Stegen er lige knap færdig endnu"
+   },
+   {
+    "en": "just under",
+    "note": "lige under",
+    "ex_en": "My daughter is just under 16 years old",
+    "ex_da": "Min datter er lige knap 16 år gammel"
+   }
+  ],
+  "phrases": [
+   {
+    "da": "knap nok",
+    "senses": [
+     {
+      "en": "hardly",
+      "ex_en": "It was hardly invented at that time",
+      "ex_da": "Det var knap nok opfundet på den tid"
+     },
+     {
+      "en": "barely"
+     }
+    ]
+   }
+  ],
+  "synonyms": [
+   "næppe",
+   "dårligt",
+   "knapt"
+  ],
+  "screens": [
+   11
+  ],
+  "check": "Rettelse: ordbogen oversætter 'Han kunne knap løfte den tunge træstamme' med 'trunk'. En træstamme er en 'tree trunk' (ikke en kuffert/'trunk'). Og 'Stegen er lige knap færdig endnu' er usædvanligt dansk; mere naturligt: 'Stegen er ikke helt færdig endnu'.",
+  "extra": "Også adj. 'knap' = scarce ('knappe ressourcer') og sb. 'en knap' = a button.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "staedig",
+  "word": "stædig",
+  "pos": "adj.",
+  "forms": "-t, -e",
+  "gloss": "stubborn, obstinate",
+  "senses": [
+   {
+    "en": "stubborn",
+    "ex_en": "He was unusually stubborn",
+    "ex_da": "Han var usædvanlig stædig"
+   },
+   {
+    "en": "obstinate",
+    "ex_en": "She was an obstinate child",
+    "ex_da": "Hun var et stædigt barn"
+   },
+   {
+    "en": "dogged",
+    "note": "talesprog",
+    "ex_en": "He adhered to his duty with a dogged determination",
+    "ex_da": "Han holdt sig til sin pligt med en stædig beslutsomhed"
+   },
+   {
+    "en": "tenacious",
+    "note": "hårdnakket"
+   }
+  ],
+  "phrases": [],
+  "synonyms": [
+   "hårdnakket",
+   "egenrådig",
+   "påståelig",
+   "stivsindet"
+  ],
+  "screens": [
+   12
+  ],
+  "check": "'dogged' er markeret som talesprog i ordbogen, men 'dogged' er ikke slang på engelsk; det er neutralt/skriftligt.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "gengaeld",
+  "word": "gengæld",
+  "pos": "sb.",
+  "forms": "",
+  "gloss": "return, retaliation",
+  "senses": [
+   {
+    "en": "return",
+    "ex_en": "He asked if there was anything he could do in return"
+   },
+   {
+    "en": "retaliation",
+    "note": "repressalier osv.",
+    "ex_en": "The attack was a retaliation for the bombing"
+   },
+   {
+    "en": "reprisal",
+    "note": "repressalier osv.",
+    "ex_en": "The prisoners were released but the government feared a reprisal"
+   },
+   {
+    "en": "retribution",
+    "note": "repressalier",
+    "ex_en": "They bombed a building in retribution"
+   }
+  ],
+  "phrases": [
+   {
+    "da": "gøre gengæld",
+    "senses": [
+     {
+      "en": "retaliate (vb.)",
+      "ex_en": "The terrorists decided to retaliate"
+     }
+    ]
+   },
+   {
+    "da": "gøre gengæld for",
+    "senses": [
+     {
+      "en": "repay (vb.)",
+      "ex_en": "I hope to be able to repay your kindness some day"
+     }
+    ]
+   },
+   {
+    "da": "til gengæld",
+    "senses": [
+     {
+      "en": "in return",
+      "ex_en": "She baked her a cake in return for her kindness"
+     },
+     {
+      "en": "on the other hand",
+      "ex_en": "On the other hand, there seems to be a clear resemblance between the two"
+     }
+    ]
+   }
+  ],
+  "synonyms": [
+   "hævn",
+   "modydelse",
+   "revanche"
+  ],
+  "screens": [
+   13
+  ],
+  "note": "Opslagsordet ses ikke på skærmbilledet; det er udledt af udtrykkene.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "besaette",
+  "word": "besætte",
+  "pos": "vb.",
+  "forms": "-r, besatte, besat",
+  "gloss": "occupy, fill",
+  "senses": [
+   {
+    "en": "occupy",
+    "note": "militær",
+    "ex_en": "Enemy troops occupied the area",
+    "ex_da": "Fjendtlige tropper besatte området"
+   },
+   {
+    "en": "fill",
+    "note": "om job",
+    "ex_en": "All positions are filled at the moment",
+    "ex_da": "Alle stillinger er besat i øjeblikket"
+   },
+   {
+    "en": "squat",
+    "note": "ulovligt, om hus",
+    "ex_en": "They decided to squat the empty building",
+    "ex_da": "De besluttede at besætte den tomme bygning"
+   },
+   {
+    "en": "possess",
+    "note": "om ide osv.",
+    "ex_en": "She is utterly possessed with the idea",
+    "ex_da": "Hun er fuldstændig besat af ideen"
+   },
+   {
+    "en": "obsess",
+    "note": "om ide osv.",
+    "ex_en": "He was completely obsessed by the thought",
+    "ex_da": "Han var komplet besat af tanken"
+   }
+  ],
+  "phrases": [],
+  "synonyms": [
+   "indtage",
+   "optage",
+   "okkupere"
+  ],
+  "screens": [
+   16
+  ],
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "excessiv",
+  "word": "excessiv",
+  "pos": "adj.",
+  "forms": "-t, -e",
+  "gloss": "excessive",
+  "senses": [
+   {
+    "en": "excessive",
+    "note": "voldsom",
+    "ex_en": "He was operated because of his excessive snoring",
+    "ex_da": "Han blev opereret for sin excessive snorken"
+   }
+  ],
+  "phrases": [],
+  "synonyms": [
+   "overdreven",
+   "voldsom",
+   "umådeholden"
+  ],
+  "screens": [
+   17
+  ],
+  "check": "'excessiv' er et sjældent, formelt ord på dansk; i hverdagssprog siger man 'overdreven' eller 'voldsom' (fx 'sin voldsomme snorken'). Det engelske eksempel bør hedde 'He was operated on because of…'.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "overdrive",
+  "word": "overdrive",
+  "pos": "vb.",
+  "forms": "-r, overdrev, overdrevet",
+  "gloss": "exaggerate, overdo",
+  "senses": [
+   {
+    "en": "exaggerate",
+    "ex_en": "He had a tendency to exaggerate"
+   },
+   {
+    "en": "overstate",
+    "ex_en": "She grossly overstated the matter"
+   },
+   {
+    "en": "overdo",
+    "ex_en": "He has a tendency to overdo his exercise"
+   },
+   {
+    "en": "carry to extremes",
+    "ex_en": "He carried his love for birds to extremes"
+   }
+  ],
+  "phrases": [],
+  "synonyms": [
+   "forstørre",
+   "pynte på",
+   "gå for vidt"
+  ],
+  "screens": [
+   18
+  ],
+  "extra": "Tillægsform: overdreven (excessive), fx 'en overdreven kritik'.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "opfordre",
+  "word": "opfordre",
+  "pos": "vb.",
+  "forms": "-r, -de, -t",
+  "gloss": "urge, request",
+  "senses": [
+   {
+    "en": "urge",
+    "ex_en": "I urge you not to do anything rash",
+    "ex_da": "Jeg opfordrer dig til ikke at gøre noget overilet"
+   },
+   {
+    "en": "incite",
+    "note": "tilskynde",
+    "ex_en": "She was fired for inciting her colleagues to go on strike",
+    "ex_da": "Hun blev fyret for at opfordre sine kolleger til at strejke"
+   },
+   {
+    "en": "ask",
+    "note": "bede om",
+    "ex_en": "We ask you to consider the safety of others",
+    "ex_da": "Vi opfordrer dig til at tage hensyn til andres sikkerhed"
+   },
+   {
+    "en": "request",
+    "note": "anmode",
+    "ex_en": "We request all students to be well prepared for the exams",
+    "ex_da": "Vi opfordrer alle studerende til at være velforberedte til eksaminerne"
+   },
+   {
+    "en": "recommend",
+    "note": "anbefale",
+    "ex_en": "We recommend to book in advance to avoid long queues",
+    "ex_da": "Vi opfordrer til at bestille på forhånd for at undgå lange køer"
+   }
+  ],
+  "phrases": [],
+  "synonyms": [
+   "tilskynde",
+   "anmode",
+   "bede",
+   "anbefale"
+  ],
+  "screens": [
+   19
+  ],
+  "check": "Det engelske 'We recommend to book' er ikke korrekt engelsk; skriv 'We recommend booking in advance'.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "stilhed",
+  "word": "stilhed",
+  "pos": "sb.",
+  "forms": "-en",
+  "gloss": "silence, calm",
+  "senses": [
+   {
+    "en": "silence",
+    "ex_en": "She enjoyed the silence",
+    "ex_da": "Hun nød stilheden"
+   },
+   {
+    "en": "hush",
+    "ex_en": "A hush fell over the courtroom",
+    "ex_da": "Der faldt stilhed over retssalen"
+   },
+   {
+    "en": "calmness",
+    "ex_en": "A certain calmness spread across the room",
+    "ex_da": "En vis stilhed bredte sig over rummet"
+   },
+   {
+    "en": "quietude",
+    "ex_en": "They experienced real quietude in the wilderness",
+    "ex_da": "De oplevede virkelig stilhed i vildnisset"
+   },
+   {
+    "en": "calm",
+    "ex_en": "The calm of the night made him nervous",
+    "ex_da": "Nattens stilhed gjorde ham nervøs"
+   },
+   {
+    "en": "quietness",
+    "note": "lavt støjniveau",
+    "ex_en": "The quietness of the engine was amazing",
+    "ex_da": "Maskinens stilhed var forbløffende"
+   }
+  ],
+  "phrases": [],
+  "synonyms": [
+   "ro",
+   "tavshed",
+   "fred"
+  ],
+  "screens": [
+   20
+  ],
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "oevrig",
+  "word": "øvrig",
+  "pos": "adj.",
+  "forms": "-t, -e",
+  "gloss": "other, remaining",
+  "senses": [
+   {
+    "en": "additional",
+    "ex_en": "He bought the additional copies",
+    "ex_da": "Han købte de øvrige kopier"
+   },
+   {
+    "en": "other",
+    "note": "andre",
+    "ex_en": "His other friends did not like her",
+    "ex_da": "Hans øvrige venner kunne ikke lide hende"
+   },
+   {
+    "en": "remaining",
+    "note": "resterende",
+    "ex_en": "He sold the remaining copies very cheaply",
+    "ex_da": "Han solgte de øvrige kopier meget billigt"
+   }
+  ],
+  "phrases": [
+   {
+    "da": "de øvrige",
+    "senses": [
+     {
+      "en": "the others",
+      "ex_en": "The others tried to get away from the police",
+      "ex_da": "De øvrige forsøgte at slippe væk fra politiet"
+     }
+    ]
+   },
+   {
+    "da": "for øvrigt",
+    "senses": [
+     {
+      "en": "by the way",
+      "note": "forresten",
+      "ex_en": "By the way, I finally heard from my neighbour",
+      "ex_da": "For øvrigt hørte jeg endelig fra min nabo"
+     }
+    ]
+   },
+   {
+    "da": "i øvrigt",
+    "senses": [
+     {
+      "en": "moreover",
+      "note": "derudover",
+      "ex_en": "Moreover, they need to look at the financial structure",
+      "ex_da": "I øvrigt er de nødt til at tage et kik på"
+     }
+    ]
+   }
+  ],
+  "synonyms": [
+   "resterende",
+   "anden",
+   "andre"
+  ],
+  "screens": [
+   21
+  ],
+  "check": "'additional' passer dårligt til 'de øvrige kopier'; det betyder 'de resterende/andre kopier'. Og 'tage et kik på' staves normalt 'tage et kig på'.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "afkald",
+  "word": "afkald",
+  "pos": "sb.",
+  "forms": "",
+  "gloss": "call-off, renunciation",
+  "senses": [
+   {
+    "en": "call off",
+    "note": "handel, leveringsmetode",
+    "ex_en": "The parties arranged that delivery will be made by call off",
+    "ex_da": "Parterne aftalte, at levering skal ske ved afkald"
+   },
+   {
+    "en": "call off order",
+    "note": "handel, leveringsmetode",
+    "ex_en": "The company is committed to delivering at the time of the call off order",
+    "ex_da": "Virksomheden er forpligtet til at levere ved afkald"
+   }
+  ],
+  "phrases": [
+   {
+    "da": "give afkald på",
+    "senses": [
+     {
+      "en": "sign away",
+      "note": "med underskrift",
+      "ex_en": "He signed away his right to a pension",
+      "ex_da": "Han gav afkald på sin ret til pension"
+     },
+     {
+      "en": "sacrifice",
+      "note": "ofre",
+      "ex_en": "He sacrificed his holiday to be with her",
+      "ex_da": "Han gav afkald på sin ferie for at være sammen med hende"
+     },
+     {
+      "en": "renounce [an inheritance / worldly goods]"
+     },
+     {
+      "en": "cede [an area to the enemy]"
+     },
+     {
+      "en": "waive [all rights / privileges]"
+     },
+     {
+      "en": "resign [a claim to sth]"
+     }
+    ]
+   }
+  ],
+  "synonyms": [
+   "opgivelse",
+   "frasigelse"
+  ],
+  "screens": [
+   22
+  ],
+  "note": "Opslagsordet ses ikke på skærmbilledet; 'afkald' er udledt af eksemplerne. Grundbetydningen 'renunciation' er tilføjet af Claude.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "naerhed",
+  "word": "nærhed",
+  "pos": "sb.",
+  "forms": "-en",
+  "gloss": "proximity, nearness",
+  "senses": [
+   {
+    "en": "proximity",
+    "ex_en": "The hotel is in close proximity to the airport"
+   },
+   {
+    "en": "nearness",
+    "ex_en": "The cabin's nearness to nature fascinated them"
+   },
+   {
+    "en": "vicinity",
+    "note": "nabolag",
+    "ex_en": "She lives in the vicinity of the city"
+   },
+   {
+    "en": "neighbourhood",
+    "note": "nabolag",
+    "ex_en": "There is no supermarket in the neighbourhood"
+   },
+   {
+    "en": "imminence",
+    "note": "om tid",
+    "ex_en": "The imminence of the threat enhances its danger"
+   },
+   {
+    "en": "closeness",
+    "note": "i personlig relation",
+    "ex_en": "The closeness between them grew as time went on"
+   },
+   {
+    "en": "intimacy",
+    "note": "i personlig relation",
+    "ex_en": "He found their intimacy a little disturbing"
+   }
+  ],
+  "phrases": [
+   {
+    "da": "i nærheden",
+    "senses": [
+     {
+      "en": "near by (adv.)"
+     }
+    ]
+   }
+  ],
+  "synonyms": [
+   "nabolag",
+   "omegn",
+   "fortrolighed (personlig)"
+  ],
+  "screens": [
+   23
+  ],
+  "check": "Engelsk staves 'nearby' i ét ord, når det står alene som adverbium.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "betjene",
+  "word": "betjene",
+  "pos": "vb.",
+  "forms": "-r, betjente, betjent",
+  "gloss": "operate, serve",
+  "senses": [
+   {
+    "en": "operate",
+    "ex_en": "He is not qualified to operate the machinery",
+    "ex_da": "Han er ikke kvalificeret til at betjene maskineriet"
+   },
+   {
+    "en": "run",
+    "ex_en": "My uncle runs the institute",
+    "ex_da": "Min onkel betjener instituttet"
+   },
+   {
+    "en": "work",
+    "ex_en": "He was supposed to work the heavy machinery",
+    "ex_da": "Det var meningen, at han skulle arbejde med det tunge maskineri"
+   },
+   {
+    "en": "serve",
+    "ex_en": "They served their guests very well",
+    "ex_da": "De betjente deres gæster særdeles godt"
+   },
+   {
+    "en": "service",
+    "ex_en": "The company established a hotline in order to better service their customers",
+    "ex_da": "Firmaet etablerede en hotline for bedre at kunne betjene deres kunder"
+   },
+   {
+    "en": "attend"
+   }
+  ],
+  "phrases": [],
+  "synonyms": [
+   "servicere",
+   "ekspedere",
+   "håndtere (maskine)",
+   "bruge"
+  ],
+  "screens": [
+   24
+  ],
+  "check": "Fejl i ordbogen: 'Min onkel betjener instituttet' betyder ikke 'My uncle runs the institute'. At lede et institut hedder 'Min onkel leder instituttet'. 'betjene' bruges om maskiner og kunder.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "bortset",
+  "word": "bortset",
+  "pos": "adv.",
+  "forms": "",
+  "gloss": "apart (from)",
+  "senses": [],
+  "phrases": [
+   {
+    "da": "bortset fra",
+    "senses": [
+     {
+      "en": "apart from",
+      "ex_en": "Everyone was invited, apart from her old aunt"
+     },
+     {
+      "en": "except from",
+      "ex_en": "I like them all except from the maths teacher"
+     },
+     {
+      "en": "except (præp.)",
+      "ex_en": "Everybody had some wine, except those who had to drive home"
+     },
+     {
+      "en": "except for",
+      "ex_en": "Everybody was there except for him"
+     }
+    ]
+   },
+   {
+    "da": "bortset fra at",
+    "senses": [
+     {
+      "en": "except that"
+     }
+    ]
+   }
+  ],
+  "synonyms": [
+   "undtagen",
+   "foruden",
+   "med undtagelse af"
+  ],
+  "screens": [
+   25
+  ],
+  "check": "Fejl i ordbogens engelske eksempel: 'except from the maths teacher' er ikke korrekt engelsk. Skriv 'I like them all except the maths teacher'. 'bortset' bruges næsten kun i 'bortset fra'.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "tvaers",
+  "word": "tværs",
+  "pos": "adv.",
+  "forms": "",
+  "gloss": "across",
+  "senses": [],
+  "phrases": [
+   {
+    "da": "komme på tværs af nogen",
+    "senses": [
+     {
+      "en": "upset somebody's apple cart",
+      "note": "figurativt",
+      "ex_en": "You should not upset his apple cart",
+      "ex_da": "Du skal ikke komme på tværs af ham"
+     }
+    ]
+   },
+   {
+    "da": "kryds og tværs",
+    "senses": [
+     {
+      "en": "crossword puzzle",
+      "ex_en": "He could not solve the crossword puzzle",
+      "ex_da": "Han kunne ikke løse krydsogtværsen"
+     }
+    ]
+   },
+   {
+    "da": "på kryds og tværs",
+    "senses": [
+     {
+      "en": "crisscross (adj.)",
+      "ex_en": "The flowers were arranged in a crisscross pattern",
+      "ex_da": "Blomsterne blev arrangeret i et mønster på kryds og tværs"
+     }
+    ]
+   },
+   {
+    "da": "på tværs",
+    "senses": [
+     {
+      "en": "crosswise",
+      "ex_en": "The campers placed the wood crosswise to start the fire",
+      "ex_da": "Campisterne placerede træet på tværs for at starte ilden"
+     }
+    ]
+   },
+   {
+    "da": "på tværs af",
+    "senses": [
+     {
+      "en": "across",
+      "ex_en": "Their work cuts across different cultural sectors",
+      "ex_da": "Deres arbejde skærer på tværs af forskellige kulturelle sektorer"
+     }
+    ]
+   },
+   {
+    "da": "tværs igennem",
+    "senses": [
+     {
+      "en": "right through",
+      "ex_en": "The spear went right through his chest",
+      "ex_da": "Spyddet gik tværs igennem hans bryst"
+     }
+    ]
+   },
+   {
+    "da": "tværs over",
+    "senses": [
+     {
+      "en": "across"
+     }
+    ]
+   }
+  ],
+  "synonyms": [
+   "på skrå",
+   "over"
+  ],
+  "screens": [
+   26
+  ],
+  "note": "Opslagsordet ses ikke på skærmbilledet; kun udtrykkene.",
+  "check": "'komme på tværs af nogen' betyder snarere 'cross somebody / get on the wrong side of somebody' end 'upset somebody's apple cart' (som betyder at ødelægge nogens planer).",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "forgifte",
+  "word": "forgifte",
+  "pos": "vb.",
+  "forms": "-r, -de, -t",
+  "gloss": "poison",
+  "senses": [
+   {
+    "en": "poison",
+    "ex_en": "All their neighbours believed that she poisoned her husband"
+   }
+  ],
+  "phrases": [],
+  "synonyms": [
+   "forgive",
+   "inficere"
+  ],
+  "screens": [
+   29
+  ],
+  "extra": "'forgive' er et ældre/litterært synonym (ikke det engelske 'forgive').",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "forpligte",
+  "word": "forpligte",
+  "pos": "vb.",
+  "forms": "-r, -de, -t",
+  "gloss": "oblige, bind",
+  "senses": [],
+  "phrases": [
+   {
+    "da": "forpligte én",
+    "senses": [
+     {
+      "en": "bind somebody",
+      "ex_en": "The ruling bound him to pay alimony",
+      "ex_da": "Kendelsen forpligtede ham til at betale underholdsbidrag"
+     },
+     {
+      "en": "put somebody under an obligation",
+      "ex_en": "It put him under the obligation to take care of her",
+      "ex_da": "Det forpligtede ham til at tage sig af hende"
+     }
+    ]
+   },
+   {
+    "da": "forpligte én til",
+    "senses": [
+     {
+      "en": "obligate to",
+      "ex_en": "My conscience obligates me to tell the truth",
+      "ex_da": "Min samvittighed forpligter mig til at fortælle sandheden"
+     }
+    ]
+   },
+   {
+    "da": "forpligte én til at gøre noget",
+    "senses": [
+     {
+      "en": "oblige somebody to do something",
+      "ex_en": "He felt his position obliged him to do something about it",
+      "ex_da": "Han følte, at hans position forpligtede ham til at gøre noget ved det"
+     }
+    ]
+   },
+   {
+    "da": "forpligte forud",
+    "senses": [
+     {
+      "en": "preengage",
+      "ex_en": "His former associates had preengaged …"
+     }
+    ]
+   }
+  ],
+  "synonyms": [
+   "binde",
+   "pålægge",
+   "tvinge"
+  ],
+  "screens": [
+   30
+  ],
+  "extra": "Også stavet 'forpligtige'. Tillægsform: forpligtet (obliged).",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "vroevl",
+  "word": "vrøvl",
+  "pos": "sb.",
+  "forms": "et; vrøvlet, vrøvl, vrøvlene",
+  "gloss": "nonsense, rubbish",
+  "senses": [
+   {
+    "en": "rubbish",
+    "ex_en": "This is rubbish",
+    "ex_da": "Det er vrøvl"
+   },
+   {
+    "en": "nonsense",
+    "ex_en": "He talked nonsense all the time",
+    "ex_da": "Han vrøvlede hele tiden"
+   },
+   {
+    "en": "rot",
+    "ex_en": "What a load of rot",
+    "ex_da": "Sådan noget vrøvl"
+   },
+   {
+    "en": "fuss",
+    "ex_en": "You just had to raise a fuss, did you not?",
+    "ex_da": "Du kunne ikke lade være med at gøre vrøvl, kunne du?"
+   },
+   {
+    "en": "twaddle",
+    "ex_en": "That is complete and utter twaddle",
+    "ex_da": "Det er noget fuldstændigt og komplet vrøvl"
+   },
+   {
+    "en": "drivel",
+    "ex_en": "Your assignment is a load of drivel",
+    "ex_da": "Din opgave er noget vrøvl"
+   },
+   {
+    "en": "difficulties",
+    "note": "besvær, pl."
+   }
+  ],
+  "phrases": [],
+  "synonyms": [
+   "sludder",
+   "nonsens",
+   "pjat",
+   "ævl"
+  ],
+  "screens": [
+   32
+  ],
+  "check": "Eksemplet 'Han vrøvlede hele tiden' bruger verbet 'vrøvle', ikke navneordet 'vrøvl'. 'did you not?' er meget formelt; i talesprog siger man 'didn't you?'.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "vroevle",
+  "word": "vrøvle",
+  "pos": "vb.",
+  "forms": "-r, -de, -t",
+  "gloss": "talk nonsense",
+  "senses": [
+   {
+    "en": "talk nonsense",
+    "ex_en": "He always talks nonsense",
+    "ex_da": "Han vrøvler altid"
+   },
+   {
+    "en": "talk rubbish",
+    "ex_en": "Do not talk rubbish!",
+    "ex_da": "Stop med at vrøvle!"
+   },
+   {
+    "en": "talk through one's hat",
+    "note": "talesprog, gammeldags",
+    "ex_en": "The old man was talking through his hat",
+    "ex_da": "Den gamle mand vrøvlede"
+   },
+   {
+    "en": "ramble",
+    "ex_en": "Will you please stop rambling?",
+    "ex_da": "Kan du ikke godt stoppe med at vrøvle?"
+   }
+  ],
+  "phrases": [],
+  "synonyms": [
+   "sludre",
+   "ævle",
+   "pjatte",
+   "plapre"
+  ],
+  "screens": [
+   33
+  ],
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "beskylde",
+  "word": "beskylde",
+  "pos": "vb.",
+  "forms": "-r, beskyldte, beskyldt",
+  "gloss": "accuse",
+  "senses": [
+   {
+    "en": "accuse",
+    "ex_en": "He was accused of a crime he did not commit",
+    "ex_da": "Han blev beskyldt for en forbrydelse han ikke havde begået"
+   },
+   {
+    "en": "impute",
+    "ex_en": "They imputed the chauffeur of driving too fast",
+    "ex_da": "De beskyldte chaufføren for at køre for hurtigt"
+   },
+   {
+    "en": "charge",
+    "note": "anklage",
+    "ex_en": "They charged him with murder",
+    "ex_da": "De beskyldte ham for mord"
+   }
+  ],
+  "phrases": [
+   {
+    "da": "blive beskyldt for ngt / at",
+    "senses": [
+     {
+      "en": "be accused of sth / of + ing"
+     }
+    ]
+   }
+  ],
+  "synonyms": [
+   "anklage",
+   "bebrejde",
+   "mistænke"
+  ],
+  "screens": [
+   34
+  ],
+  "check": "Fejl i ordbogens engelske eksempel: 'impute' bruges som 'impute something to someone', ikke 'impute someone of'. Skriv fx 'They accused the driver of driving too fast'. I juridisk betydning ('charge with murder') siger man på dansk 'sigte/anklage for mord', ikke 'beskylde'.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "ihjel",
+  "word": "ihjel",
+  "pos": "adv.",
+  "forms": "",
+  "gloss": "to death",
+  "senses": [],
+  "phrases": [
+   {
+    "da": "arbejde sig ihjel",
+    "senses": [
+     {
+      "en": "work oneself to death",
+      "note": "figurativt",
+      "ex_en": "She worked herself to death",
+      "ex_da": "Hun arbejdede sig selv ihjel"
+     }
+    ]
+   },
+   {
+    "da": "drikke sig ihjel",
+    "senses": [
+     {
+      "en": "drink oneself to death",
+      "ex_en": "Her father drank himself to death",
+      "ex_da": "Hendes far drak sig selv ihjel"
+     }
+    ]
+   },
+   {
+    "da": "kede sig ihjel",
+    "senses": [
+     {
+      "en": "be bored to death",
+      "note": "figurativt",
+      "ex_en": "I am bored to death",
+      "ex_da": "Jeg keder mig ihjel"
+     }
+    ]
+   },
+   {
+    "da": "prygle én ihjel",
+    "senses": [
+     {
+      "en": "beat somebody to death",
+      "ex_en": "He was beaten to death",
+      "ex_da": "Han blev pryglet ihjel"
+     }
+    ]
+   },
+   {
+    "da": "slå ihjel",
+    "senses": [
+     {
+      "en": "kill (vb.)",
+      "ex_en": "They killed him",
+      "ex_da": "De slog ham ihjel"
+     }
+    ]
+   },
+   {
+    "da": "slå tiden ihjel",
+    "senses": [
+     {
+      "en": "kill time",
+      "note": "figurativt",
+      "ex_en": "He is not very good at killing time",
+      "ex_da": "Han er ikke god til at slå tiden ihjel"
+     }
+    ]
+   }
+  ],
+  "synonyms": [
+   "til døde"
+  ],
+  "screens": [
+   36
+  ],
+  "check": "'drak sig selv ihjel' og 'arbejdede sig selv ihjel' er forståeligt, men det mest idiomatiske er uden 'selv': 'drak sig ihjel', 'arbejdede sig ihjel'.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "forkaele",
+  "word": "forkæle",
+  "pos": "vb.",
+  "forms": "-r, -de, -t",
+  "gloss": "spoil, pamper",
+  "senses": [
+   {
+    "en": "spoil",
+    "ex_en": "The grandparents spoiled their grandchild",
+    "ex_da": "Bedsteforældrene forkælede deres barnebarn"
+   },
+   {
+    "en": "pamper",
+    "ex_en": "She pampered the dog with lots of good biscuits",
+    "ex_da": "Hun forkælede hunden med mange gode småkager"
+   },
+   {
+    "en": "cosset",
+    "ex_en": "Parents usually cosset their children",
+    "ex_da": "Forældre forkæler normalt deres børn"
+   },
+   {
+    "en": "coddle",
+    "ex_en": "Why are you coddling him?",
+    "ex_da": "Hvorfor forkæler du ham?"
+   },
+   {
+    "en": "mollycoddle",
+    "note": "pylre om",
+    "ex_en": "She is mollycoddling her children",
+    "ex_da": "Hun pylrer om sine børn"
+   }
+  ],
+  "phrases": [],
+  "synonyms": [
+   "pylre om",
+   "pakke ind i vat",
+   "forvænne"
+  ],
+  "screens": [
+   42
+  ],
+  "extra": "Tillægsform: forkælet (spoilt).",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "dig",
+  "word": "dig",
+  "pos": "pron.",
+  "forms": "",
+  "gloss": "you",
+  "senses": [
+   {
+    "en": "you",
+    "ex_en": "I need to tell you a secret"
+   }
+  ],
+  "phrases": [
+   {
+    "da": "tag dig sammen",
+    "senses": [
+     {
+      "en": "get a grip",
+      "ex_en": "Oh, get a grip, said his mother when he began to cry"
+     }
+    ]
+   }
+  ],
+  "synonyms": [
+   "(høflig) Dem"
+  ],
+  "screens": [
+   48
+  ],
+  "extra": "Genstandsform af 'du'. Bruges også refleksivt: 'Du skal skynde dig'.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "fornemme",
+  "word": "fornemme",
+  "pos": "vb.",
+  "forms": "-r, -de, -t",
+  "gloss": "sense, perceive",
+  "senses": [
+   {
+    "en": "sense",
+    "ex_en": "He sensed that something was wrong"
+   },
+   {
+    "en": "perceive",
+    "ex_en": "She perceived his unhappiness"
+   },
+   {
+    "en": "notice",
+    "note": "bemærke",
+    "ex_en": "He noticed that he was not alone"
+   },
+   {
+    "en": "feel",
+    "note": "føle",
+    "ex_en": "He felt that someone was watching him"
+   }
+  ],
+  "phrases": [],
+  "synonyms": [
+   "mærke",
+   "ane",
+   "føle",
+   "bemærke"
+  ],
+  "screens": [
+   49
+  ],
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "snige",
+  "word": "snige",
+  "pos": "vb.",
+  "forms": "-r, sneg, sneget",
+  "gloss": "sneak",
+  "senses": [],
+  "phrases": [
+   {
+    "da": "snige sig",
+    "senses": [
+     {
+      "en": "slip",
+      "ex_en": "Their daughter slipped out in the middle of the night",
+      "ex_da": "Deres datter sneg sig ud midt om natten"
+     },
+     {
+      "en": "creep",
+      "ex_en": "He crept by without being noticed",
+      "ex_da": "Han sneg sig forbi uden at blive opdaget"
+     },
+     {
+      "en": "sneak",
+      "ex_en": "She sneaked around the house and into the basement",
+      "ex_da": "Hun sneg sig rundt om huset og ned i kælderen"
+     }
+    ]
+   },
+   {
+    "da": "snige sig gennem",
+    "senses": [
+     {
+      "en": "slink through",
+      "ex_en": "We heard a cat slinking through the grass."
+     }
+    ]
+   },
+   {
+    "da": "snige sig ind på ng",
+    "senses": [
+     {
+      "en": "sneak up on sby"
+     }
+    ]
+   },
+   {
+    "da": "snige sig til at gøre ngt",
+    "senses": [
+     {
+      "en": "surreptitiously do sth"
+     }
+    ]
+   }
+  ],
+  "synonyms": [
+   "liste",
+   "luske",
+   "smyge sig"
+  ],
+  "screens": [
+   56
+  ],
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "handle",
+  "word": "handle",
+  "pos": "vb.",
+  "forms": "-r, -de, -t",
+  "gloss": "trade, act, shop",
+  "senses": [
+   {
+    "en": "trade",
+    "ex_en": "Many different goods are traded at the market",
+    "ex_da": "Der bliver handlet med mange forskellige varer på markedet"
+   },
+   {
+    "en": "deal",
+    "ex_en": "He refused to deal with that company",
+    "ex_da": "Han nægtede at handle med det firma"
+   },
+   {
+    "en": "do business",
+    "ex_en": "I refuse to do business with that company ever again",
+    "ex_da": "Jeg nægter at handle med det firma igen"
+   },
+   {
+    "en": "shop",
+    "note": "foretage indkøb",
+    "ex_en": "She spent the afternoon shopping",
+    "ex_da": "Hun tilbragte eftermiddagen med at handle"
+   },
+   {
+    "en": "act",
+    "note": "gøre noget",
+    "ex_en": "She taught him to think before acting",
+    "ex_da": "Hun lærte ham, at han skal tænke, før han handler"
+   },
+   {
+    "en": "traffic",
+    "note": "ulovligt",
+    "ex_en": "He traffics stolen goods",
+    "ex_da": "Han handler med hælervarer"
+   }
+  ],
+  "phrases": [
+   {
+    "da": "handle ind",
+    "senses": [
+     {
+      "en": "shop",
+      "ex_en": "She has to shop for the whole week"
+     }
+    ]
+   },
+   {
+    "da": "handle om",
+    "senses": [
+     {
+      "en": "be about"
+     }
+    ]
+   }
+  ],
+  "synonyms": [
+   "købe ind",
+   "sælge",
+   "agere",
+   "gøre noget"
+  ],
+  "screens": [
+   57
+  ],
+  "note": "'handle om' (be about) er tilføjet af Claude; det ses ikke på skærmbilledet.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "udrette",
+  "word": "udrette",
+  "pos": "vb.",
+  "forms": "-r, -de, -t",
+  "gloss": "achieve, accomplish",
+  "senses": [
+   {
+    "en": "achieve",
+    "note": "opnå",
+    "ex_en": "He did not achieve what he had set out to do",
+    "ex_da": "Han udrettede ikke det, han havde sat ud til at gøre"
+   },
+   {
+    "en": "accomplish",
+    "note": "opnå",
+    "ex_en": "She had not accomplished much in her life",
+    "ex_da": "Hun havde ikke udrettet meget i sit liv"
+   },
+   {
+    "en": "perform",
+    "note": "fuldføre",
+    "ex_en": "The doctors performed a miracle",
+    "ex_da": "Lægerne udrettede et mirakel"
+   },
+   {
+    "en": "do",
+    "note": "gøre",
+    "ex_en": "The physiotherapist did wonders for my back",
+    "ex_da": "Fysioterapeuten udrettede vidundere for min ryg"
+   },
+   {
+    "en": "straighten",
+    "note": "teknik, rette",
+    "ex_en": "They tried to straighten the bend in the road",
+    "ex_da": "De forsøgte at udrette bugten i vejen"
+   }
+  ],
+  "phrases": [],
+  "synonyms": [
+   "opnå",
+   "præstere",
+   "gennemføre",
+   "rette ud (teknik)"
+  ],
+  "screens": [
+   58
+  ],
+  "check": "To ordbogseksempler er oversat ord for ord fra engelsk: 'han havde sat ud til at gøre' er ikke dansk (skriv 'han havde sat sig for'), og 'udrettede vidundere for min ryg' hedder naturligt 'gjorde underværker for min ryg'.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "mindst",
+  "word": "mindst",
+  "pos": "adj.",
+  "forms": "mindste (superlativ af lille)",
+  "gloss": "smallest, least",
+  "senses": [
+   {
+    "en": "smaller",
+    "note": "af to",
+    "ex_en": "He looked at the two cups and chose the smaller one",
+    "ex_da": "Han kiggede på de to kopper, og valgte den mindste"
+   },
+   {
+    "en": "younger",
+    "note": "af to, om alder",
+    "ex_en": "He asked the younger boy to get the milk",
+    "ex_da": "Han bad den mindste dreng om at hente mælken"
+   }
+  ],
+  "phrases": [
+   {
+    "da": "det mindste",
+    "senses": [
+     {
+      "en": "the least",
+      "ex_en": "The least I could do was help you carry the boxes",
+      "ex_da": "Det mindste jeg kunne gøre var at hjælpe med at bære kasserne"
+     }
+    ]
+   },
+   {
+    "da": "i det mindste",
+    "senses": [
+     {
+      "en": "at least",
+      "ex_en": "It may be cold, but at least it is not raining",
+      "ex_da": "Det er koldt, men i det mindste regner det ikke"
+     }
+    ]
+   },
+   {
+    "da": "ikke det mindste",
+    "senses": [
+     {
+      "en": "nothing at all",
+      "note": "ingenting",
+      "ex_en": "He knew nothing at all about their plans",
+      "ex_da": "Han vidste ikke det mindste om deres planer"
+     },
+     {
+      "en": "not at all",
+      "note": "slet ikke",
+      "ex_en": "Do you mind if I borrow your pen? Not at all, he said",
+      "ex_da": "Har du noget imod, at jeg låner din kuglepen? Ikke det mindste, sagde han"
+     }
+    ]
+   }
+  ],
+  "synonyms": [
+   "mindste",
+   "ringeste"
+  ],
+  "screens": [
+   59
+  ],
+  "note": "Opslagsordet ses ikke på skærmbilledet; udtrykkene hører under 'mindst/mindste'.",
+  "check": "Kommaet i 'Han kiggede på de to kopper, og valgte den mindste' er unødvendigt efter moderne regler.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "oedelaegge",
+  "word": "ødelægge",
+  "pos": "vb.",
+  "forms": "-r, ødelagde, ødelagt",
+  "gloss": "destroy, ruin",
+  "senses": [
+   {
+    "en": "destroy",
+    "ex_en": "The burglars destroyed almost everything in the house",
+    "ex_da": "Indbrudstyvene ødelagde næsten alt i huset"
+   },
+   {
+    "en": "wreck",
+    "ex_en": "The boys wrecked all the garden furniture",
+    "ex_da": "Drengene ødelagde alle havemøblerne"
+   },
+   {
+    "en": "ruin",
+    "ex_en": "This event has completely ruined her life",
+    "ex_da": "Den begivenhed har fuldstændig ødelagt hendes liv"
+   },
+   {
+    "en": "devastate",
+    "ex_en": "The country was devastated by the wars",
+    "ex_da": "Landet var ødelagt af krigene"
+   },
+   {
+    "en": "smash",
+    "note": "slå i stykker",
+    "ex_en": "The child smashed his friend's toy",
+    "ex_da": "Barnet ødelagde sin vens legetøj"
+   }
+  ],
+  "phrases": [],
+  "synonyms": [
+   "smadre",
+   "knuse",
+   "spolere",
+   "hærge"
+  ],
+  "screens": [
+   60
+  ],
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "eneste",
+  "word": "eneste",
+  "pos": "adj.",
+  "forms": "(ubøjeligt)",
+  "gloss": "only, sole",
+  "senses": [
+   {
+    "en": "only",
+    "ex_en": "She was the only applicant for the job",
+    "ex_da": "Hun var den eneste ansøger til jobbet"
+   },
+   {
+    "en": "sole",
+    "ex_en": "He was the sole survivor of the shipwreck",
+    "ex_da": "Han var den eneste overlevende efter skibsbruddet"
+   },
+   {
+    "en": "single",
+    "ex_en": "We only have one single copy of the book left",
+    "ex_da": "Vi har kun en eneste kopi af bogen tilbage"
+   }
+  ],
+  "phrases": [
+   {
+    "da": "de eneste",
+    "senses": [
+     {
+      "en": "the only ones",
+      "ex_en": "They were the only ones who went to the concert",
+      "ex_da": "De var de eneste der tog til koncerten"
+     }
+    ]
+   },
+   {
+    "da": "den eneste",
+    "senses": [
+     {
+      "en": "the only one",
+      "ex_en": "He was the only one interested in frogs",
+      "ex_da": "Han var den eneste der interesserede sig for frøer"
+     }
+    ]
+   },
+   {
+    "da": "hver eneste",
+    "senses": [
+     {
+      "en": "every single",
+      "ex_en": "She turned over every single stone"
+     }
+    ]
+   }
+  ],
+  "synonyms": [
+   "enkelt",
+   "enlig",
+   "alene"
+  ],
+  "screens": [
+   61
+  ],
+  "check": "Efter moderne kommaregler kan man skrive 'De var de eneste, der tog til koncerten' (med komma før 'der'); begge dele er tilladt.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "opdigte",
+  "word": "opdigte",
+  "pos": "vb.",
+  "forms": "-r, -de, -t",
+  "gloss": "make up, invent",
+  "senses": [
+   {
+    "en": "cook up",
+    "ex_en": "He cooked up a convincing explanation for his presence there"
+   },
+   {
+    "en": "make up",
+    "ex_en": "They made up an explanation for his absence"
+   },
+   {
+    "en": "dream up",
+    "ex_en": "She dreams up all kinds of excuses"
+   },
+   {
+    "en": "fabricate",
+    "note": "fabrikere",
+    "ex_en": "He is extremely good at fabricating explanations"
+   }
+  ],
+  "phrases": [],
+  "synonyms": [
+   "finde på",
+   "digte",
+   "konstruere",
+   "fabrikere"
+  ],
+  "screens": [
+   62
+  ],
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "antage",
+  "word": "antage",
+  "pos": "vb.",
+  "forms": "-r, antog, -t",
+  "gloss": "assume, suppose",
+  "senses": [
+   {
+    "en": "presume",
+    "note": "formode",
+    "ex_en": "I presume that you have finished the job by now",
+    "ex_da": "Jeg antager, at du har færdiggjort arbejdet nu"
+   },
+   {
+    "en": "assume",
+    "note": "formode",
+    "ex_en": "I assume that this is correct",
+    "ex_da": "Jeg antager, at det er korrekt"
+   },
+   {
+    "en": "suppose",
+    "note": "formode",
+    "ex_en": "I suppose that this might be an option",
+    "ex_da": "Jeg antager, at dette måske er en mulighed"
+   },
+   {
+    "en": "engage",
+    "note": "ansætte",
+    "ex_en": "He had just engaged a new secretary",
+    "ex_da": "Han har lige antaget en ny sekretær"
+   },
+   {
+    "en": "hire",
+    "note": "ansætte",
+    "ex_en": "They hired ten new employees",
+    "ex_da": "De antog ti nye medarbejdere"
+   }
+  ],
+  "phrases": [],
+  "synonyms": [
+   "formode",
+   "gå ud fra",
+   "regne med",
+   "ansætte (om job)"
+  ],
+  "screens": [
+   64
+  ],
+  "check": "Betydningen 'ansætte' (engage, hire) er gammeldags; i dag siger man 'De ansatte ti nye medarbejdere'. 'Han har lige antaget' passer heller ikke til datid i det engelske 'had just engaged'.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "overskue",
+  "word": "overskue",
+  "pos": "vb.",
+  "forms": "-r, -de, -t",
+  "gloss": "survey, cope with",
+  "senses": [
+   {
+    "en": "survey",
+    "note": "se ud over",
+    "ex_en": "We need to survey the land first",
+    "ex_da": "Vi er nødt til at overskue landet først"
+   },
+   {
+    "en": "command",
+    "note": "have overblik over",
+    "ex_en": "The general commanded the entire battlefield from a small hillock",
+    "ex_da": "Generalen overskuede hele slagmarken fra en lille tue"
+   },
+   {
+    "en": "cope with",
+    "note": "klare",
+    "ex_en": "I do not think he can cope with that situation",
+    "ex_da": "Jeg tror ikke han kan overskue den situation"
+   },
+   {
+    "en": "manage",
+    "note": "klare",
+    "ex_en": "I can't manage dealing with it right now",
+    "ex_da": "Jeg kan ikke overskue at tage mig af det lige nu"
+   },
+   {
+    "en": "assess",
+    "note": "vurdere",
+    "ex_en": "It was difficult at that time to assess the damage",
+    "ex_da": "Det var svært på det tidspunkt at overskue skaderne"
+   }
+  ],
+  "phrases": [],
+  "synonyms": [
+   "have overblik over",
+   "klare",
+   "magte",
+   "vurdere"
+  ],
+  "screens": [
+   65
+  ],
+  "extra": "Meget brugt i hverdagen: 'Jeg kan ikke overskue det' = I can't face it / it's too much for me.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "magt",
+  "word": "magt",
+  "pos": "sb.",
+  "forms": "-en",
+  "gloss": "power, force",
+  "senses": [
+   {
+    "en": "power",
+    "ex_en": "He thought the labour unions had too little power",
+    "ex_da": "Han syntes, at fagforeningerne havde for lidt magt"
+   },
+   {
+    "en": "force",
+    "ex_en": "The man threatened to use force to enter the house",
+    "ex_da": "Manden truede med at bruge magt for at komme ind i huset"
+   },
+   {
+    "en": "might",
+    "ex_en": "The king used all his might to suppress the opposition",
+    "ex_da": "Kongen brugte al sin magt til at holde modstanden nede"
+   },
+   {
+    "en": "control",
+    "note": "herredømme",
+    "ex_en": "He soon gained control over the situation",
+    "ex_da": "Han fik snart magten over situationen"
+   },
+   {
+    "en": "authority",
+    "note": "herredømme",
+    "ex_en": "He had the authority to order the things done immediately",
+    "ex_da": "Han havde magten til at beordre, at tingene blev udført med det samme"
+   }
+  ],
+  "phrases": [],
+  "synonyms": [
+   "kraft",
+   "styrke",
+   "herredømme",
+   "myndighed"
+  ],
+  "screens": [
+   66
+  ],
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "efterhaanden",
+  "word": "efterhånden",
+  "pos": "adv.",
+  "forms": "",
+  "gloss": "gradually, eventually",
+  "senses": [
+   {
+    "en": "as",
+    "ex_en": "As the days become longer, more children come out to play"
+   },
+   {
+    "en": "gradually",
+    "ex_en": "The company gradually replaced their old computers"
+   },
+   {
+    "en": "eventually",
+    "note": "til sidst",
+    "ex_en": "You have to decide eventually"
+   },
+   {
+    "en": "by degrees",
+    "ex_en": "Their friendship was growing by degrees"
+   },
+   {
+    "en": "over time",
+    "ex_en": "The burnt area grew back over time"
+   }
+  ],
+  "phrases": [
+   {
+    "da": "efterhånden komme til at",
+    "senses": [
+     {
+      "en": "have come to",
+      "ex_en": "I have come to take it for granted that any nice restaurant will accommodate a request for a vegetarian meal."
+     }
+    ]
+   },
+   {
+    "da": "efterhånden som",
+    "senses": [
+     {
+      "en": "as",
+      "ex_en": "He would deal with those problems as they arose."
+     }
+    ]
+   }
+  ],
+  "synonyms": [
+   "gradvist",
+   "lidt efter lidt",
+   "med tiden",
+   "til sidst"
+  ],
+  "screens": [
+   67
+  ],
+  "check": "Betydningen 'as' gælder kun i forbindelsen 'efterhånden som' ('Efterhånden som dagene bliver længere …'), ikke 'efterhånden' alene.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "skide",
+  "word": "skide",
+  "pos": "vb.",
+  "forms": "-r, sked, skidt",
+  "gloss": "shit (vulgært)",
+  "senses": [
+   {
+    "en": "shit",
+    "ex_en": "The dog shit all over the place",
+    "ex_da": "Hunden sked over det hele"
+   },
+   {
+    "en": "defecate",
+    "ex_en": "The child defecated in a potty",
+    "ex_da": "Barnet sked i potten"
+   },
+   {
+    "en": "crap",
+    "note": "talesprog",
+    "ex_en": "He went to the toilet to crap",
+    "ex_da": "Han gik på toilettet for at skide"
+   }
+  ],
+  "phrases": [
+   {
+    "da": "det vil jeg skide på",
+    "senses": [
+     {
+      "en": "I do not give a shit",
+      "note": "figurativt"
+     }
+    ]
+   },
+   {
+    "da": "skide være med det",
+    "senses": [
+     {
+      "en": "to hell with it",
+      "note": "figurativt",
+      "ex_en": "To hell with it!",
+      "ex_da": "Skide være med det!"
+     }
+    ]
+   },
+   {
+    "da": "ville skide på",
+    "senses": [
+     {
+      "en": "not give a shit about",
+      "note": "figurativt",
+      "ex_en": "I do not give a shit about them",
+      "ex_da": "Dem vil jeg skide på!"
+     }
+    ]
+   },
+   {
+    "da": "være ude at skide",
+    "senses": [
+     {
+      "en": "be in the shit",
+      "note": "figurativt",
+      "ex_en": "She was really in the shit last month",
+      "ex_da": "Hun var virkelig ude at skide sidste måned"
+     }
+    ]
+   }
+  ],
+  "synonyms": [
+   "(neutralt) have afføring",
+   "gå på toilettet",
+   "(om udtryk) være ligeglad med"
+  ],
+  "screens": [
+   68
+  ],
+  "check": "'defecate' er et neutralt/medicinsk ord, mens 'skide' er vulgært; neutralt dansk er 'have afføring'. 'Barnet sked i potten' er almindeligt i hverdagssprog om børn.",
+  "extra": "Vulgært. Bemærk også 'skidt' som adj. = bad ('Det er skidt' = That's bad).",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "fred",
+  "word": "fred",
+  "pos": "sb.",
+  "forms": "-en",
+  "gloss": "peace",
+  "senses": [
+   {
+    "en": "peace",
+    "ex_en": "We pray for peace in this land",
+    "ex_da": "Vi beder for fred i dette land"
+   }
+  ],
+  "phrases": [
+   {
+    "da": "fred og ro",
+    "senses": [
+     {
+      "en": "peace and quiet",
+      "ex_en": "They love the peace and quiet of the country",
+      "ex_da": "De elsker den fred og ro, der er på landet"
+     },
+     {
+      "en": "peace and tranquility"
+     }
+    ]
+   },
+   {
+    "da": "lad mig være i fred",
+    "senses": [
+     {
+      "en": "leave me alone",
+      "ex_en": "He told them to leave him alone",
+      "ex_da": "Han bad dem om at lade ham være i fred"
+     }
+    ]
+   },
+   {
+    "da": "slutte fred",
+    "senses": [
+     {
+      "en": "make peace",
+      "ex_en": "The warring parts agreed to make peace",
+      "ex_da": "De stridende parter blev enige om at slutte fred"
+     }
+    ]
+   },
+   {
+    "da": "(en) varig fred",
+    "senses": [
+     {
+      "en": "(a) lasting peace"
+     }
+    ]
+   },
+   {
+    "da": "bryde freden",
+    "senses": [
+     {
+      "en": "breach / break the peace"
+     }
+    ]
+   },
+   {
+    "da": "en køreplan for fred",
+    "senses": [
+     {
+      "en": "a roadmap for peace [in the Middle East]"
+     }
+    ]
+   },
+   {
+    "da": "en usikker fred",
+    "senses": [
+     {
+      "en": "an uneasy peace"
+     }
+    ]
+   },
+   {
+    "da": "et brud på freden",
+    "senses": [
+     {
+      "en": "a breach of (the) peace"
+     }
+    ]
+   },
+   {
+    "da": "fred i sjælen",
+    "senses": [
+     {
+      "en": "peace of mind (se: sjælefred)"
+     }
+    ]
+   }
+  ],
+  "synonyms": [
+   "ro",
+   "stilhed",
+   "fredelighed"
+  ],
+  "screens": [
+   69
+  ],
+  "check": "Det engelske eksempel 'The warring parts' bør være 'The warring parties'. 'peace of mind' er Claudes oversættelse af 'fred i sjælen'; ordbogen henviser kun til 'sjælefred'.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "smadre",
+  "word": "smadre",
+  "pos": "vb.",
+  "forms": "-r, -de, -t",
+  "gloss": "smash, wreck",
+  "senses": [
+   {
+    "en": "wreck",
+    "ex_en": "He wrecked his new car in the accident"
+   },
+   {
+    "en": "break",
+    "ex_en": "She knocked over the table and broke the vase"
+   },
+   {
+    "en": "smash",
+    "ex_en": "The ball bounced off the wall and smashed the window"
+   },
+   {
+    "en": "bash",
+    "ex_en": "He bashed his head against the overhanging beam"
+   },
+   {
+    "en": "bust",
+    "note": "talesprog",
+    "ex_en": "She bust his new computer"
+   },
+   {
+    "en": "devastate",
+    "note": "ødelægge",
+    "ex_en": "The bombs devastated the whole city"
+   },
+   {
+    "en": "shatter",
+    "note": "knuse",
+    "ex_en": "He shattered the window"
+   },
+   {
+    "en": "destroy",
+    "note": "figurativt",
+    "ex_en": "Her dismissive reply completely destroyed his hopes and dreams"
+   }
+  ],
+  "phrases": [],
+  "synonyms": [
+   "ødelægge",
+   "knuse",
+   "slå i stykker"
+  ],
+  "screens": [
+   70
+  ],
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "formaa",
+  "word": "formå",
+  "pos": "vb.",
+  "forms": "-r, -ede, -et",
+  "gloss": "be able to, manage",
+  "senses": [
+   {
+    "en": "be able to",
+    "note": "kunne",
+    "ex_en": "He was not able to help them anymore",
+    "ex_da": "Han formåede ikke at hjælpe dem mere"
+   },
+   {
+    "en": "be capable of",
+    "note": "kunne",
+    "ex_en": "He was not capable of taking care of himself",
+    "ex_da": "Han formåede ikke at passe på sig selv"
+   },
+   {
+    "en": "induce",
+    "note": "overtale",
+    "ex_en": "He induced the costumers to buy another sofa",
+    "ex_da": "Han formåede kunderne til at købe endnu en sofa"
+   },
+   {
+    "en": "persuade",
+    "note": "overtale",
+    "ex_en": "They persuaded the government to change the health legislation",
+    "ex_da": "De formåede regeringen til at ændre sundhedslovgivningen"
+   }
+  ],
+  "phrases": [],
+  "synonyms": [
+   "kunne",
+   "magte",
+   "evne",
+   "overtale (gl.)"
+  ],
+  "screens": [
+   71
+  ],
+  "check": "Stavefejl i ordbogen: 'costumers' skal være 'customers'. 'formå nogen til' (overtale) er gammeldags; i dag: 'Han fik kunderne til at købe …' eller 'overtalte kunderne til …'.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "passe",
+  "word": "passe",
+  "pos": "vb.",
+  "forms": "-r, -de, -t",
+  "gloss": "fit, suit, look after",
+  "senses": [],
+  "phrases": [
+   {
+    "da": "passe sine egne sager",
+    "senses": [
+     {
+      "en": "mind one's own business",
+      "ex_en": "He told them to mind their own business",
+      "ex_da": "Han bad dem om at passe deres egne sager"
+     }
+    ]
+   },
+   {
+    "da": "passe tiden",
+    "senses": [
+     {
+      "en": "be punctual",
+      "ex_en": "She has never been very punctual",
+      "ex_da": "Hun har aldrig passet tiden særlig godt"
+     }
+    ]
+   },
+   {
+    "da": "passe til",
+    "senses": [
+     {
+      "en": "fit",
+      "ex_en": "The key does not fit the lock",
+      "ex_da": "Nøglen passer ikke til låsen"
+     },
+     {
+      "en": "suit",
+      "ex_en": "That shirt suits your pants",
+      "ex_da": "Den skjorte passer til dine bukser"
+     },
+     {
+      "en": "fit into",
+      "ex_en": "The picture does not fit into the frame",
+      "ex_da": "Billedet passer ikke til rammen"
+     },
+     {
+      "en": "go with",
+      "ex_en": "The paint does not go with the curtains",
+      "ex_da": "Malingen passer ikke til gardinerne"
+     },
+     {
+      "en": "match",
+      "ex_en": "Does this shirt match the skirt?, she asked",
+      "ex_da": "Passer denne bluse til nederdelen?, spurgte hun"
+     }
+    ]
+   },
+   {
+    "da": "det kan (da) ikke passe",
+    "senses": [
+     {
+      "en": "surely not"
+     },
+     {
+      "en": "it cannot be true"
+     }
+    ]
+   },
+   {
+    "da": "passe på",
+    "senses": [
+     {
+      "en": "look after, take care (of)"
+     }
+    ]
+   }
+  ],
+  "synonyms": [
+   "egne sig",
+   "matche",
+   "tage sig af (passe på)"
+  ],
+  "screens": [
+   72
+  ],
+  "note": "Opslagsordet ses ikke på skærmbilledet. 'passe på' er tilføjet af Claude.",
+  "check": "'Billedet passer ikke til rammen' kan betyde både 'does not fit' og 'does not suit'; tydeligere: 'Billedet passer ikke ind i rammen'. 'shirt' vs. 'bluse': 'bluse' er en kvindetrøje (blouse).",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "indtraede",
+  "word": "indtræde",
+  "pos": "vb.",
+  "forms": "-r, indtrådte, indtrådt",
+  "gloss": "occur, enter",
+  "senses": [
+   {
+    "en": "occur",
+    "note": "finde sted",
+    "ex_en": "A crisis occurred while the director was on holiday"
+   },
+   {
+    "en": "take place",
+    "note": "finde sted",
+    "ex_en": "Many car accidents take place during the summer"
+   }
+  ],
+  "phrases": [
+   {
+    "da": "indtræde i noget",
+    "senses": [
+     {
+      "en": "enter something",
+      "ex_en": "She entered the army at the age of 18"
+     }
+    ]
+   }
+  ],
+  "synonyms": [
+   "indtræffe (ske)",
+   "indfinde sig",
+   "træde ind i"
+  ],
+  "screens": [
+   73
+  ],
+  "check": "Forveksling: til 'occur / take place' bruger man normalt 'indtræffe' ('En krise indtraf, mens direktøren var på ferie'). 'indtræde' betyder især 'sætte ind' ('Døden indtrådte kl. 3') og 'træde ind i' (fx et firma, en aftale). Begge er formelle; i hverdagen siger man 'ske' og 'gå ind i'.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "erklaere",
+  "word": "erklære",
+  "pos": "vb.",
+  "forms": "-r, -de, -t",
+  "gloss": "declare",
+  "senses": [
+   {
+    "en": "declare",
+    "ex_en": "They declared war on the neighbouring country",
+    "ex_da": "De erklærede krig mod nabolandet"
+   },
+   {
+    "en": "pronounce",
+    "ex_en": "They pronounced their intentions to get married",
+    "ex_da": "De erklærede deres intentioner om ægteskab"
+   },
+   {
+    "en": "proclaim",
+    "ex_en": "The president proclaimed his loyalty to the allies",
+    "ex_da": "Præsidenten erklærede sin loyalitet til de allierede"
+   },
+   {
+    "en": "state",
+    "note": "forklare"
+   }
+  ],
+  "phrases": [],
+  "synonyms": [
+   "bekendtgøre",
+   "forkynde",
+   "udtale",
+   "meddele"
+  ],
+  "screens": [
+   74
+  ],
+  "check": "'erklære krig mod' er almindeligt, men den faste vending er også 'erklære krig mod/imod'. 'They pronounced their intentions' er usædvanligt engelsk; naturligt: 'They announced their intention to marry'.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "aarti",
+  "word": "årti",
+  "pos": "sb.",
+  "forms": "et; -et, -er, -erne",
+  "gloss": "decade",
+  "senses": [
+   {
+    "en": "decade",
+    "ex_en": "She had worked there for over a decade now",
+    "ex_da": "Hun havde arbejdet der i mere end et årti nu"
+   }
+  ],
+  "phrases": [],
+  "synonyms": [
+   "tiår"
+  ],
+  "screens": [
+   75
+  ],
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "skille",
+  "word": "skille",
+  "pos": "vb.",
+  "forms": "-r, -de, -t",
+  "gloss": "separate, part",
+  "senses": [],
+  "phrases": [
+   {
+    "da": "skille ad",
+    "senses": [
+     {
+      "en": "disassemble",
+      "note": "mere formelt eller teknisk",
+      "ex_en": "He showed them how to disassemble the machine"
+     },
+     {
+      "en": "take apart",
+      "ex_en": "He took apart his electric guitar and cleaned it"
+     }
+    ]
+   },
+   {
+    "da": "skille noget ud",
+    "senses": [
+     {
+      "en": "separate something",
+      "ex_en": "She could not separate it from the rest"
+     }
+    ]
+   },
+   {
+    "da": "skille sig af med",
+    "senses": [
+     {
+      "en": "dispose of",
+      "ex_en": "They decided to dispose of the old couch"
+     }
+    ]
+   },
+   {
+    "da": "skille sig fra",
+    "senses": [
+     {
+      "en": "differ from",
+      "ex_en": "This differs from what you told me"
+     }
+    ]
+   },
+   {
+    "da": "skille sig ud",
+    "senses": [
+     {
+      "en": "stand out",
+      "ex_en": "It really stands out"
+     }
+    ]
+   },
+   {
+    "da": "skille sig ud fra",
+    "senses": [
+     {
+      "en": "be different from",
+      "ex_en": "She is quite different from other people"
+     }
+    ]
+   },
+   {
+    "da": "til døden os skiller",
+    "senses": [
+     {
+      "en": "till death do us part",
+      "ex_en": "We promised to live together till death do us part"
+     }
+    ]
+   },
+   {
+    "da": "skille fårene fra bukkene",
+    "senses": [
+     {
+      "en": "separate the wheat from the chaff"
+     }
+    ]
+   },
+   {
+    "da": "skille ngt ad",
+    "senses": [
+     {
+      "en": "take sth apart"
+     }
+    ]
+   },
+   {
+    "da": "skille sig ud (fra)",
+    "senses": [
+     {
+      "en": "stand out (from) [the rest]"
+     }
+    ]
+   }
+  ],
+  "synonyms": [
+   "adskille",
+   "dele",
+   "splitte"
+  ],
+  "screens": [
+   76
+  ],
+  "note": "Opslagsordet og bøjningen ses ikke på skærmbilledet; tilføjet af Claude. Relateret: 'blive skilt' (get divorced).",
+  "check": "'skille sig fra' (differ from) er sjældent; man siger oftere 'adskille sig fra' eller 'være forskellig fra'.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "nytte",
+  "word": "nytte",
+  "pos": "sb.",
+  "forms": "-n",
+  "gloss": "use, usefulness",
+  "senses": [
+   {
+    "en": "use",
+    "ex_en": "She hoped they would be of use to her"
+   },
+   {
+    "en": "utility",
+    "ex_en": "These tools are only of limited utility"
+   },
+   {
+    "en": "usefulness",
+    "ex_en": "The old computer had lost its usefulness"
+   }
+  ],
+  "phrases": [
+   {
+    "da": "gøre nytte",
+    "senses": [
+     {
+      "en": "be useful"
+     }
+    ]
+   },
+   {
+    "da": "til hvilken nytte?",
+    "senses": [
+     {
+      "en": "to what avail?"
+     },
+     {
+      "en": "what good would that do?"
+     }
+    ]
+   },
+   {
+    "da": "til ingen nytte",
+    "senses": [
+     {
+      "en": "without avail",
+      "ex_en": "It was all to no avail."
+     }
+    ]
+   }
+  ],
+  "synonyms": [
+   "gavn",
+   "fordel",
+   "anvendelse"
+  ],
+  "screens": [
+   77
+  ],
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "nytte-vb",
+  "word": "nytte",
+  "pos": "vb.",
+  "forms": "-r, -de, -t",
+  "gloss": "be of use",
+  "senses": [],
+  "phrases": [
+   {
+    "da": "hvad nytter det at",
+    "senses": [
+     {
+      "en": "what is the use of",
+      "ex_en": "What is the use of running, he asked"
+     }
+    ]
+   }
+  ],
+  "synonyms": [
+   "gavne",
+   "hjælpe",
+   "duge"
+  ],
+  "screens": [
+   77
+  ],
+  "extra": "Ofte i nægtelse: 'Det nytter ikke' = It's no use.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "vaskebraet",
+  "word": "vaskebræt",
+  "pos": "sb.",
+  "forms": "et; -tet, -ter, -terne",
+  "gloss": "washboard",
+  "senses": [
+   {
+    "en": "washboard",
+    "ex_en": "The clothes lay in a heap on the washboard",
+    "ex_da": "Tøjet ligger i en bunke på vaskebrættet"
+   },
+   {
+    "en": "scrubbing board",
+    "ex_en": "We used to wash clothes on scrubbing boards, she explained",
+    "ex_da": "Vi plejede at vaske tøj på vaskebrætter, forklarede hun"
+   }
+  ],
+  "phrases": [],
+  "synonyms": [
+   "(i overført betydning) sixpack (om mavemuskler)"
+  ],
+  "screens": [
+   78
+  ],
+  "check": "Tiderne passer ikke sammen i ordbogens eksempel: 'lay' (datid) men 'ligger' (nutid). Rettet dansk: 'Tøjet lå i en bunke på vaskebrættet'.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "pifte",
+  "word": "pifte",
+  "pos": "vb.",
+  "forms": "-r, -de, -t",
+  "gloss": "whistle",
+  "senses": [
+   {
+    "en": "whistle",
+    "ex_en": "He whistled at the pretty girls as they walked past",
+    "ex_da": "Han piftede af de flotte piger, da de gik forbi"
+   },
+   {
+    "en": "catcall",
+    "note": "fjendtlig stemt",
+    "ex_en": "The audience catcalled and threw tomatoes",
+    "ex_da": "Publikum piftede og kastede med tomater"
+   },
+   {
+    "en": "let down",
+    "note": "om dæk",
+    "ex_en": "Someone had let down the tyres on my bike",
+    "ex_da": "Nogen havde piftet min cykel"
+   }
+  ],
+  "phrases": [
+   {
+    "da": "pifte ng / ngt op",
+    "senses": [
+     {
+      "en": "spiff sby / sth up"
+     },
+     {
+      "en": "smarten sby / sth up"
+     }
+    ]
+   }
+  ],
+  "synonyms": [
+   "fløjte",
+   "pibe",
+   "peppe op (pifte op)"
+  ],
+  "screens": [
+   79
+  ],
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "kompromis",
+  "word": "kompromis",
+  "pos": "sb.",
+  "forms": "et; -et, -er, -erne",
+  "gloss": "compromise",
+  "senses": [
+   {
+    "en": "compromise",
+    "ex_en": "The negotiating parties finally reached a compromise"
+   }
+  ],
+  "phrases": [
+   {
+    "da": "gå på kompromis",
+    "senses": [
+     {
+      "en": "compromise (vb.)",
+      "ex_en": "They refused to compromise"
+     }
+    ]
+   },
+   {
+    "da": "gå på kompromis med",
+    "senses": [
+     {
+      "en": "compromise on",
+      "ex_en": "We never compromise on quality"
+     }
+    ]
+   },
+   {
+    "da": "nægte at gå på kompromis",
+    "senses": [
+     {
+      "en": "refuse to compromise"
+     }
+    ]
+   }
+  ],
+  "synonyms": [
+   "forlig",
+   "mellemvej",
+   "overenskomst"
+  ],
+  "screens": [
+   80
+  ],
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "arrangement",
+  "word": "arrangement",
+  "pos": "sb.",
+  "forms": "et; -et, -er, -erne",
+  "gloss": "event, arrangement",
+  "senses": [
+   {
+    "en": "event",
+    "note": "større arrangement, show osv.",
+    "ex_en": "An extraordinary event took place last night"
+   },
+   {
+    "en": "section",
+    "note": "del",
+    "ex_en": "The wind section played an important role at the concert"
+   },
+   {
+    "en": "arrangement",
+    "ex_en": "A beautiful arrangement was made for the party"
+   },
+   {
+    "en": "layout",
+    "ex_en": "She is in charge of the layout"
+   },
+   {
+    "en": "array",
+    "ex_en": "The array of sea food on display was impressive"
+   },
+   {
+    "en": "set-up",
+    "ex_en": "The set-up was well done"
+   },
+   {
+    "en": "line-up",
+    "note": "i sport",
+    "ex_en": "The teams' line-ups were published before the game"
+   }
+  ],
+  "phrases": [],
+  "synonyms": [
+   "begivenhed",
+   "fest",
+   "opstilling"
+  ],
+  "screens": [
+   81
+  ],
+  "check": "'section' (fx 'the wind section') er ikke en almindelig betydning af 'arrangement'; et orkesters træblæsere hedder 'træblæsergruppen'. Behandl den betydning med forsigtighed. 'sea food' staves 'seafood'.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "overvejende",
+  "word": "overvejende",
+  "pos": "adj.",
+  "forms": "",
+  "gloss": "predominant, prevailing",
+  "senses": [
+   {
+    "en": "predominant",
+    "ex_en": "The predominant part of the audience agreed with him"
+   },
+   {
+    "en": "prevailing",
+    "ex_en": "The prevailing opinion is that they will make it"
+   }
+  ],
+  "phrases": [],
+  "synonyms": [
+   "fremherskende",
+   "dominerende",
+   "altovervejende"
+  ],
+  "screens": [
+   87
+  ],
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "overvejende-adv",
+  "word": "overvejende",
+  "pos": "adv.",
+  "forms": "",
+  "gloss": "predominantly, mainly",
+  "senses": [
+   {
+    "en": "predominantly",
+    "ex_en": "The family lives in a predominantly rich neighbourhood"
+   },
+   {
+    "en": "mainly",
+    "ex_en": "The participants are mainly young people"
+   },
+   {
+    "en": "chiefly",
+    "ex_en": "He has chiefly travelled in Australia"
+   }
+  ],
+  "phrases": [
+   {
+    "da": "handle overvejende om",
+    "senses": [
+     {
+      "en": "be essentially about",
+      "ex_en": "It is essentially about providing grass-roots support."
+     }
+    ]
+   }
+  ],
+  "synonyms": [
+   "hovedsageligt",
+   "primært",
+   "for det meste",
+   "især"
+  ],
+  "screens": [
+   87
+  ],
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "sagsoege",
+  "word": "sagsøge",
+  "pos": "vb.",
+  "forms": "-r, sagsøgte, sagsøgt",
+  "gloss": "sue",
+  "senses": [
+   {
+    "en": "sue",
+    "note": "jura",
+    "ex_en": "She sued the magazine for writing lies about her",
+    "ex_da": "Hun sagsøgte bladet for at skrive løgne om hende"
+   },
+   {
+    "en": "file suit against",
+    "note": "jura",
+    "ex_en": "They decided to file suit against the company",
+    "ex_da": "De valgte at sagsøge virksomheden"
+   },
+   {
+    "en": "bring charges against",
+    "note": "jura",
+    "ex_en": "You ought to bring charges against him!",
+    "ex_da": "Du burde sagsøge ham!"
+   }
+  ],
+  "phrases": [],
+  "synonyms": [
+   "anlægge sag mod",
+   "stævne",
+   "retsforfølge"
+  ],
+  "screens": [
+   88
+  ],
+  "check": "Juridisk præcision: 'sagsøge' er et civilt søgsmål (sue). 'bring charges against' er strafferet og svarer til 'anmelde/rejse tiltale mod', ikke 'sagsøge'.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "udenpaa",
+  "word": "udenpå",
+  "pos": "præp.",
+  "forms": "",
+  "gloss": "outside of",
+  "senses": [
+   {
+    "en": "outside of",
+    "ex_en": "Someone had painted a big flower outside of the building",
+    "ex_da": "Nogen havde malet en stor blomst uden på bygningen"
+   },
+   {
+    "en": "on the outside of",
+    "ex_en": "She had her shirt outside of her skirt",
+    "ex_da": "Hun havde blusen uden på sin nederdel"
+   }
+  ],
+  "phrases": [
+   {
+    "da": "have nerverne uden på tøjet",
+    "senses": [
+     {
+      "en": "emotions running high",
+      "ex_en": "His emotions are obviously running high today",
+      "ex_da": "Han har tydeligvis nerverne uden på tøjet i dag"
+     }
+    ]
+   }
+  ],
+  "synonyms": [
+   "på ydersiden af",
+   "uden for"
+  ],
+  "screens": [
+   89
+  ],
+  "check": "'have nerverne uden på tøjet' betyder at være meget nervøs/anspændt ('be on edge'), ikke kun 'emotions running high'.",
+  "extra": "Som forholdsord skrives det ofte i to ord: 'uden på'.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "udenpaa-adv",
+  "word": "udenpå",
+  "pos": "adv.",
+  "forms": "",
+  "gloss": "on the outside",
+  "senses": [
+   {
+    "en": "on the outside",
+    "ex_en": "A note was attached on the outside",
+    "ex_da": "En seddel var vedhæftet udenpå"
+   },
+   {
+    "en": "on the outside",
+    "note": "om persons facade, figurativt",
+    "ex_en": "I am sad on the inside but happy on the outside"
+   }
+  ],
+  "phrases": [],
+  "synonyms": [
+   "udvendigt",
+   "på ydersiden"
+  ],
+  "screens": [
+   89
+  ],
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "indeni",
+  "word": "indeni",
+  "pos": "adv.",
+  "forms": "",
+  "gloss": "inside, within",
+  "senses": [
+   {
+    "en": "within",
+    "ex_en": "The box has a velvet lining within"
+   },
+   {
+    "en": "inside",
+    "ex_en": "He had a warm and fuzzy feeling inside"
+   }
+  ],
+  "phrases": [],
+  "synonyms": [
+   "inde i",
+   "indvendigt"
+  ],
+  "screens": [
+   90
+  ],
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "indeni-praep",
+  "word": "indeni",
+  "pos": "præp.",
+  "forms": "",
+  "gloss": "inside",
+  "senses": [
+   {
+    "en": "inside",
+    "ex_en": "There was a mouse inside his shoe",
+    "ex_da": "Der var en mus inden i hans sko"
+   },
+   {
+    "en": "within",
+    "ex_en": "It was very hot within the room",
+    "ex_da": "Det var meget varmt inden i lokalet"
+   }
+  ],
+  "phrases": [],
+  "synonyms": [
+   "inde i",
+   "i"
+  ],
+  "screens": [
+   90
+  ],
+  "check": "'Det var meget varmt inden i lokalet' er usædvanligt; man siger blot 'Det var meget varmt i lokalet'.",
+  "extra": "Som forholdsord skrives det ofte 'inden i'.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "tage",
+  "word": "tage",
+  "pos": "vb.",
+  "forms": "-r, tog, taget",
+  "gloss": "take",
+  "senses": [],
+  "phrases": [
+   {
+    "da": "tage frem",
+    "senses": [
+     {
+      "en": "take out",
+      "ex_en": "She asked me to take out the encyclopedia",
+      "ex_da": "Hun bad mig om at tage leksikonet frem"
+     }
+    ]
+   },
+   {
+    "da": "tage godt imod",
+    "senses": [
+     {
+      "en": "give somebody a good reception",
+      "ex_en": "He gave them a good reception",
+      "ex_da": "Han tog godt imod dem"
+     }
+    ]
+   },
+   {
+    "da": "tage hårdt på nogen",
+    "senses": [
+     {
+      "en": "take a toll",
+      "ex_en": "The years have taken their toll on him",
+      "ex_da": "Årene har taget hårdt på ham"
+     }
+    ]
+   },
+   {
+    "da": "tage imod",
+    "senses": [
+     {
+      "en": "accept",
+      "note": "acceptere",
+      "ex_en": "She could not accept his gift",
+      "ex_da": "Hun kunne ikke tage imod hans gave"
+     },
+     {
+      "en": "meet",
+      "note": "møde, byde velkommen",
+      "ex_en": "She will meet you at the airport",
+      "ex_da": "Hun vil tage imod dig i lufthavnen"
+     }
+    ]
+   },
+   {
+    "da": "tage med",
+    "senses": [
+     {
+      "en": "bring",
+      "note": "medbringe",
+      "ex_en": "I wonder whether we should bring anything to the party tonight",
+      "ex_da": "Jeg spekulerer på, om vi burde tage noget med til festen i aften"
+     }
+    ]
+   },
+   {
+    "da": "tage ned",
+    "senses": [
+     {
+      "en": "take down",
+      "ex_en": "Will you please take down the picture for me?",
+      "ex_da": "Vil du være sød at tage billedet ned for mig?"
+     },
+     {
+      "en": "lower",
+      "ex_en": "Remember to lower the flag before it gets dark",
+      "ex_da": "Husk at tage flaget ned, før det bliver mørkt"
+     }
+    ]
+   }
+  ],
+  "synonyms": [
+   "gribe",
+   "få",
+   "modtage (tage imod)"
+  ],
+  "screens": [
+   91
+  ],
+  "note": "Opslagsordet og bøjningen ses ikke på skærmbilledet; tilføjet af Claude.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "nedslidt",
+  "word": "nedslidt",
+  "pos": "adj.",
+  "forms": "-e",
+  "gloss": "worn out, worn down",
+  "senses": [
+   {
+    "en": "worn down",
+    "ex_en": "The tires had to be replaced because they were worn down",
+    "ex_da": "Dækkene skulle udskiftes, fordi de var nedslidte"
+   },
+   {
+    "en": "worn out",
+    "ex_en": "I was tired and both mentally and physically worn out",
+    "ex_da": "Jeg var træt og nedslidt både mentalt og fysisk"
+   },
+   {
+    "en": "beat-up",
+    "ex_en": "The beat-up machine is beyond repair",
+    "ex_da": "Den nedslidte maskine kan ikke repareres"
+   }
+  ],
+  "phrases": [
+   {
+    "da": "helt nedslidt",
+    "senses": [
+     {
+      "en": "bald",
+      "note": "om dæk",
+      "ex_en": "She did not know that her tires were bald and needed replacing",
+      "ex_da": "Hun vidste ikke, at hendes dæk var helt nedslidte og skulle udskiftes"
+     }
+    ]
+   }
+  ],
+  "synonyms": [
+   "slidt",
+   "udslidt",
+   "udkørt (om person)",
+   "medtaget"
+  ],
+  "screens": [
+   92
+  ],
+  "extra": "Tillægsform af 'nedslide' (vb., -r, nedsled, nedslidt).",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "drage",
+  "word": "drage",
+  "pos": "sb.",
+  "forms": "-n, -r, -rne",
+  "gloss": "kite, dragon",
+  "senses": [
+   {
+    "en": "kite",
+    "note": "legetøj",
+    "ex_en": "On windy days they played with their kites",
+    "ex_da": "På blæsende dage fløj de med deres drager"
+   },
+   {
+    "en": "dragon",
+    "note": "fabeldyr",
+    "ex_en": "The knight in shining armour killed the dragon",
+    "ex_da": "Ridderen i den skinnende rustning dræbte dragen"
+   },
+   {
+    "en": "battleaxe",
+    "note": "om kvinde, nedsættende",
+    "ex_en": "His wife was considered a real battleaxe",
+    "ex_da": "Hans kone blev anset som en rigtig drage"
+   }
+  ],
+  "phrases": [],
+  "synonyms": [
+   "lindorm (fabeldyr)",
+   "heks (om kvinde)"
+  ],
+  "screens": [
+   93
+  ],
+  "check": "'anset som' er almindeligt i talesprog; korrekt skriftsprog er 'anset for (at være) en rigtig drage'.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "drage-vb",
+  "word": "drage",
+  "pos": "vb.",
+  "forms": "-r, drog, -t",
+  "gloss": "go, draw",
+  "senses": [
+   {
+    "en": "go",
+    "note": "tage til et sted",
+    "ex_en": "The young men went abroad to find adventure",
+    "ex_da": "De unge mænd drog udenlands for at finde eventyr"
+   }
+  ],
+  "phrases": [],
+  "synonyms": [
+   "rejse",
+   "tage af sted",
+   "trække (drage en konklusion)"
+  ],
+  "screens": [
+   93
+  ],
+  "note": "Skærmbilledet er afskåret efter første betydning. 'drage en konklusion' (draw a conclusion) er tilføjet af Claude.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "staevne",
+  "word": "stævne",
+  "pos": "sb.",
+  "forms": "et; -t, -r, -rne",
+  "gloss": "rally, competition",
+  "senses": [
+   {
+    "en": "rally",
+    "note": "politisk møde osv.",
+    "ex_en": "The human rights rally became a huge success"
+   },
+   {
+    "en": "competition",
+    "note": "konkurrence",
+    "ex_en": "She was looking forward to the gymnastics competition"
+   },
+   {
+    "en": "meet",
+    "note": "amerikansk"
+   },
+   {
+    "en": "round robin",
+    "note": "hvor alle møder alle",
+    "ex_en": "All of the local teams were invited to the round robin"
+   },
+   {
+    "en": "show",
+    "ex_en": "Her horse was participating in the show"
+   }
+  ],
+  "phrases": [
+   {
+    "da": "sætte nogen stævne",
+    "senses": [
+     {
+      "en": "arrange to meet somebody",
+      "note": "aftale at mødes",
+      "ex_en": "She arranged to meet her husband for lunch",
+      "ex_da": "Hun satte sin mand stævne til frokost"
+     }
+    ]
+   }
+  ],
+  "synonyms": [
+   "møde",
+   "konkurrence",
+   "træf",
+   "turnering"
+  ],
+  "screens": [
+   94,
+   95
+  ],
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "staevne-vb",
+  "word": "stævne",
+  "pos": "vb.",
+  "forms": "-r, -de, -t",
+  "gloss": "summon, sue, head for",
+  "senses": [
+   {
+    "en": "sue",
+    "note": "jura, sagsøge",
+    "ex_en": "The woman sued her husband"
+   },
+   {
+    "en": "summon",
+    "note": "jura, indkalde",
+    "ex_en": "She was summoned to appear in court"
+   },
+   {
+    "en": "pollard",
+    "note": "ved skovbrug",
+    "ex_en": "Once young trees have reached the desired height, you can begin to pollard them"
+   }
+  ],
+  "phrases": [
+   {
+    "da": "stævne frem mod",
+    "senses": [
+     {
+      "en": "head for",
+      "note": "udvikle sig i en retning, figurativt",
+      "ex_en": "The company heads for bankruptcy"
+     }
+    ]
+   },
+   {
+    "da": "stævne ud",
+    "senses": [
+     {
+      "en": "head out",
+      "note": "om skib",
+      "ex_en": "The ship headed out to sea"
+     }
+    ]
+   }
+  ],
+  "synonyms": [
+   "sagsøge",
+   "indkalde",
+   "sejle (om skib)",
+   "beskære (træer)"
+  ],
+  "screens": [
+   95
+  ],
+  "check": "'stævne frem mod' er litterært; i hverdagen siger man 'Firmaet er på vej mod konkurs'.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "lun",
+  "word": "lun",
+  "pos": "adj.",
+  "forms": "-t, -e, -ere, -est",
+  "gloss": "warm, cosy",
+  "senses": [
+   {
+    "en": "warm",
+    "ex_en": "She loved slightly warm rolls with butter"
+   },
+   {
+    "en": "snug",
+    "ex_en": "Her feet felt snug in the furry boots"
+   },
+   {
+    "en": "cosy",
+    "note": "hyggeligt; US: cozy",
+    "ex_en": "It is very cosy in here"
+   },
+   {
+    "en": "humorous",
+    "note": "spøgefuld",
+    "ex_en": "He is a humorous person"
+   },
+   {
+    "en": "pawky",
+    "note": "spøgefuld",
+    "ex_en": "She is pawky"
+   }
+  ],
+  "phrases": [
+   {
+    "da": "lun ret",
+    "senses": [
+     {
+      "en": "warm dish",
+      "ex_en": "The buffet had many warm dishes such as spring rolls",
+      "ex_da": "Der var mange lune retter i buffeten som f.eks. forårsruller"
+     }
+    ]
+   },
+   {
+    "da": "være lun på ng",
+    "senses": [
+     {
+      "en": "have a crush on sby"
+     }
+    ]
+   }
+  ],
+  "synonyms": [
+   "varm",
+   "hyggelig",
+   "tørvittig (om humor)",
+   "forelsket (være lun på)"
+  ],
+  "screens": [
+   96,
+   97
+  ],
+  "check": "'lun humor' er tør, underspillet humor; 'pawky' er et sjældent britisk/skotsk ord for netop det. 'humorous' alene rammer ikke helt betydningen. 'Lunt' i 'Det er lunt herinde' betyder snarere 'pleasantly warm' end 'cosy'.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "ride",
+  "word": "ride",
+  "pos": "vb.",
+  "forms": "rider, red, redet",
+  "gloss": "ride",
+  "senses": [
+   {
+    "en": "ride",
+    "ex_en": "The cowboy was riding his black horse",
+    "ex_da": "Cowboyen red på sin sorte hest"
+   }
+  ],
+  "phrases": [],
+  "synonyms": [
+   "galoppere",
+   "trave"
+  ],
+  "screens": [
+   98
+  ],
+  "extra": "Bemærk: 'ride på cykel' siger man ikke; det hedder 'cykle'.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "ride-sb",
+  "word": "ride",
+  "pos": "sb.",
+  "forms": "en; -n, -r, -rne",
+  "gloss": "kittiwake",
+  "senses": [
+   {
+    "en": "kittiwake",
+    "note": "zoologi",
+    "ex_en": "They saw a couple of kittiwakes during the trip",
+    "ex_da": "De så et par rider på deres tur"
+   }
+  ],
+  "phrases": [],
+  "synonyms": [
+   "mågefugl"
+  ],
+  "screens": [
+   98
+  ],
+  "check": "Det engelske eksempel staver 'kittywakes'; korrekt er 'kittiwakes'.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ },
+ {
+  "id": "utilregnelig",
+  "word": "utilregnelig",
+  "pos": "adj.",
+  "forms": "-t, -e",
+  "gloss": "insane, unpredictable",
+  "senses": [
+   {
+    "en": "mentally deranged",
+    "ex_en": "My neighbour is deranged",
+    "ex_da": "Min nabo er utilregnelig"
+   },
+   {
+    "en": "insane",
+    "ex_en": "He was certified insane by several doctors",
+    "ex_da": "Han var bekræftet utilregnelig af flere læger"
+   },
+   {
+    "en": "of unsound mind",
+    "ex_en": "She was declared of unsound mind when committing the crime",
+    "ex_da": "Hun var erklæret utilregnelig, mens hun begik forbrydelsen"
+   },
+   {
+    "en": "unstable",
+    "note": "ustabil",
+    "ex_en": "The patient is very unstable at the moment",
+    "ex_da": "Patienten er meget utilregnelig i øjeblikket"
+   }
+  ],
+  "phrases": [
+   {
+    "da": "utilregnelig i gerningsøjeblikket",
+    "senses": [
+     {
+      "en": "not guilty by reason of insanity",
+      "ex_en": "Those found to have been not guilty by reason of insanity are generally required to undergo psychiatric treatment."
+     }
+    ]
+   }
+  ],
+  "synonyms": [
+   "sindssyg",
+   "uforudsigelig",
+   "ustabil",
+   "uberegnelig"
+  ],
+  "screens": [
+   99
+  ],
+  "check": "To rettelser: (1) Man siger 'erklæret utilregnelig', ikke 'bekræftet utilregnelig'. (2) I hverdagsdansk betyder 'utilregnelig' oftest 'uforudsigelig' ('Han er helt utilregnelig, når han drikker'); den betydning mangler i ordbogen. 'Min nabo er utilregnelig' betyder derfor typisk 'unpredictable', ikke 'mentally deranged'.",
+  "source": "ordbogen.com (skærmbillede)",
+  "added": "2026-11-06"
+ }
 ]
