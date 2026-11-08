@@ -1,0 +1,497 @@
+<title>Prøveklar</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,650;1,6..72,400&family=Libre+Franklin:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: one column styled like the paper test sheet — numbered question, tick-box answers; a home screen with three ways to play. */
+:root {
+  --paper: #f3f5f7; --sheet: #ffffff; --ink: #15233a; --muted: #5a6779; --line: #d8dee6;
+  --red: #c8102e; --red-soft: #fbe7ea; --ok: #1c7a4b; --ok-soft: #e2f3e9; --gold: #a86b00; --gold-soft: #fbf0d9;
+  --f-q: "Newsreader", "Iowan Old Style", Georgia, serif;
+  --f-ui: "Libre Franklin", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #0f1520; --sheet: #172131; --ink: #e6ecf4; --muted: #96a3b5; --line: #29364a;
+  --red: #ff6b7d; --red-soft: #3b1d25; --ok: #6fd3a0; --ok-soft: #16322a; --gold: #f0b552; --gold-soft: #33280f; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --paper: #0f1520; --sheet: #172131; --ink: #e6ecf4; --muted: #96a3b5; --line: #29364a;
+  --red: #ff6b7d; --red-soft: #3b1d25; --ok: #6fd3a0; --ok-soft: #16322a; --gold: #f0b552; --gold-soft: #33280f; color-scheme: dark }
+
+body { background: var(--paper); color: var(--ink); font: 15px/1.5 var(--f-ui); }
+.wrap { max-width: 720px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 24px 56px; display: grid; gap: 18px; }
+button { font: inherit; color: inherit; }
+button:focus-visible, a:focus-visible, select:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+
+header { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
+.brand { display: grid; gap: 4px; }
+.eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); display: flex; gap: 8px; align-items: center; }
+.flag { width: 18px; height: 13px; background: var(--red); position: relative; border-radius: 1px; flex: none; }
+.flag::before, .flag::after { content: ""; position: absolute; background: var(--sheet); }
+.flag::before { left: 5px; top: 0; bottom: 0; width: 2.5px; }
+.flag::after { top: 5px; left: 0; right: 0; height: 2.5px; }
+h1 { font: 650 clamp(30px, 7vw, 42px)/1.05 var(--f-q); margin: 0; letter-spacing: -.01em; }
+.lang { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; background: var(--sheet); }
+.lang button { border: 0; background: none; padding: 6px 12px; font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer; }
+.lang button[aria-pressed="true"] { background: var(--ink); color: var(--sheet); }
+
+.facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.fact { background: var(--sheet); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+.fact b { display: block; font: 650 24px/1.1 var(--f-q); font-variant-numeric: tabular-nums; }
+.fact span { font-size: 12px; color: var(--muted); }
+.modes { display: grid; gap: 10px; }
+.mode { text-align: left; background: var(--sheet); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; cursor: pointer; display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; align-items: center; }
+.mode:hover { border-color: var(--ink); }
+.mode h2 { font: 650 21px var(--f-q); margin: 0; }
+.mode p { margin: 0; color: var(--muted); grid-column: 1; }
+.mode .go { grid-row: 1 / span 2; grid-column: 2; font-size: 22px; color: var(--red); }
+.mode.exam { border-left: 4px solid var(--red); }
+.mode .best { font-size: 12px; font-weight: 600; color: var(--ok); grid-column: 1; }
+.cats { display: flex; flex-wrap: wrap; gap: 6px; }
+.cat { border: 1px solid var(--line); background: var(--sheet); border-radius: 999px; padding: 5px 12px; font-size: 13px; font-weight: 500; cursor: pointer; }
+.cat .n { color: var(--muted); margin-left: 4px; font-variant-numeric: tabular-nums; }
+.cat:hover { border-color: var(--ink); }
+.sec-title { font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 6px 0 0; }
+.note { font-size: 13px; color: var(--muted); margin: 0; }
+.note a { color: var(--ink); }
+
+/* question sheet */
+.bar { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.quit { border: 1px solid var(--line); background: var(--sheet); border-radius: 999px; padding: 6px 12px; font-size: 13px; font-weight: 600; cursor: pointer; }
+.hud { display: flex; gap: 14px; align-items: center; font-variant-numeric: tabular-nums; font-weight: 600; }
+.hud .t.low { color: var(--red); }
+.lives { letter-spacing: 2px; color: var(--red); }
+.progress { height: 5px; background: var(--line); border-radius: 999px; overflow: hidden; }
+.progress i { display: block; height: 100%; background: var(--ink); transition: width .25s; }
+.timerbar { height: 4px; background: var(--line); border-radius: 999px; overflow: hidden; }
+.timerbar i { display: block; height: 100%; background: var(--red); }
+.sheet { background: var(--sheet); border: 1px solid var(--line); border-radius: 12px; padding: 22px 20px; display: grid; gap: 16px; }
+.qhead { display: flex; justify-content: space-between; gap: 10px; font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.qhead .tag.val { color: var(--gold); }
+.q { font: 500 clamp(21px, 4.6vw, 25px)/1.3 var(--f-q); margin: 0; text-wrap: balance; }
+.q-en { color: var(--muted); font-style: italic; margin: -8px 0 0; }
+.opts { display: grid; gap: 8px; }
+.opt { display: grid; grid-template-columns: 26px 1fr; gap: 12px; align-items: start; text-align: left; background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; cursor: pointer; font-size: 16px; }
+.opt:hover:not([disabled]) { border-color: var(--ink); }
+.box { width: 22px; height: 22px; border: 2px solid var(--ink); border-radius: 3px; display: grid; place-items: center; font-weight: 700; font-size: 15px; line-height: 1; margin-top: 1px; }
+.opt .en { display: block; color: var(--muted); font-size: 13px; font-style: italic; }
+.opt.chosen .box::after { content: "✕"; }
+.opt.right { background: var(--ok-soft); border-color: var(--ok); }
+.opt.right .box { border-color: var(--ok); color: var(--ok); }
+.opt.right .box::after { content: "✓"; }
+.opt.wrong { background: var(--red-soft); border-color: var(--red); }
+.opt.wrong .box { border-color: var(--red); color: var(--red); }
+.opt.wrong .box::after { content: "✕"; }
+.opt[disabled] { cursor: default; }
+.explain { border-top: 1px solid var(--line); padding-top: 12px; display: grid; gap: 4px; }
+.explain b { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+.explain.good b { color: var(--ok); } .explain.bad b { color: var(--red); }
+.explain p { margin: 0; }
+.actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+.btn { border: 0; border-radius: 10px; padding: 12px 20px; font-weight: 600; cursor: pointer; background: var(--ink); color: var(--sheet); }
+.btn.ghost { background: var(--sheet); color: var(--ink); border: 1px solid var(--line); }
+.btn.red { background: var(--red); color: #fff; }
+.flash { font: 700 15px var(--f-ui); color: var(--gold); min-height: 1.4em; text-align: center; }
+
+/* results */
+.result { display: grid; gap: 14px; }
+.verdict { font: 650 clamp(30px, 7vw, 40px)/1.05 var(--f-q); margin: 0; }
+.verdict.pass { color: var(--ok); } .verdict.fail { color: var(--red); }
+.score-rows { display: grid; gap: 8px; }
+.srow { display: grid; grid-template-columns: 1fr auto; gap: 4px 10px; align-items: center; }
+.srow .meter { grid-column: 1 / -1; height: 8px; background: var(--line); border-radius: 999px; overflow: hidden; position: relative; }
+.srow .meter i { display: block; height: 100%; background: var(--ink); }
+.srow .meter u { position: absolute; top: -2px; bottom: -2px; width: 2px; background: var(--red); }
+.srow b { font-variant-numeric: tabular-nums; }
+.review { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.review li { background: var(--sheet); border: 1px solid var(--line); border-left: 4px solid var(--red); border-radius: 8px; padding: 10px 12px; display: grid; gap: 2px; }
+.review .yours { color: var(--red); font-size: 13px; }
+.review .right { color: var(--ok); font-weight: 600; }
+.review .x { color: var(--muted); font-size: 13px; }
+@media (max-width: 520px) { .facts { grid-template-columns: repeat(2, 1fr); } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap" id="app">
+  <header>
+    <div class="brand">
+      <div class="eyebrow"><span class="flag" aria-hidden="true"></span>Træning til indfødsretsprøven</div>
+      <h1>Prøveklar</h1>
+    </div>
+    <div class="lang" role="group" aria-label="Oversættelse">
+      <button type="button" id="lang-da" aria-pressed="true">Kun dansk</button>
+      <button type="button" id="lang-en" aria-pressed="false">+ English</button>
+    </div>
+  </header>
+  <main id="view"></main>
+</div>
+
+<script>
+// Each question: [category, Danish question, English question, [[correct da, en], [da, en], ...], explanation (Danish)]
+// The first option is always the right one; options are shuffled when shown.
+const CATS = {
+  hist: "Historie", demo: "Grundloven og demokratiet", samf: "Samfund og velfærd",
+  kult: "Kultur og traditioner", geo: "Geografi", verd: "Danmark i verden", vaerdi: "Danske værdier"
+};
+const Q = [
+// ---------- Historie ----------
+["hist","Hvornår fik Danmark sin første grundlov?","When did Denmark get its first constitution?",[["1849","1849"],["1660","1660"],["1915","1915"]],"Grundloven blev underskrevet den 5. juni 1849. Den gjorde Danmark til et konstitutionelt monarki og afskaffede enevælden."],
+["hist","Hvilken konge underskrev Grundloven i 1849?","Which king signed the constitution in 1849?",[["Frederik 7.","Frederick VII"],["Christian 4.","Christian IV"],["Christian 10.","Christian X"]],"Frederik 7. underskrev Grundloven den 5. juni 1849."],
+["hist","Hvornår blev enevælden indført i Danmark?","When was absolute monarchy introduced in Denmark?",[["1660","1660"],["1536","1536"],["1849","1849"]],"Enevælden blev indført i 1660 under Frederik 3. og varede til 1849."],
+["hist","Hvornår fik kvinder valgret til Folketinget?","When did women get the right to vote for the Folketing?",[["1915","1915"],["1849","1849"],["1953","1953"]],"Med grundlovsændringen i 1915 fik kvinder og tjenestefolk valgret til Rigsdagen."],
+["hist","Hvornår blev Danmark besat af Tyskland?","When was Denmark occupied by Germany?",[["9. april 1940","9 April 1940"],["29. august 1943","29 August 1943"],["1. september 1939","1 September 1939"]],"Tyske tropper besatte Danmark om morgenen den 9. april 1940."],
+["hist","Hvornår blev Danmark befriet efter besættelsen?","When was Denmark liberated after the occupation?",[["5. maj 1945","5 May 1945"],["9. april 1945","9 April 1945"],["8. august 1946","8 August 1946"]],"Befrielsesbudskabet kom om aftenen den 4. maj, og kapitulationen trådte i kraft den 5. maj 1945. Bornholm blev dog først befriet senere."],
+["hist","Hvad skete der den 29. august 1943?","What happened on 29 August 1943?",[["Samarbejdspolitikken med besættelsesmagten brød sammen","The policy of cooperation with the occupiers broke down"],["Danmark blev befriet","Denmark was liberated"],["Danmark blev medlem af NATO","Denmark joined NATO"]],"Efter strejker og uroligheder gik regeringen af, og samarbejdet med tyskerne ophørte den 29. august 1943."],
+["hist","Hvor flygtede de fleste danske jøder hen i oktober 1943?","Where did most Danish Jews flee to in October 1943?",[["Sverige","Sweden"],["Norge","Norway"],["England","England"]],"Med hjælp fra almindelige danskere blev de fleste danske jøder sejlet over Øresund til Sverige."],
+["hist","Hvilke landsdele mistede Danmark til Sverige i 1658?","Which regions did Denmark lose to Sweden in 1658?",[["Skåne, Halland og Blekinge","Scania, Halland and Blekinge"],["Slesvig og Holsten","Schleswig and Holstein"],["Norge og Island","Norway and Iceland"]],"Ved freden i Roskilde 1658 mistede Danmark Skåne, Halland og Blekinge til Sverige."],
+["hist","Hvornår mistede Danmark Norge?","When did Denmark lose Norway?",[["1814","1814"],["1658","1658"],["1905","1905"]],"Ved freden i Kiel i 1814 måtte Danmark afstå Norge til Sverige."],
+["hist","Hvilke områder mistede Danmark efter krigen i 1864?","Which areas did Denmark lose after the war of 1864?",[["Hertugdømmerne Slesvig, Holsten og Lauenborg","The duchies of Schleswig, Holstein and Lauenburg"],["Skåne og Halland","Scania and Halland"],["Færøerne","The Faroe Islands"]],"Nederlaget til Preussen og Østrig i 1864 kostede Danmark hertugdømmerne, blandt andet slaget ved Dybbøl."],
+["hist","Hvornår blev Sønderjylland genforenet med Danmark?","When was Southern Jutland reunited with Denmark?",[["1920","1920"],["1864","1864"],["1945","1945"]],"Efter en folkeafstemning blev Nordslesvig (Sønderjylland) genforenet med Danmark i 1920."],
+["hist","Hvornår blev reformationen gennemført i Danmark?","When was the Reformation carried out in Denmark?",[["1536","1536"],["1660","1660"],["1849","1849"]],"I 1536 blev Danmark luthersk under Christian 3."],
+["hist","Hvem rejste den store Jellingsten, der kaldes Danmarks dåbsattest?","Who raised the large Jelling stone, called Denmark's certificate of baptism?",[["Harald Blåtand","Harald Bluetooth"],["Christian 4.","Christian IV"],["Knud den Store","Canute the Great"]],"Harald Blåtand skriver på stenen, at han samlede Danmark og gjorde danerne kristne."],
+["hist","Omtrent hvornår var vikingetiden?","Roughly when was the Viking Age?",[["Ca. 800–1050","About 800–1050"],["Ca. 1500–1700","About 1500–1700"],["Ca. 200–500","About 200–500"]],"Vikingetiden regnes fra omkring år 800 til omkring 1050."],
+["hist","Hvem samlede Danmark, Norge og Sverige i Kalmarunionen i 1397?","Who united Denmark, Norway and Sweden in the Kalmar Union in 1397?",[["Dronning Margrete 1.","Queen Margaret I"],["Christian 4.","Christian IV"],["Gorm den Gamle","Gorm the Old"]],"Margrete 1. stod bag Kalmarunionen, som blev dannet i 1397."],
+["hist","Hvilken konge byggede blandt andet Rundetårn og Børsen i København?","Which king built, among other things, the Round Tower and the Stock Exchange in Copenhagen?",[["Christian 4.","Christian IV"],["Frederik 7.","Frederick VII"],["Harald Blåtand","Harald Bluetooth"]],"Christian 4. var konge 1588–1648 og byggede mange kendte bygninger."],
+["hist","Hvornår blev stavnsbåndet ophævet?","When was the adscription (stavnsbånd) abolished?",[["1788","1788"],["1849","1849"],["1901","1901"]],"Stavnsbåndet bandt bønderne til det gods, de var født på. Det blev ophævet i 1788 som en del af landboreformerne."],
+["hist","Hvem regnes som folkehøjskolens grundlægger i tankerne?","Who is seen as the founder of the ideas behind the folk high school?",[["N.F.S. Grundtvig","N.F.S. Grundtvig"],["H.C. Andersen","Hans Christian Andersen"],["Søren Kierkegaard","Søren Kierkegaard"]],"Grundtvig ville have en skole for livet for hele folket. Den første højskole åbnede i Rødding i 1844."],
+["hist","Hvad var andelsbevægelsen?","What was the cooperative movement?",[["Landmænd, der i fællesskab ejede mejerier og slagterier","Farmers who jointly owned dairies and slaughterhouses"],["Statsejede fabrikker","State-owned factories"],["En religiøs vækkelse","A religious revival"]],"I slutningen af 1800-tallet gik landmænd sammen om andelsmejerier og andelsslagterier. Hver andelshaver havde én stemme."],
+["hist","Hvad kaldes det, da regeringen i 1901 for første gang blev dannet ud fra flertallet i Folketinget?","What is it called when, in 1901, the government was formed from the majority in the Folketing for the first time?",[["Systemskiftet","The change of system"],["Reformationen","The Reformation"],["Genforeningen","The reunification"]],"Med systemskiftet i 1901 blev parlamentarismen indført i praksis."],
+["hist","Hvilket land købte De Dansk-Vestindiske Øer i 1917?","Which country bought the Danish West Indies in 1917?",[["USA","The USA"],["Storbritannien","Great Britain"],["Frankrig","France"]],"Danmark solgte øerne Sankt Thomas, Sankt Jan og Sankt Croix til USA i 1917."],
+["hist","Hvornår trådte Danmarks forbud mod slavehandel i kraft?","When did Denmark's ban on the slave trade take effect?",[["1803","1803"],["1849","1849"],["1917","1917"]],"Forbuddet blev vedtaget i 1792 og trådte i kraft i 1803. Selve slaveriet i Vestindien blev først afskaffet i 1848."],
+["hist","Hvilken statsminister er kendt for Kanslergadeforliget i 1933?","Which prime minister is known for the Kanslergade agreement of 1933?",[["Thorvald Stauning","Thorvald Stauning"],["Poul Schlüter","Poul Schlüter"],["Anders Fogh Rasmussen","Anders Fogh Rasmussen"]],"Kanslergadeforliget blev indgået i Staunings lejlighed i Kanslergade og lagde grunden til velfærdsstaten."],
+["hist","Hvornår var den danske guldalder?","When was the Danish Golden Age?",[["I første halvdel af 1800-tallet","In the first half of the 1800s"],["I 1600-tallet","In the 1600s"],["I 1950'erne","In the 1950s"]],"Guldalderen var en blomstringstid for kunst, litteratur og videnskab, med blandt andre H.C. Andersen, Eckersberg og H.C. Ørsted."],
+["hist","Hvornår åbnede Danmarks første jernbane mellem København og Roskilde?","When did Denmark's first railway between Copenhagen and Roskilde open?",[["1847","1847"],["1901","1901"],["1798","1798"]],"Den første danske jernbane åbnede i 1847."],
+["hist","Hvem var Danmarks dronning fra 1972 til 2024?","Who was Denmark's queen from 1972 to 2024?",[["Margrethe 2.","Margrethe II"],["Ingrid","Ingrid"],["Margrete 1.","Margaret I"]],"Dronning Margrethe 2. abdicerede den 14. januar 2024."],
+["hist","Hvornår blev Frederik 10. konge?","When did Frederik X become king?",[["14. januar 2024","14 January 2024"],["5. juni 2023","5 June 2023"],["1. januar 2025","1 January 2025"]],"Frederik 10. blev udråbt til konge fra Christiansborg Slot den 14. januar 2024."],
+["hist","Hvornår ophørte Grønland med at være en dansk koloni?","When did Greenland stop being a Danish colony?",[["1953","1953"],["1979","1979"],["1721","1721"]],"Med grundloven i 1953 blev Grønland en ligeværdig del af riget. Hjemmestyre kom i 1979 og selvstyre i 2009."],
+["hist","Hvornår fik Færøerne hjemmestyre?","When did the Faroe Islands get home rule?",[["1948","1948"],["1979","1979"],["2009","2009"]],"Færøerne fik hjemmestyre i 1948."],
+["hist","Hvornår fik Grønland selvstyre?","When did Greenland get self-government?",[["2009","2009"],["1953","1953"],["1948","1948"]],"Selvstyreloven trådte i kraft den 21. juni 2009 og afløste hjemmestyret fra 1979."],
+["hist","Hvornår blev Island en selvstændig republik?","When did Iceland become an independent republic?",[["1944","1944"],["1814","1814"],["1973","1973"]],"Island blev selvstændigt kongerige i personalunion med Danmark i 1918 og republik i 1944."],
+["hist","Hvad stemte danskerne ved folkeafstemningen om Maastricht-traktaten i 1992?","How did the Danes vote in the 1992 referendum on the Maastricht Treaty?",[["Nej","No"],["Ja","Yes"],["Afstemningen blev aflyst","The vote was cancelled"]],"Et snævert nej i 1992 førte til de danske forbehold, og i 1993 stemte danskerne ja til Edinburgh-aftalen."],
+// ---------- Grundloven og demokratiet ----------
+["demo","Hvor mange medlemmer har Folketinget?","How many members does the Folketing have?",[["179","179"],["175","175"],["150","150"]],"Folketinget har 179 medlemmer: 175 valgt i Danmark og 2 fra både Færøerne og Grønland."],
+["demo","Hvor mange af Folketingets medlemmer vælges på Færøerne og i Grønland tilsammen?","How many members of the Folketing are elected in the Faroe Islands and Greenland combined?",[["4","4"],["2","2"],["10","10"]],"Der vælges 2 medlemmer på Færøerne og 2 i Grønland."],
+["demo","Hvor ofte skal der som minimum være folketingsvalg?","How often must there at least be a general election?",[["Mindst hvert 4. år","At least every 4 years"],["Hvert 2. år","Every 2 years"],["Hvert 6. år","Every 6 years"]],"Der skal være valg senest 4 år efter sidste valg, men statsministeren kan udskrive valg før."],
+["demo","Hvor gammel skal man være for at have valgret til Folketinget?","How old must you be to vote in general elections?",[["18 år","18"],["16 år","16"],["21 år","21"]],"Valgretsalderen har været 18 år siden 1978."],
+["demo","Hvem har valgret til folketingsvalg?","Who can vote in general elections?",[["Danske statsborgere over 18 år med fast bopæl i riget","Danish citizens over 18 who live permanently in the realm"],["Alle, der bor i Danmark","Everyone who lives in Denmark"],["Kun personer, der betaler skat","Only people who pay tax"]],"Valgret til Folketinget kræver dansk indfødsret, at man er fyldt 18 og har fast bopæl i riget."],
+["demo","Kan udenlandske statsborgere stemme til kommunalvalg?","Can foreign citizens vote in local elections?",[["Ja, hvis de opfylder visse krav om ophold i Danmark","Yes, if they meet certain residence requirements"],["Nej, aldrig","No, never"],["Kun hvis de har dansk ægtefælle","Only if they have a Danish spouse"]],"Udlændinge kan stemme til kommunal- og regionsvalg, hvis de opfylder kravene om lovligt ophold og bopæl."],
+["demo","Hvem har den lovgivende magt ifølge Grundloven?","Who holds legislative power according to the constitution?",[["Folketinget og kongen i forening","The Folketing and the king jointly"],["Domstolene","The courts"],["Kommunerne","The municipalities"]],"Grundloven deler magten i tre: den lovgivende, den udøvende og den dømmende. Lovene vedtages af Folketinget og underskrives af kongen."],
+["demo","Hvem har den dømmende magt i Danmark?","Who holds judicial power in Denmark?",[["Domstolene","The courts"],["Regeringen","The government"],["Folketinget","The Folketing"]],"Domstolene er uafhængige og dømmer efter loven."],
+["demo","Hvem udøver i praksis den udøvende magt?","Who exercises executive power in practice?",[["Regeringen","The government"],["Højesteret","The Supreme Court"],["Folketingets formand","The Speaker of the Folketing"]],"Formelt ligger den udøvende magt hos kongen, men den udøves af regeringen og ministrene."],
+["demo","Hvornår fejres grundlovsdag?","When is Constitution Day celebrated?",[["5. juni","5 June"],["4. maj","4 May"],["15. juni","15 June"]],"Grundlovsdag er den 5. juni, dagen hvor både grundloven af 1849 og af 1953 blev underskrevet."],
+["demo","Hvornår blev den grundlov, der gælder i dag, vedtaget?","When was the constitution in force today adopted?",[["1953","1953"],["1849","1849"],["1915","1915"]],"Den nuværende grundlov er fra 1953. Samtidig fik Danmark en ny tronfølgelov, så kvinder kunne arve tronen."],
+["demo","Hvad blev afskaffet med grundloven i 1953?","What was abolished with the 1953 constitution?",[["Landstinget","The Landsting (upper chamber)"],["Folketinget","The Folketing"],["Højesteret","The Supreme Court"]],"Før 1953 havde Rigsdagen to kamre. Landstinget blev afskaffet, så Folketinget nu er alene."],
+["demo","Hvad skal der til for at ændre Grundloven?","What is needed to change the constitution?",[["Folketinget skal vedtage ændringen før og efter et valg, og derefter skal der være en folkeafstemning","The Folketing must pass it before and after an election, followed by a referendum"],["Et simpelt flertal i Folketinget","A simple majority in the Folketing"],["Kongen kan ændre den alene","The king can change it alone"]],"Ved folkeafstemningen skal et flertal stemme ja, og ja-stemmerne skal udgøre mindst 40 % af alle vælgere."],
+["demo","Hvad betyder negativ parlamentarisme?","What does negative parliamentarism mean?",[["En regering kan blive siddende, så længe der ikke er et flertal imod den","A government can stay as long as there is no majority against it"],["Regeringen skal altid have flertal bag sig","The government must always have a majority behind it"],["Kongen vælger regeringen","The king chooses the government"]],"Derfor kan Danmark have mindretalsregeringer, som skal finde flertal for hver lov."],
+["demo","Hvor stor en del af stemmerne skal et parti normalt have for at komme i Folketinget?","What share of the votes does a party normally need to get into the Folketing?",[["2 %","2%"],["5 %","5%"],["10 %","10%"]],"Spærregrænsen er 2 % af de gyldige stemmer."],
+["demo","Hvad er Folketingets Ombudsmands opgave?","What is the task of the Parliamentary Ombudsman?",[["At undersøge klager over offentlige myndigheder","To investigate complaints about public authorities"],["At lede Folketingets møder","To chair the Folketing's meetings"],["At dømme i straffesager","To judge criminal cases"]],"Ombudsmanden er uafhængig og kontrollerer, at myndighederne behandler borgerne korrekt."],
+["demo","Hvilken domstol er den øverste i Danmark?","Which court is the highest in Denmark?",[["Højesteret","The Supreme Court"],["Landsretten","The High Court"],["Byretten","The District Court"]],"Sager starter normalt i byretten og kan ankes til landsretten og i nogle tilfælde til Højesteret."],
+["demo","Hvad er en domsmand?","What is a lay judge (domsmand)?",[["En almindelig borger, der dømmer sammen med en juridisk dommer","An ordinary citizen who judges together with a professional judge"],["En advokat","A lawyer"],["En politibetjent","A police officer"]],"Domsmænd og nævninger er lægdommere. De sikrer, at almindelige borgere er med i retssystemet."],
+["demo","Hvad er den kriminelle lavalder i Danmark?","What is the age of criminal responsibility in Denmark?",[["15 år","15"],["12 år","12"],["18 år","18"]],"Man kan straffes, når man er fyldt 15 år."],
+["demo","Hvilken frihed beskytter Grundlovens § 77?","Which freedom does section 77 of the constitution protect?",[["Ytringsfriheden","Freedom of expression"],["Religionsfriheden","Freedom of religion"],["Ejendomsretten","Property rights"]],"§ 77 siger, at enhver kan offentliggøre sine tanker på tryk, i skrift og tale, men kan holdes ansvarlig for det ved domstolene. Censur må aldrig indføres."],
+["demo","Hvad sikrer Grundloven om religion?","What does the constitution guarantee about religion?",[["Alle har ret til at dyrke deres religion, så længe det ikke strider mod sædeligheden eller den offentlige orden","Everyone may practise their religion, as long as it does not violate morality or public order"],["Alle skal være medlem af folkekirken","Everyone must be a member of the national church"],["Religion er forbudt i det offentlige rum","Religion is banned in public"]],"Der er religionsfrihed i Danmark. Folkekirken er evangelisk-luthersk og understøttes af staten."],
+["demo","Hvilken kirke skal monarken tilhøre ifølge Grundloven?","Which church must the monarch belong to under the constitution?",[["Den evangelisk-lutherske kirke","The Evangelical Lutheran Church"],["Den katolske kirke","The Catholic Church"],["Monarken vælger selv","The monarch chooses freely"]],"Grundloven siger, at kongen skal høre til den evangelisk-lutherske kirke."],
+["demo","Hvem udnævner formelt statsministeren og de andre ministre?","Who formally appoints the prime minister and the other ministers?",[["Monarken","The monarch"],["Højesteret","The Supreme Court"],["Befolkningen ved folkeafstemning","The people by referendum"]],"Monarken udnævner ministrene, men følger altid flertallets anbefaling efter forhandlinger i Folketinget."],
+["demo","Hvor mange kommuner er der i Danmark?","How many municipalities are there in Denmark?",[["98","98"],["275","275"],["14","14"]],"Ved kommunalreformen i 2007 blev de 271 kommuner lagt sammen til 98."],
+["demo","Hvor ofte er der kommunalvalg?","How often are there local elections?",[["Hvert 4. år","Every 4 years"],["Hvert 2. år","Every 2 years"],["Hvert 5. år","Every 5 years"]],"Kommunal- og regionsrådsvalg holdes samtidig hvert fjerde år i november."],
+["demo","Er det hemmeligt, hvad man stemmer ved et valg?","Is it secret how you vote in an election?",[["Ja, der er hemmelig afstemning","Yes, the ballot is secret"],["Nej, man skal oplyse det","No, you must report it"],["Kun ved kommunalvalg","Only in local elections"]],"Hemmelig afstemning sikrer, at alle kan stemme frit uden pres."],
+["demo","Hvad består Rigsfællesskabet af?","What does the Unity of the Realm consist of?",[["Danmark, Færøerne og Grønland","Denmark, the Faroe Islands and Greenland"],["Danmark, Norge og Sverige","Denmark, Norway and Sweden"],["Danmark og Island","Denmark and Iceland"]],"Færøerne og Grønland har selvstyre på mange områder, men er en del af riget sammen med Danmark."],
+["demo","Hvordan får man dansk indfødsret ved naturalisation?","How does one get Danish citizenship by naturalisation?",[["Ved en lov, som Folketinget vedtager","Through a law passed by the Folketing"],["Ved at søge kommunen","By applying to the municipality"],["Automatisk efter 5 års ophold","Automatically after 5 years of residence"]],"Grundloven siger, at indfødsret kun kan gives ved lov. Folketinget vedtager lovforslag med navnene på dem, der får statsborgerskab."],
+["demo","Tillader Danmark dobbelt statsborgerskab?","Does Denmark allow dual citizenship?",[["Ja, siden 2015","Yes, since 2015"],["Nej","No"],["Kun for nordiske borgere","Only for Nordic citizens"]],"Fra 1. september 2015 kan man have dansk statsborgerskab samtidig med et andet."],
+// ---------- Samfund og velfærd ----------
+["samf","Hvordan finansieres det meste af den danske velfærd?","How is most of Danish welfare financed?",[["Gennem skatter","Through taxes"],["Gennem private forsikringer","Through private insurance"],["Gennem gaver fra virksomheder","Through donations from companies"]],"Skatter betaler for blandt andet skoler, sygehuse og ældrepleje, så de er gratis eller billige for borgerne."],
+["samf","Har man skolepligt eller undervisningspligt i Danmark?","Is there compulsory schooling or compulsory education in Denmark?",[["Undervisningspligt","Compulsory education"],["Skolepligt","Compulsory school attendance"],["Ingen af delene","Neither"]],"Børn skal undervises, men forældrene kan vælge folkeskole, friskole, privatskole eller hjemmeundervisning."],
+["samf","Hvem har ansvaret for folkeskolen?","Who is responsible for the public school (folkeskole)?",[["Kommunen","The municipality"],["Regionen","The region"],["Kirken","The church"]],"Kommunerne driver folkeskolerne. De har også ansvaret for blandt andet daginstitutioner og ældrepleje."],
+["samf","Hvem driver sygehusene i Danmark?","Who runs the hospitals in Denmark?",[["Regionerne","The regions"],["Kommunerne","The municipalities"],["Private forsikringsselskaber","Private insurance companies"]],"Regionernes vigtigste opgave er sundhedsvæsenet, herunder sygehusene."],
+["samf","Hvad skal man vise, når man går til lægen?","What do you show when you go to the doctor?",[["Sundhedskortet (det gule kort)","The health card (the yellow card)"],["Kørekortet","The driving licence"],["Et bibliotekskort","A library card"]],"Sundhedskortet viser, hvilken læge man har, og giver gratis adgang til lægehjælp."],
+["samf","Hvad er et CPR-nummer?","What is a CPR number?",[["Et personligt identifikationsnummer","A personal identification number"],["Et telefonnummer","A phone number"],["Et nummer på et bankkort","A bank card number"]],"Alle, der bor i Danmark, får et CPR-nummer. Det bruges i kontakten med det offentlige."],
+["samf","Hvordan modtager man normalt breve fra det offentlige?","How do you normally receive letters from public authorities?",[["Digitalt, i Digital Post","Digitally, in Digital Post"],["Med almindelig post","By ordinary mail"],["Som SMS","By text message"]],"De fleste borgere skal modtage post fra det offentlige digitalt og logger på med MitID."],
+["samf","Hvem fastsætter normalt lønnen på det danske arbejdsmarked?","Who normally sets wages in the Danish labour market?",[["Arbejdsgivere og fagforeninger gennem overenskomster","Employers and trade unions through collective agreements"],["Folketinget ved lov","The Folketing by law"],["Kommunen","The municipality"]],"Det kaldes den danske model. Der er ingen lovbestemt mindsteløn."],
+["samf","Hvad betyder flexicurity?","What does flexicurity mean?",[["Det er let at ansætte og afskedige, og der er økonomisk sikkerhed ved ledighed","It is easy to hire and fire, with financial security if unemployed"],["Alle har ret til et job i staten","Everyone has the right to a state job"],["Man må ikke skifte job","You may not change jobs"]],"Fleksibilitet for virksomhederne kombineres med tryghed for lønmodtagerne, fx dagpenge og hjælp til at finde nyt arbejde."],
+["samf","Hvad er en a-kasse?","What is an unemployment insurance fund (a-kasse)?",[["En forening, der udbetaler dagpenge, hvis man bliver ledig","An association that pays benefits if you become unemployed"],["En bank for offentligt ansatte","A bank for public employees"],["En del af skattevæsenet","Part of the tax authority"]],"Medlemskab af en a-kasse er frivilligt. Man betaler kontingent og kan få dagpenge, hvis man mister sit arbejde."],
+["samf","Er det lovpligtigt at være medlem af en fagforening?","Is membership of a trade union compulsory?",[["Nej, det er frivilligt","No, it is voluntary"],["Ja, for alle","Yes, for everyone"],["Ja, for offentligt ansatte","Yes, for public employees"]],"Der er foreningsfrihed, og man bestemmer selv, om man vil være medlem af en fagforening."],
+["samf","Hvor stor er momsen i Danmark?","How high is VAT in Denmark?",[["25 %","25%"],["15 %","15%"],["8 %","8%"]],"Momsen er 25 % på næsten alle varer og tjenester."],
+["samf","Hvad hedder Danmarks valuta?","What is Denmark's currency called?",[["Danske kroner","Danish kroner"],["Euro","Euro"],["Mark","Mark"]],"Danmark har beholdt kronen, fordi danskerne stemte nej til euroen i 2000."],
+["samf","Hvem betaler kirkeskat?","Who pays church tax?",[["Medlemmer af folkekirken","Members of the national church"],["Alle borgere","All citizens"],["Kun præster","Only priests"]],"Kirkeskatten betales af medlemmerne af folkekirken sammen med den øvrige skat."],
+["samf","Hvilket tal ringer man til ved akut fare for liv eller helbred?","Which number do you call in an emergency?",[["112","112"],["911","911"],["114","114"]],"112 er alarmnummeret. 114 er politiets nummer, når det ikke haster."],
+["samf","Hvad er SU?","What is SU?",[["Statens uddannelsesstøtte til studerende","State educational support for students"],["En skat på opsparing","A tax on savings"],["Et sygehus","A hospital"]],"Studerende over 18 år kan få SU, så de kan tage en uddannelse uanset forældrenes økonomi."],
+["samf","Er det gratis at gå i folkeskole?","Is it free to attend the public school (folkeskole)?",[["Ja","Yes"],["Nej, man betaler skolepenge","No, you pay school fees"],["Kun for danske statsborgere","Only for Danish citizens"]],"Folkeskolen er gratis og betalt over skatten."],
+["samf","Hvilket princip gælder for løn til mænd og kvinder?","What principle applies to pay for men and women?",[["Lige løn for lige arbejde","Equal pay for equal work"],["Mænd skal have mere i løn","Men should be paid more"],["Det bestemmer arbejdsgiveren frit","The employer decides freely"]],"Loven om ligeløn forbyder forskelsbehandling i løn på grund af køn."],
+// ---------- Kultur og traditioner ----------
+["kult","Hvem skrev eventyret 'Den grimme ælling'?","Who wrote the fairy tale 'The Ugly Duckling'?",[["H.C. Andersen","Hans Christian Andersen"],["Karen Blixen","Karen Blixen"],["Søren Kierkegaard","Søren Kierkegaard"]],"H.C. Andersen (1805–1875) fra Odense skrev over 150 eventyr, som er oversat til mange sprog."],
+["kult","Hvem skrev bogen 'Den afrikanske farm'?","Who wrote the book 'Out of Africa'?",[["Karen Blixen","Karen Blixen"],["H.C. Andersen","Hans Christian Andersen"],["Tove Ditlevsen","Tove Ditlevsen"]],"Karen Blixen boede i Kenya og skrev om sine år der."],
+["kult","Hvem var Søren Kierkegaard?","Who was Søren Kierkegaard?",[["En filosof","A philosopher"],["En komponist","A composer"],["En konge","A king"]],"Kierkegaard (1813–1855) regnes for en af eksistensfilosofiens fædre."],
+["kult","Hvem fik Nobelprisen i fysik i 1922 for sin forskning i atomets opbygning?","Who won the Nobel Prize in Physics in 1922 for research on the structure of the atom?",[["Niels Bohr","Niels Bohr"],["H.C. Ørsted","H.C. Ørsted"],["Tycho Brahe","Tycho Brahe"]],"Niels Bohr grundlagde Niels Bohr Institutet i København."],
+["kult","Hvad opdagede H.C. Ørsted i 1820?","What did H.C. Ørsted discover in 1820?",[["Elektromagnetismen","Electromagnetism"],["Penicillinen","Penicillin"],["Planeten Uranus","The planet Uranus"]],"Ørsted opdagede, at en elektrisk strøm påvirker en kompasnål."],
+["kult","Hvem tegnede operahuset i Sydney?","Who designed the Sydney Opera House?",[["Jørn Utzon","Jørn Utzon"],["Arne Jacobsen","Arne Jacobsen"],["Bjarke Ingels","Bjarke Ingels"]],"Den danske arkitekt Jørn Utzon vandt konkurrencen i 1957."],
+["kult","Hvem er kendt for at have designet stolene 'Myren' og 'Ægget'?","Who is known for designing the chairs 'The Ant' and 'The Egg'?",[["Arne Jacobsen","Arne Jacobsen"],["Jørn Utzon","Jørn Utzon"],["P.S. Krøyer","P.S. Krøyer"]],"Arne Jacobsen er en af de mest kendte navne i dansk design."],
+["kult","Hvilken maler forbindes især med Skagensmalerne?","Which painter is especially associated with the Skagen Painters?",[["P.S. Krøyer","P.S. Krøyer"],["Asger Jorn","Asger Jorn"],["Bertel Thorvaldsen","Bertel Thorvaldsen"]],"Skagensmalerne malede lyset og livet i Skagen i slutningen af 1800-tallet."],
+["kult","Hvem komponerede blandt andet sangen 'Jeg ved en lærkerede'?","Who composed, among others, the song 'Jeg ved en lærkerede'?",[["Carl Nielsen","Carl Nielsen"],["H.C. Lumbye","H.C. Lumbye"],["Kim Larsen","Kim Larsen"]],"Carl Nielsen (1865–1931) er Danmarks mest kendte komponist."],
+["kult","Hvor blev LEGO grundlagt?","Where was LEGO founded?",[["I Billund","In Billund"],["I Odense","In Odense"],["I København","In Copenhagen"]],"Ole Kirk Christiansen startede virksomheden i Billund i 1932. Navnet kommer af 'leg godt'."],
+["kult","Hvilken dansk film vandt en Oscar for bedste internationale film i 2021?","Which Danish film won the Oscar for Best International Feature in 2021?",[["Druk","Another Round (Druk)"],["Festen","The Celebration (Festen)"],["Jagten","The Hunt (Jagten)"]],"Thomas Vinterbergs 'Druk' vandt i 2021. Tidligere har blandt andet 'Babettes gæstebud', 'Pelle Erobreren' og 'Hævnen' vundet."],
+["kult","Hvad hedder Danmarks nationalsang?","What is Denmark's national anthem called?",[["Der er et yndigt land","Der er et yndigt land (There is a lovely land)"],["Kong Christian stod ved højen mast","Kong Christian stod ved højen mast"],["I Danmark er jeg født","I Danmark er jeg født"]],"Danmark har to nationalsange: 'Der er et yndigt land' er den borgerlige, og 'Kong Christian stod ved højen mast' er kongesangen."],
+["kult","Hvem skrev teksten til 'Der er et yndigt land'?","Who wrote the lyrics of 'Der er et yndigt land'?",[["Adam Oehlenschläger","Adam Oehlenschläger"],["H.C. Andersen","Hans Christian Andersen"],["N.F.S. Grundtvig","N.F.S. Grundtvig"]],"Digteren Adam Oehlenschläger skrev teksten i 1819."],
+["kult","Hvor faldt Dannebrog ned fra himlen ifølge sagnet?","Where did the Danish flag fall from the sky, according to legend?",[["I Estland, under et slag i 1219","In Estonia, during a battle in 1219"],["I Jelling","In Jelling"],["På Bornholm","On Bornholm"]],"Ifølge sagnet faldt flaget ned under Valdemar Sejrs slag ved Lyndanisse (Tallinn) i 1219."],
+["kult","Hvad fejrer man den 23. juni om aftenen?","What is celebrated on the evening of 23 June?",[["Sankthansaften med bål","Midsummer Eve with bonfires"],["Grundlovsdag","Constitution Day"],["Fastelavn","Shrovetide"]],"Ved sankthans tænder man bål, ofte med en heks af halm, og synger Midsommervisen."],
+["kult","Hvad gør børn til fastelavn?","What do children do at Shrovetide (fastelavn)?",[["Klæder sig ud og slår katten af tønden","Dress up and 'hit the cat out of the barrel'"],["Tænder bål","Light bonfires"],["Spiser and","Eat duck"]],"Til fastelavn spiser man også fastelavnsboller."],
+["kult","Hvad spiser mange danskere til mortensaften den 10. november?","What do many Danes eat on St Martin's Eve, 10 November?",[["And","Duck"],["Lam","Lamb"],["Torsk","Cod"]],"Ifølge sagnet afslørede gæs, hvor Sankt Morten gemte sig, og derfor spiser man and eller gås."],
+["kult","Hvornår holder danskerne juleaften?","When do Danes celebrate Christmas Eve?",[["Den 24. december","24 December"],["Den 25. december","25 December"],["Den 6. januar","6 January"]],"Juleaften er den store aften med middag, juletræ og gaver."],
+["kult","Hvad gør mange danskere om aftenen den 4. maj?","What do many Danes do on the evening of 4 May?",[["Sætter lys i vinduerne for at mindes befrielsen","Put candles in the windows to remember the liberation"],["Tænder bål","Light bonfires"],["Slår katten af tønden","Hit the cat out of the barrel"]],"Lysene minder om befrielsesbudskabet den 4. maj 1945, hvor folk rev mørklægningsgardinerne ned."],
+["kult","Hvilken helligdag blev afskaffet fra 2024?","Which public holiday was abolished from 2024?",[["Store bededag","Great Prayer Day"],["Kristi himmelfartsdag","Ascension Day"],["2. juledag","Boxing Day"]],"Folketinget afskaffede store bededag som helligdag fra 2024 for at finansiere forsvaret."],
+["kult","Hvornår åbnede forlystelseshaven Tivoli i København?","When did the Tivoli amusement park in Copenhagen open?",[["1843","1843"],["1943","1943"],["1743","1743"]],"Tivoli blev grundlagt af Georg Carstensen i 1843."],
+["kult","Hvilken ret blev i 2014 kåret til Danmarks nationalret?","Which dish was voted Denmark's national dish in 2014?",[["Stegt flæsk med persillesovs","Fried pork belly with parsley sauce"],["Frikadeller","Meatballs"],["Smørrebrød","Open sandwiches"]],"Kåringen var en afstemning blandt befolkningen."],
+["kult","Hvilket år vandt det danske herrelandshold EM i fodbold?","In which year did the Danish men's team win the European Football Championship?",[["1992","1992"],["1986","1986"],["2004","2004"]],"Danmark kom med i sidste øjeblik og vandt finalen over Tyskland i Göteborg."],
+["kult","I hvilken sport har det danske herrelandshold vundet flere VM-guld i de senere år?","In which sport has the Danish men's team won several world championships in recent years?",[["Håndbold","Handball"],["Ishockey","Ice hockey"],["Basketball","Basketball"]],"Håndbold er en af de mest populære sportsgrene i Danmark."],
+["kult","Hvad er Roskilde Festival?","What is Roskilde Festival?",[["En stor musikfestival","A large music festival"],["En kirkelig højtid","A church holiday"],["Et sportsstævne","A sports event"]],"Roskilde Festival har været holdt hvert år siden 1971 og er en af Europas største."],
+["kult","Hvilket eventyr af H.C. Andersen er statuen ved Langelinie i København inspireret af?","Which Hans Christian Andersen tale inspired the statue at Langelinie in Copenhagen?",[["Den lille havfrue","The Little Mermaid"],["Kejserens nye klæder","The Emperor's New Clothes"],["Prinsessen på ærten","The Princess and the Pea"]],"Statuen af Den lille havfrue blev lavet af Edvard Eriksen i 1913."],
+["kult","Hvad var Dogme 95?","What was Dogme 95?",[["Regler for filmoptagelse, skrevet af blandt andre Lars von Trier og Thomas Vinterberg","Rules for film-making, written by Lars von Trier and Thomas Vinterberg among others"],["En politisk bevægelse","A political movement"],["En arkitektstil","An architectural style"]],"Dogmefilm skulle blandt andet optages med håndholdt kamera og uden kunstigt lys."],
+// ---------- Geografi ----------
+["geo","Hvilket land har Danmark landegrænse til?","Which country does Denmark share a land border with?",[["Tyskland","Germany"],["Sverige","Sweden"],["Polen","Poland"]],"Danmarks eneste landegrænse er mod Tyskland i Sønderjylland."],
+["geo","Hvad er Danmarks næststørste by?","What is Denmark's second-largest city?",[["Aarhus","Aarhus"],["Odense","Odense"],["Aalborg","Aalborg"]],"København er størst, derefter følger Aarhus, Odense og Aalborg."],
+["geo","Omtrent hvor mange indbyggere har Danmark?","Roughly how many people live in Denmark?",[["Ca. 6 millioner","About 6 million"],["Ca. 10 millioner","About 10 million"],["Ca. 2 millioner","About 2 million"]],"Danmark har omkring 6 millioner indbyggere."],
+["geo","Hvilke landsdele forbinder Storebæltsforbindelsen?","Which parts of the country does the Great Belt link connect?",[["Sjælland og Fyn","Zealand and Funen"],["Fyn og Jylland","Funen and Jutland"],["Sjælland og Sverige","Zealand and Sweden"]],"Forbindelsen åbnede for tog i 1997 og for biler i 1998."],
+["geo","Hvilke byer forbinder Øresundsbroen?","Which cities does the Øresund Bridge connect?",[["København og Malmø","Copenhagen and Malmö"],["Helsingør og Helsingborg","Helsingør and Helsingborg"],["Odense og Aarhus","Odense and Aarhus"]],"Øresundsbroen åbnede i 2000."],
+["geo","Hvor ligger Bornholm?","Where is Bornholm?",[["I Østersøen","In the Baltic Sea"],["I Nordsøen","In the North Sea"],["I Limfjorden","In the Limfjord"]],"Bornholm ligger øst for resten af Danmark, tæt på Sverige."],
+["geo","Hvad hedder havet ved Jyllands sydvestkyst, der står på UNESCO's verdensarvsliste?","What is the sea off Jutland's south-west coast that is a UNESCO World Heritage Site?",[["Vadehavet","The Wadden Sea"],["Kattegat","Kattegat"],["Østersøen","The Baltic Sea"]],"Vadehavet blev optaget på listen i 2014 og er også nationalpark."],
+["geo","Hvad er Danmarks største ø, når man ikke regner Grønland med?","What is Denmark's largest island, not counting Greenland?",[["Sjælland","Zealand"],["Fyn","Funen"],["Lolland","Lolland"]],"København ligger på Sjælland."],
+["geo","Omtrent hvor højt er Danmarks højeste naturlige punkt?","Roughly how high is Denmark's highest natural point?",[["Ca. 170 meter","About 170 metres"],["Ca. 1.000 meter","About 1,000 metres"],["Ca. 50 meter","About 50 metres"]],"Møllehøj og Yding Skovhøj i Østjylland er omkring 170 meter over havet."],
+["geo","Hvad hedder Grønlands hovedstad?","What is the capital of Greenland?",[["Nuuk","Nuuk"],["Tórshavn","Tórshavn"],["Ilulissat","Ilulissat"]],"Tórshavn er Færøernes hovedstad."],
+["geo","Hvad hedder Færøernes hovedstad?","What is the capital of the Faroe Islands?",[["Tórshavn","Tórshavn"],["Nuuk","Nuuk"],["Klaksvík","Klaksvík"]],"Færøerne består af 18 øer i Nordatlanten."],
+["geo","I hvilken by blev H.C. Andersen født?","In which city was Hans Christian Andersen born?",[["Odense","Odense"],["København","Copenhagen"],["Skagen","Skagen"]],"H.C. Andersen blev født i Odense på Fyn i 1805."],
+["geo","Hvad er Danmarks nordligste by?","What is Denmark's northernmost town?",[["Skagen","Skagen"],["Aalborg","Aalborg"],["Hirtshals","Hirtshals"]],"Ved Grenen nord for Skagen mødes Skagerrak og Kattegat."],
+// ---------- Danmark i verden ----------
+["verd","Hvornår blev Danmark medlem af EF, som i dag er EU?","When did Denmark join the EC, today the EU?",[["1973","1973"],["1957","1957"],["1992","1992"]],"Danmark kom med i 1973 sammen med Storbritannien og Irland efter en folkeafstemning i 1972."],
+["verd","Hvornår blev Danmark medlem af NATO?","When did Denmark join NATO?",[["1949","1949"],["1973","1973"],["1991","1991"]],"Danmark var et af de lande, der stiftede NATO i 1949."],
+["verd","Var Danmark med til at stifte FN i 1945?","Was Denmark one of the founders of the UN in 1945?",[["Ja","Yes"],["Nej","No"]],"Danmark var et af de 51 lande, der grundlagde FN i 1945."],
+["verd","Hvilket EU-forbehold blev afskaffet ved en folkeafstemning i 2022?","Which EU opt-out was abolished in a 2022 referendum?",[["Forsvarsforbeholdet","The defence opt-out"],["Euroforbeholdet","The euro opt-out"],["Retsforbeholdet","The justice opt-out"]],"Den 1. juni 2022 stemte et flertal for at afskaffe forsvarsforbeholdet."],
+["verd","Hvorfor betaler man ikke med euro i Danmark?","Why don't people pay with euros in Denmark?",[["Fordi danskerne stemte nej til euroen i 2000","Because the Danes voted no to the euro in 2000"],["Fordi Danmark ikke er med i EU","Because Denmark is not in the EU"],["Fordi EU har forbudt det","Because the EU has banned it"]],"Danmark har et euroforbehold, men kronen er bundet tæt til euroen."],
+["verd","Hvilke lande er med i Nordisk Råd?","Which countries are in the Nordic Council?",[["Danmark, Norge, Sverige, Finland og Island samt Færøerne, Grønland og Åland","Denmark, Norway, Sweden, Finland and Iceland plus the Faroes, Greenland and Åland"],["Kun Danmark, Norge og Sverige","Only Denmark, Norway and Sweden"],["Alle EU-lande","All EU countries"]],"Nordisk Råd blev oprettet i 1952 for samarbejde mellem de nordiske parlamenter."],
+["verd","Er Danmark med i Schengen-samarbejdet?","Is Denmark part of the Schengen cooperation?",[["Ja","Yes"],["Nej","No"]],"Schengen betyder, at der normalt ikke er pas-kontrol ved grænserne mellem medlemslandene."],
+// ---------- Danske værdier ----------
+["vaerdi","Må forældre slå deres børn i Danmark?","Are parents allowed to hit their children in Denmark?",[["Nej, det er forbudt","No, it is forbidden"],["Ja, hvis barnet har gjort noget forkert","Yes, if the child has done something wrong"],["Ja, men kun derhjemme","Yes, but only at home"]],"Forældres ret til at slå deres børn (revselsesretten) blev helt afskaffet i 1997."],
+["vaerdi","Er det lovligt at tvinge en person til at gifte sig?","Is it legal to force someone to marry?",[["Nej, tvangsægteskab er strafbart","No, forced marriage is a crime"],["Ja, hvis familien er enig","Yes, if the family agrees"],["Ja, hvis personen er under 18","Yes, if the person is under 18"]],"Begge parter skal frivilligt sige ja. Man skal også være fyldt 18 år for at blive gift."],
+["vaerdi","Har kvinder og mænd de samme rettigheder i Danmark?","Do women and men have the same rights in Denmark?",[["Ja","Yes"],["Nej, mænd har flere rettigheder","No, men have more rights"],["Det afhænger af religionen","It depends on religion"]],"Ligestilling mellem kønnene er et grundlæggende princip i dansk lov og samfund."],
+["vaerdi","Må man kritisere eller gøre grin med religion i Danmark?","Is it allowed to criticise or make fun of religion in Denmark?",[["Ja, det er en del af ytringsfriheden","Yes, it is part of freedom of expression"],["Nej, det er altid forbudt","No, it is always forbidden"],["Kun hvis man selv er religiøs","Only if you are religious yourself"]],"Ytringsfriheden gælder også kritik af religion. Der er dog grænser, fx ved trusler og racistiske udtalelser."],
+["vaerdi","Må man frit melde sig ud af et trossamfund eller skifte religion?","May you freely leave a religious community or change religion?",[["Ja","Yes"],["Nej","No"],["Kun med familiens tilladelse","Only with the family's permission"]],"Religionsfriheden betyder også friheden til ikke at have en religion."],
+["vaerdi","Hvem bestemmer, om en voksen kvinde må tage en uddannelse eller arbejde?","Who decides whether an adult woman may study or work?",[["Kvinden selv","The woman herself"],["Hendes mand","Her husband"],["Hendes far","Her father"]],"Voksne bestemmer selv over deres eget liv, uanset køn."],
+["vaerdi","Kan to personer af samme køn blive gift i Danmark?","Can two people of the same sex marry in Denmark?",[["Ja","Yes"],["Nej","No"],["Kun hvis de bor i København","Only if they live in Copenhagen"]],"Danmark var i 1989 det første land med registreret partnerskab. Siden 2012 har par af samme køn kunnet gifte sig, også i folkekirken."],
+["vaerdi","Hvad må man gøre, hvis man er uenig i en lov?","What may you do if you disagree with a law?",[["Demonstrere fredeligt og arbejde for at ændre loven","Demonstrate peacefully and work to change the law"],["Bruge vold for at få loven ændret","Use violence to get the law changed"],["Lade være med at overholde loven","Simply not follow the law"]],"I et demokrati ændrer man love gennem debat, valg og politisk arbejde. Man skal overholde loven, så længe den gælder."],
+["vaerdi","Må en arbejdsgiver afvise en ansøger på grund af religion eller hudfarve?","May an employer reject an applicant because of religion or skin colour?",[["Nej, det er ulovlig forskelsbehandling","No, it is illegal discrimination"],["Ja, arbejdsgiveren bestemmer frit","Yes, the employer decides freely"],["Ja, i private firmaer","Yes, in private companies"]],"Forskelsbehandlingsloven forbyder diskrimination på arbejdsmarkedet."],
+["vaerdi","Er det tilladt at bruge vold mod sin ægtefælle?","Is it allowed to use violence against your spouse?",[["Nej, vold er altid strafbart","No, violence is always a crime"],["Ja, hvis det sker i hjemmet","Yes, if it happens at home"],["Ja, hvis begge er enige","Yes, if both agree"]],"Vold i familien er lige så strafbart som al anden vold."],
+["vaerdi","Hvem skal overholde danske love?","Who must obey Danish laws?",[["Alle, der opholder sig i Danmark","Everyone who is in Denmark"],["Kun danske statsborgere","Only Danish citizens"],["Kun personer over 18 år","Only people over 18"]],"Loven gælder ens for alle, uanset statsborgerskab, religion og køn."],
+["vaerdi","Kan religiøse regler stå over dansk lov?","Can religious rules override Danish law?",[["Nej, dansk lov gælder altid","No, Danish law always applies"],["Ja, hvis man er meget troende","Yes, if you are very religious"],["Ja, inden for familien","Yes, within the family"]],"Man må gerne leve efter religiøse regler, men kun så længe de ikke strider mod loven."],
+["vaerdi","Er omskæring af piger tilladt i Danmark?","Is female genital mutilation allowed in Denmark?",[["Nej, det er strafbart","No, it is a crime"],["Ja, hvis forældrene ønsker det","Yes, if the parents want it"],["Ja, hvis det sker i udlandet","Yes, if it happens abroad"]],"Kvindelig omskæring er forbudt og strafbart, også hvis det sker i udlandet."],
+["vaerdi","Hvem bestemmer, hvem en voksen skal gifte sig med?","Who decides whom an adult marries?",[["Personen selv","The person themselves"],["Forældrene","The parents"],["Imamen eller præsten","The imam or the priest"]],"Ægteskab kræver, at begge parter selv og frivilligt siger ja."],
+["vaerdi","Har alle ret til en retfærdig rettergang ved uafhængige domstole?","Does everyone have the right to a fair trial before independent courts?",[["Ja","Yes"],["Nej, kun danske statsborgere","No, only Danish citizens"],["Kun hvis man har råd til en advokat","Only if you can afford a lawyer"]],"Retsstaten betyder, at alle behandles lige for loven, og at domstolene er uafhængige af regeringen."]
+];
+
+// ---------- state & helpers ----------
+const $ = s => document.querySelector(s);
+const view = $("#view");
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.random() * (i + 1) | 0; [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const store = {
+  get(k, d) { try { const v = localStorage.getItem("proeveklar-" + k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem("proeveklar-" + k, JSON.stringify(v)); } catch (e) {} }
+};
+let EN = store.get("en", false);
+let missed = store.get("missed", {});        // question index -> times missed (cleared when answered right later)
+let best = store.get("best", { exam: null, blitz: 0 });
+let game = null, tick = null;
+
+function setLang(en) {
+  EN = en; store.set("en", en);
+  $("#lang-da").setAttribute("aria-pressed", String(!en)); $("#lang-en").setAttribute("aria-pressed", String(en));
+  if (game) renderQuestion(); else home();
+}
+$("#lang-da").onclick = () => setLang(false);
+$("#lang-en").onclick = () => setLang(true);
+
+const valIdx = Q.map((q, i) => q[0] === "vaerdi" ? i : -1).filter(i => i >= 0);
+const knowIdx = Q.map((q, i) => q[0] !== "vaerdi" ? i : -1).filter(i => i >= 0);
+const byCat = c => Q.map((q, i) => q[0] === c ? i : -1).filter(i => i >= 0);
+
+// ---------- home ----------
+function home() {
+  stopTimer(); game = null;
+  const nMiss = Object.keys(missed).length;
+  const counts = {}; Q.forEach(q => counts[q[0]] = (counts[q[0]] || 0) + 1);
+  view.innerHTML = `
+  <div style="display:grid;gap:18px">
+    <div class="facts">
+      <div class="fact"><b>45</b><span>spørgsmål</span></div>
+      <div class="fact"><b>45</b><span>minutter</span></div>
+      <div class="fact"><b>36</b><span>rigtige for at bestå</span></div>
+      <div class="fact"><b>4 / 5</b><span>værdispørgsmål rigtige</span></div>
+    </div>
+    <div class="modes">
+      <button class="mode exam" type="button" data-mode="exam"><h2>Prøveeksamen</h2><p>45 spørgsmål på 45 minutter, ligesom den rigtige prøve. Du ser svarene til sidst.</p>${best.exam ? `<span class="best">Bedste resultat: ${best.exam.score} / 45${best.exam.pass ? " · bestået" : ""}</span>` : ""}<span class="go" aria-hidden="true">→</span></button>
+      <button class="mode" type="button" data-mode="blitz"><h2>Lynrunde</h2><p>15 sekunder pr. spørgsmål og 3 liv. Rigtige svar i træk giver bonuspoint.</p>${best.blitz ? `<span class="best">Rekord: ${best.blitz} point</span>` : ""}<span class="go" aria-hidden="true">→</span></button>
+      ${nMiss ? `<button class="mode" type="button" data-mode="missed"><h2>Øv dine fejl</h2><p>${nMiss} spørgsmål, du har svaret forkert på. Svar rigtigt for at fjerne dem fra listen.</p><span class="go" aria-hidden="true">→</span></button>` : ""}
+    </div>
+    <div style="display:grid;gap:8px">
+      <p class="sec-title">Øv ét emne i dit eget tempo</p>
+      <div class="cats">${Object.entries(CATS).map(([k, v]) => `<button class="cat" type="button" data-cat="${k}">${esc(v)}<span class="n">${counts[k] || 0}</span></button>`).join("")}</div>
+    </div>
+    <p class="note">Spørgsmålene er skrevet til træning og er ikke de officielle prøvespørgsmål. Den rigtige prøve har 35 spørgsmål fra lærematerialet, 5 om aktuelle begivenheder og 5 om danske værdier. Aktuelle spørgsmål skifter fra prøve til prøve, så prøveeksamen her bruger 40 spørgsmål fra emnerne i stedet. Læs det officielle læremateriale hos <a href="https://siri.dk" target="_blank" rel="noopener">Styrelsen for International Rekruttering og Integration (siri.dk)</a>.</p>
+  </div>`;
+  view.querySelectorAll("[data-mode]").forEach(b => b.onclick = () => start(b.dataset.mode));
+  view.querySelectorAll("[data-cat]").forEach(b => b.onclick = () => start("cat", b.dataset.cat));
+}
+
+// ---------- game setup ----------
+function start(mode, cat) {
+  let list;
+  if (mode === "exam") list = shuffle(knowIdx).slice(0, 40).concat(shuffle(valIdx).slice(0, 5));
+  else if (mode === "blitz") list = shuffle(Q.map((_, i) => i));
+  else if (mode === "missed") list = shuffle(Object.keys(missed).map(Number));
+  else list = shuffle(byCat(cat));
+  game = { mode, cat, list, i: 0, answers: [], picked: null, order: [], score: 0, streak: 0, lives: 3, endAt: mode === "exam" ? Date.now() + 45 * 60e3 : 0, qEnd: 0 };
+  nextQuestion(true);
+}
+function nextQuestion(first) {
+  if (!first) game.i++;
+  if (game.i >= game.list.length || (game.mode === "blitz" && game.lives <= 0)) return finish();
+  const q = Q[game.list[game.i]];
+  game.order = shuffle(q[3].map((o, k) => k));
+  game.picked = null;
+  if (game.mode === "blitz") game.qEnd = Date.now() + 15e3;
+  renderQuestion(); startTimer();
+}
+
+// ---------- timers ----------
+function startTimer() {
+  stopTimer();
+  if (game.mode !== "exam" && game.mode !== "blitz") return;
+  tick = setInterval(() => {
+    const now = Date.now();
+    if (game.mode === "exam") {
+      const left = Math.max(0, game.endAt - now), el = $("#clock");
+      if (el) { el.textContent = fmt(left); el.classList.toggle("low", left < 5 * 60e3); }
+      if (left <= 0) { stopTimer(); finish(true); }
+    } else if (game.picked === null) {
+      const left = Math.max(0, game.qEnd - now), bar = $("#tbar"), el = $("#clock");
+      if (bar) bar.style.width = (left / 15e3 * 100) + "%";
+      if (el) { el.textContent = Math.ceil(left / 1000) + " s"; el.classList.toggle("low", left < 5e3); }
+      if (left <= 0) answer(-1);
+    }
+  }, 200);
+}
+function stopTimer() { clearInterval(tick); tick = null; }
+const fmt = ms => { const s = Math.ceil(ms / 1000); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`; };
+
+// ---------- question view ----------
+function renderQuestion() {
+  const g = game, qi = g.list[g.i], q = Q[qi], isVal = q[0] === "vaerdi", n = g.list.length;
+  const showFeedback = g.picked !== null && g.mode !== "exam";
+  const hud = g.mode === "exam" ? `<span class="t" id="clock">${fmt(g.endAt - Date.now())}</span>`
+    : g.mode === "blitz" ? `<span class="lives" aria-label="${g.lives} liv">${"♥".repeat(g.lives)}${"♡".repeat(3 - g.lives)}</span><span>${g.score} point</span><span class="t" id="clock">15 s</span>`
+    : `<span>${g.answers.filter(a => a.ok).length} rigtige</span>`;
+  view.innerHTML = `
+  <div style="display:grid;gap:12px">
+    <div class="bar"><button class="quit" type="button" id="quit">← Afslut</button><div class="hud">${hud}</div></div>
+    ${g.mode === "blitz" ? `<div class="timerbar"><i id="tbar" style="width:${g.picked === null ? Math.max(0, (g.qEnd - Date.now()) / 150) : 0}%"></i></div>` : `<div class="progress"><i style="width:${g.i / n * 100}%"></i></div>`}
+    <article class="sheet">
+      <div class="qhead"><span>Spørgsmål ${g.i + 1}${g.mode === "blitz" ? "" : ` af ${n}`}</span><span class="tag${isVal ? " val" : ""}">${esc(CATS[q[0]])}</span></div>
+      <h2 class="q">${esc(q[1])}</h2>
+      ${EN ? `<p class="q-en">${esc(q[2])}</p>` : ""}
+      <div class="opts">${g.order.map(k => {
+        const o = q[3][k]; let cls = "";
+        if (g.picked !== null) {
+          if (g.mode === "exam") cls = k === g.picked ? " chosen" : "";
+          else cls = k === 0 ? " right" : k === g.picked ? " wrong" : "";
+        }
+        return `<button class="opt${cls}" type="button" data-k="${k}"${g.picked !== null && g.mode !== "exam" ? " disabled" : ""}><span class="box" aria-hidden="true"></span><span>${esc(o[0])}${EN ? `<span class="en">${esc(o[1])}</span>` : ""}</span></button>`;
+      }).join("")}</div>
+      ${showFeedback ? `<div class="explain ${g.picked === 0 ? "good" : "bad"}"><b>${g.picked === 0 ? "Rigtigt" : g.picked === -1 ? "Tiden løb ud" : "Forkert"}</b><p>${esc(q[4])}</p></div>` : ""}
+      <div class="flash" id="flash">${g.mode === "blitz" && g.picked === 0 && g.streak >= 3 ? `${g.streak} i træk · bonus ×${Math.min(3, 1 + Math.floor(g.streak / 3))}` : ""}</div>
+      <div class="actions">
+        ${g.mode === "exam" && g.i > 0 ? `<button class="btn ghost" type="button" id="prev">← Forrige</button>` : ""}
+        ${g.mode === "exam" ? `<button class="btn${g.i === n - 1 ? " red" : ""}" type="button" id="next"${g.picked === null ? " disabled style=\"opacity:.45\"" : ""}>${g.i === n - 1 ? "Aflever prøven" : "Næste →"}</button>`
+          : showFeedback ? `<button class="btn" type="button" id="next">${g.mode === "blitz" && g.lives <= 0 ? "Se resultat" : g.i === n - 1 ? "Se resultat" : "Næste →"}</button>` : ""}
+      </div>
+    </article>
+  </div>`;
+  $("#quit").onclick = () => { if (g.mode === "exam" && g.answers.length) finish(); else home(); };
+  view.querySelectorAll(".opt").forEach(b => b.onclick = () => answer(+b.dataset.k));
+  const nx = $("#next"); if (nx) nx.onclick = () => { if (g.mode === "exam" && g.picked === null) return; nextQuestion(); };
+  const pv = $("#prev"); if (pv) pv.onclick = () => { g.i--; g.order = g.answers[g.i].order; g.picked = g.answers[g.i].picked; renderQuestion(); };
+  (showFeedback ? nx : view.querySelector(".opt"))?.focus({ preventScroll: true });
+}
+
+function answer(k) {
+  const g = game; if (g.mode !== "exam" && g.picked !== null) return;
+  const qi = g.list[g.i], ok = k === 0;
+  g.picked = k;
+  g.answers[g.i] = { qi, picked: k, ok, order: g.order };
+  if (g.mode !== "exam") {
+    if (ok) { if (missed[qi]) { delete missed[qi]; } } else missed[qi] = (missed[qi] || 0) + 1;
+    store.set("missed", missed);
+  }
+  if (g.mode === "blitz") {
+    if (ok) { g.streak++; g.score += 10 * Math.min(3, 1 + Math.floor(g.streak / 3)); }
+    else { g.streak = 0; g.lives--; }
+  }
+  renderQuestion();
+}
+
+// ---------- results ----------
+function finish(timeUp) {
+  stopTimer();
+  const g = game, ans = g.answers.filter(Boolean);
+  if (g.mode === "exam") {
+    // unanswered questions count as wrong
+    const all = g.list.map((qi, i) => g.answers[i] || { qi, picked: null, ok: false });
+    all.forEach(a => { if (a.ok) delete missed[a.qi]; else missed[a.qi] = (missed[a.qi] || 0) + 1; }); store.set("missed", missed);
+    const score = all.filter(a => a.ok).length;
+    const valOk = all.filter(a => Q[a.qi][0] === "vaerdi" && a.ok).length;
+    const pass = score >= 36 && valOk >= 4;
+    if (!best.exam || score > best.exam.score) { best.exam = { score, pass }; store.set("best", best); }
+    const wrong = all.filter(a => !a.ok);
+    const byC = {}; all.forEach(a => { const c = Q[a.qi][0]; byC[c] = byC[c] || [0, 0]; byC[c][1]++; if (a.ok) byC[c][0]++; });
+    view.innerHTML = `<section class="result">
+      <div class="sheet">
+        <div class="qhead"><span>${timeUp ? "Tiden er gået" : "Prøven er afleveret"}</span><span>Prøveeksamen</span></div>
+        <h2 class="verdict ${pass ? "pass" : "fail"}">${pass ? "Bestået" : "Ikke bestået"}</h2>
+        <div class="score-rows">
+          <div class="srow"><span>Rigtige svar i alt</span><b>${score} / 45</b><div class="meter"><i style="width:${score / 45 * 100}%"></i><u style="left:${36 / 45 * 100}%"></u></div></div>
+          <div class="srow"><span>Værdispørgsmål</span><b>${valOk} / 5</b><div class="meter"><i style="width:${valOk / 5 * 100}%"></i><u style="left:80%"></u></div></div>
+        </div>
+        <p class="note">Den røde streg viser kravet: 36 rigtige i alt og mindst 4 af 5 værdispørgsmål.${!pass ? (score < 36 ? ` Du manglede ${36 - score} rigtige.` : " Du havde nok rigtige i alt, men for få værdispørgsmål.") : ""}</p>
+        <div class="score-rows">${Object.entries(byC).map(([c, [o, t]]) => `<div class="srow"><span>${esc(CATS[c])}</span><b>${o} / ${t}</b><div class="meter"><i style="width:${o / t * 100}%"></i></div></div>`).join("")}</div>
+        <div class="actions"><button class="btn ghost" type="button" id="home">Til forsiden</button><button class="btn" type="button" id="again">Ny prøveeksamen</button></div>
+      </div>
+      ${wrong.length ? `<p class="sec-title">Dine ${wrong.length} forkerte svar</p><ul class="review">${wrong.map(reviewItem).join("")}</ul>` : `<p class="note">Alle svar var rigtige.</p>`}
+    </section>`;
+    $("#again").onclick = () => start("exam");
+  } else {
+    const ok = ans.filter(a => a.ok).length, wrong = ans.filter(a => !a.ok);
+    let head;
+    if (g.mode === "blitz") {
+      const rec = g.score > (best.blitz || 0); if (rec) { best.blitz = g.score; store.set("best", best); }
+      head = `<h2 class="verdict pass">${g.score} point</h2><p class="note">${ok} rigtige ud af ${ans.length}.${rec ? " Ny rekord!" : ` Din rekord er ${best.blitz} point.`}</p>`;
+    } else head = `<h2 class="verdict ${ok === ans.length ? "pass" : ""}">${ok} af ${ans.length} rigtige</h2><p class="note">${g.mode === "cat" ? esc(CATS[g.cat]) : "Øv dine fejl"}</p>`;
+    view.innerHTML = `<section class="result"><div class="sheet">${head}
+      <div class="actions"><button class="btn ghost" type="button" id="home">Til forsiden</button><button class="btn" type="button" id="again">Spil igen</button></div></div>
+      ${wrong.length ? `<p class="sec-title">Dem du skal øve</p><ul class="review">${wrong.map(reviewItem).join("")}</ul>` : ""}</section>`;
+    $("#again").onclick = () => start(g.mode === "missed" && !Object.keys(missed).length ? "blitz" : g.mode, g.cat);
+  }
+  $("#home").onclick = home;
+  game = null;
+  window.scrollTo(0, 0);
+}
+function reviewItem(a) {
+  const q = Q[a.qi];
+  return `<li><span>${esc(q[1])}${EN ? ` <span class="x">· ${esc(q[2])}</span>` : ""}</span>
+    ${a.picked !== null && a.picked >= 0 ? `<span class="yours">Dit svar: ${esc(q[3][a.picked][0])}</span>` : `<span class="yours">Ikke besvaret</span>`}
+    <span class="right">Rigtigt svar: ${esc(q[3][0][0])}</span><span class="x">${esc(q[4])}</span></li>`;
+}
+
+document.addEventListener("keydown", e => {
+  if (!game) return;
+  const n = +e.key;
+  if (n >= 1 && n <= 3) { const b = view.querySelectorAll(".opt")[n - 1]; if (b && !b.disabled) b.click(); }
+  else if (e.key === "Enter") { const nx = $("#next"); if (nx && document.activeElement?.tagName !== "BUTTON") nx.click(); }
+});
+
+setLang(EN);
+</script>
