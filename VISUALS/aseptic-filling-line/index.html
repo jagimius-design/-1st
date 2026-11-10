@@ -1,0 +1,1094 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Aseptic Vial Filling Line</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: control-room HMI. A wide process stage on top, the operator console under it, reference sections after. */
+:root{
+  --bg:#E8EDEF; --surface:#F7F9FA; --surface-2:#DCE4E7; --ink:#132026; --muted:#53646C; --line:#C2CED3;
+  --accent:#0D6C77; --accent-ink:#FFFFFF;
+  --heat:#D0701C; --vhp:#7650C9; --wfi:#2A74C9; --steam:#8A9EA8; --product:#B0437C; --cip:#4F9A2C;
+  --ok:#21855A; --warn:#B57C05; --bad:#C3362B;
+  --g-a:#12886F; --g-b:#3B76C6; --g-c:#C3952A; --g-d:#8676B8; --g-n:#93A0A6;
+  --scene:#F2F5F6; --wall:#C6D0D5; --mezz:#DBE2E5; --steel-hi:#F6F8F9; --steel:#C3CDD2; --steel-lo:#8E9DA5;
+  --glass:#7FC2D6; --frame:#64757E; --air:#3E9DB8; --rubber:#4F5B63;
+  --f-display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E1417; --surface:#161F24; --surface-2:#1D292F; --ink:#E1EAED; --muted:#91A3AA; --line:#2B3940;
+  --accent:#4DB3BE; --accent-ink:#06171A;
+  --heat:#F0974A; --vhp:#A88BF2; --wfi:#5CA0EE; --steam:#7C909A; --product:#E07AB1; --cip:#8DCB5C;
+  --ok:#4CC28A; --warn:#E5B140; --bad:#F06A5E;
+  --g-a:#3CC2A2; --g-b:#6EA1EE; --g-c:#E0BA52; --g-d:#A898DF; --g-n:#6E7C82;
+  --scene:#121A1E; --wall:#26333A; --mezz:#0B1114; --steel-hi:#56666E; --steel:#36454C; --steel-lo:#1E292E;
+  --glass:#5FB6CC; --frame:#7D939C; --air:#6CC4DA; --rubber:#9AA7AE;
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#0E1417; --surface:#161F24; --surface-2:#1D292F; --ink:#E1EAED; --muted:#91A3AA; --line:#2B3940;
+  --accent:#4DB3BE; --accent-ink:#06171A;
+  --heat:#F0974A; --vhp:#A88BF2; --wfi:#5CA0EE; --steam:#7C909A; --product:#E07AB1; --cip:#8DCB5C;
+  --ok:#4CC28A; --warn:#E5B140; --bad:#F06A5E;
+  --g-a:#3CC2A2; --g-b:#6EA1EE; --g-c:#E0BA52; --g-d:#A898DF; --g-n:#6E7C82;
+  --scene:#121A1E; --wall:#26333A; --mezz:#0B1114; --steel-hi:#56666E; --steel:#36454C; --steel-lo:#1E292E;
+  --glass:#5FB6CC; --frame:#7D939C; --air:#6CC4DA; --rubber:#9AA7AE;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 var(--f-body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1320px;margin:0 auto}
+h1,h2,h3{font-family:var(--f-display);font-weight:700;letter-spacing:.01em;text-wrap:balance;margin:0}
+h1{font-size:clamp(2.1rem,4.6vw,3.3rem);line-height:1;text-transform:uppercase}
+h2{font-size:1.75rem;line-height:1.1}
+h3{font-size:1.15rem;text-transform:uppercase;letter-spacing:.06em}
+p{margin:0}
+.eyebrow{font:600 .74rem/1.3 var(--f-mono);text-transform:uppercase;letter-spacing:.09em;color:var(--muted)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.masthead{padding-block:28px 18px;display:grid;gap:10px}
+.masthead .lead{max-width:68ch;color:var(--muted)}
+.masthead .lead b{color:var(--ink);font-weight:600}
+
+/* toolbar */
+.toolbar{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;padding-block:10px;border-top:1px solid var(--line)}
+.grp{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.grp-label{font:500 .7rem var(--f-mono);text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.btn{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:6px 11px;cursor:pointer;font-size:.86rem;line-height:1.2;min-height:34px}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:600}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:4px;overflow:hidden;background:var(--surface)}
+.seg button{border:0;background:transparent;padding:6px 10px;cursor:pointer;font-size:.84rem;min-height:32px;border-right:1px solid var(--line)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.seg button:disabled{opacity:.5;cursor:not-allowed}
+.tog{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:4px 10px 4px 7px;background:var(--surface);cursor:pointer;font-size:.82rem;min-height:30px}
+.tog .dot{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--muted)}
+.tog[aria-pressed="true"]{border-color:var(--accent)}
+.tog[aria-pressed="true"] .dot{background:var(--accent);border-color:var(--accent)}
+
+/* stage */
+.stage{position:relative;height:clamp(380px,64vh,700px);border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--scene)}
+#cv{display:block;width:100%;height:100%;touch-action:pan-y;cursor:grab}
+#cv.pointing{cursor:pointer}
+#cv.dragging{cursor:grabbing}
+.hud{position:absolute;pointer-events:none;font:500 .76rem/1.3 var(--f-mono)}
+.hud-tl{top:10px;left:10px;display:flex;gap:6px;flex-wrap:wrap;max-width:calc(100% - 20px)}
+.hud-tl span{background:var(--surface);border:1px solid var(--line);border-radius:3px;padding:4px 8px;font-variant-numeric:tabular-nums}
+.pill-run{color:var(--ok)} .pill-stop{color:var(--warn)} .pill-change{color:var(--vhp)}
+.hud-bl{bottom:10px;left:10px;max-width:min(560px,calc(100% - 20px));background:var(--surface);border:1px solid var(--accent);border-radius:3px;padding:6px 9px;color:var(--ink)}
+.hud-br{bottom:10px;right:10px;color:var(--muted);background:var(--surface);border-radius:3px;padding:3px 7px;border:1px solid var(--line)}
+@media (max-width:640px){.hud-br{display:none}}
+
+.chips{display:flex;gap:6px;overflow-x:auto;padding-block:10px 4px;scrollbar-width:thin}
+.chip{flex:0 0 auto;display:flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--surface);border-radius:4px;padding:6px 10px 6px 6px;cursor:pointer;font-size:.84rem;white-space:nowrap}
+.chip .n{font:600 .72rem var(--f-mono);min-width:22px;height:20px;display:grid;place-items:center;border-radius:3px;background:var(--surface-2);color:var(--muted)}
+.chip.proc .n{background:var(--ink);color:var(--bg)}
+.chip[aria-selected="true"]{border-color:var(--accent);box-shadow:inset 0 -2px 0 var(--accent)}
+.chip-sep{flex:0 0 auto;align-self:center;font:500 .68rem var(--f-mono);text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding-inline:4px}
+
+/* console */
+.console{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:16px;padding-block:18px 8px;align-items:start}
+@media (max-width:960px){.console{grid-template-columns:minmax(0,1fr)}}
+.side{display:grid;gap:16px;min-width:0}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:18px;min-width:0}
+.panel-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:12px}
+.tag{font:500 .68rem var(--f-mono);text-transform:uppercase;letter-spacing:.08em;color:var(--muted);border:1px dashed var(--line);padding:2px 6px;border-radius:3px;white-space:nowrap}
+
+.station{display:grid;gap:14px}
+.station .what{max-width:66ch}
+.grade{display:inline-flex;align-items:center;gap:6px}
+.grade i{width:10px;height:10px;border-radius:2px;display:inline-block}
+.params{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden;margin:0}
+.params div{background:var(--surface);padding:9px 11px}
+.params dt{font:500 .7rem var(--f-mono);text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.params dd{margin:2px 0 0;font-weight:500}
+.eff{margin:0;padding:0;list-style:none;display:grid;gap:8px}
+.eff li{padding-left:22px;position:relative;max-width:66ch}
+.eff li::before{content:"";position:absolute;left:2px;top:.5em;width:10px;height:10px;border:2px solid var(--ok);border-radius:50%}
+
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+@media (max-width:520px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.tile .k{font:500 .68rem var(--f-mono);text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.tile .v{font:600 1.65rem/1.1 var(--f-display);font-variant-numeric:tabular-nums}
+.tile .s{font:400 .74rem var(--f-mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.bars{display:grid;gap:3px;margin-top:5px}
+.bar{display:grid;grid-template-columns:12px 1fr 34px;gap:5px;align-items:center;font:500 .66rem var(--f-mono);color:var(--muted)}
+.bar b{display:block;height:5px;background:var(--surface-2);border-radius:2px;overflow:hidden}
+.bar b i{display:block;height:100%;background:var(--accent)}
+.chart{margin-top:16px}
+.chart-h{display:flex;justify-content:space-between;gap:8px;font:500 .72rem var(--f-mono);color:var(--muted);margin-bottom:4px;flex-wrap:wrap}
+.chart svg{width:100%;height:auto;display:block}
+.chart .band{fill:var(--ok);opacity:.1}
+.chart .lim{stroke:var(--bad);stroke-dasharray:4 3;stroke-width:1}
+.chart .tgt{stroke:var(--muted);stroke-width:1}
+.chart .ax{fill:var(--muted);font:10px var(--f-mono)}
+.chart .pl{fill:none;stroke:var(--product);stroke-width:1.6}
+.chart .pt{fill:var(--product)}
+.chart .pt.bad{fill:var(--bad)}
+.pcs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
+.pc{border-top:1px solid var(--line);padding-top:8px}
+.pc .k{font:500 .68rem var(--f-mono);text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.pc .v{font:500 1.1rem var(--f-mono);font-variant-numeric:tabular-nums}
+.pc .s{font:400 .72rem var(--f-mono);color:var(--muted);margin-top:4px}
+.pc .gauge{height:6px;background:var(--surface-2);border-radius:3px;margin-top:5px;overflow:hidden}
+.pc .gauge i{display:block;height:100%;background:var(--g-a)}
+
+.phases{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:6px}
+.phases li{display:grid;grid-template-columns:20px minmax(0,1fr) auto;gap:8px;align-items:center;font-size:.88rem}
+.phases .st{width:16px;height:16px;border-radius:50%;border:2px solid var(--line)}
+.phases li.done .st{background:var(--ok);border-color:var(--ok)}
+.phases li.active .st{border-color:var(--vhp);border-top-color:transparent;animation:spin 1s linear infinite}
+.phases li.active{font-weight:600}
+.phases .d{font:500 .74rem var(--f-mono);color:var(--muted)}
+.phases .prog{grid-column:2/4;height:3px;background:var(--surface-2);border-radius:2px;overflow:hidden}
+.phases .prog i{display:block;height:100%;background:var(--vhp)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.readout{margin-top:12px;font:500 .8rem var(--f-mono);background:var(--surface-2);padding:8px 10px;border-radius:4px;min-height:2.4em;font-variant-numeric:tabular-nums}
+.change-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.total{margin-top:10px;font-size:.86rem;color:var(--muted)}
+.total b{color:var(--ink);font-family:var(--f-mono);font-weight:500}
+
+.log{list-style:none;margin:0;padding:0;display:grid;gap:5px;font:400 .78rem/1.4 var(--f-mono)}
+.log li{display:grid;grid-template-columns:64px 8px minmax(0,1fr);gap:8px;align-items:baseline}
+.log time{color:var(--muted);font-variant-numeric:tabular-nums}
+.log .m{width:8px;height:8px;border-radius:50%;background:var(--muted);align-self:center}
+.log .ok .m{background:var(--ok)} .log .bad .m{background:var(--bad)} .log .warn .m{background:var(--warn)} .log .vhp .m{background:var(--vhp)}
+
+/* support + levers */
+.section{padding-block:30px 6px;display:grid;gap:14px}
+.section > .intro{max-width:70ch;color:var(--muted)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:16px;display:grid;gap:10px;align-content:start;min-width:0}
+.card .top{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.card h3{font-size:1.2rem;text-transform:none;letter-spacing:.01em}
+.card .sw{width:12px;height:12px;border-radius:2px;flex:0 0 auto;margin-top:4px}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:4px;font:500 .72rem var(--f-mono)}
+.steps li{background:var(--surface-2);border-radius:3px;padding:3px 7px}
+.steps li + li::before{content:"→ ";color:var(--muted)}
+.card .crit{font:400 .78rem/1.45 var(--f-mono);color:var(--muted);border-top:1px solid var(--line);padding-top:8px}
+.card .btn{justify-self:start}
+.levers{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:0;border-top:2px solid var(--ink)}
+.lever{display:grid;grid-template-columns:minmax(0,1fr);gap:4px;padding:14px 16px 14px 0;border-bottom:1px solid var(--line)}
+.lever b{font-family:var(--f-display);font-size:1.2rem;font-weight:600}
+.lever span{color:var(--muted);max-width:60ch}
+.lever em{font-style:normal;font:500 .72rem var(--f-mono);color:var(--accent);text-transform:uppercase;letter-spacing:.07em}
+footer{padding-block:28px 40px;color:var(--muted);font-size:.82rem;display:grid;gap:6px;max-width:90ch}
+@media (prefers-reduced-motion: reduce){.phases li.active .st{animation:none;border-top-color:var(--vhp)}}
+</style>
+
+<header class="masthead wrap">
+  <p class="eyebrow">Sterile drug product · Parenteral vials · EU GMP Annex 1 (2022)</p>
+  <h1>Aseptic Vial Filling Line</h1>
+  <p class="lead">Follow a vial from <b>washing and depyrogenation</b> through a <b>Grade A isolator</b> where it is filled, weighed and stoppered, then <b>capped, inspected and serialised</b>. The utilities and clean-room systems that keep it sterile run alongside. Run a <b>changeover</b> to watch CIP, SIP and VHP decontamination, and compare a conventional set-up with a streamlined one.</p>
+</header>
+
+<section class="wrap" aria-label="Filling line simulation">
+  <div class="toolbar">
+    <div class="grp">
+      <button class="btn" id="play" type="button">Pause</button>
+      <div class="seg" id="speed" role="group" aria-label="Simulation speed">
+        <button type="button" data-v="0.5">0.5×</button><button type="button" data-v="1" aria-pressed="true">1×</button><button type="button" data-v="2">2×</button><button type="button" data-v="4">4×</button>
+      </div>
+    </div>
+    <div class="grp">
+      <span class="grp-label">View</span>
+      <div class="seg" id="view" role="group" aria-label="Camera">
+        <button type="button" data-v="tour">Tour</button><button type="button" data-v="follow">Follow a vial</button><button type="button" data-v="overview">Whole line</button>
+      </div>
+      <button class="btn" id="zout" type="button" aria-label="Zoom out">−</button>
+      <button class="btn" id="zin" type="button" aria-label="Zoom in">+</button>
+    </div>
+    <div class="grp" id="layers" role="group" aria-label="Layers">
+      <span class="grp-label">Layers</span>
+      <button class="tog" type="button" data-l="air" aria-pressed="true"><span class="dot"></span>Airflow</button>
+      <button class="tog" type="button" data-l="util" aria-pressed="true"><span class="dot"></span>Utilities</button>
+      <button class="tog" type="button" data-l="press" aria-pressed="false"><span class="dot"></span>Grades &amp; pressure</button>
+      <button class="tog" type="button" data-l="em" aria-pressed="false"><span class="dot"></span>Monitoring</button>
+    </div>
+  </div>
+  <div class="stage">
+    <canvas id="cv" role="img" aria-label="Animated side view of an aseptic vial filling line: compounding and sterile filtration, vial washer, depyrogenation tunnel, filling isolator with stoppering, capping, automated inspection, labelling and packing, with utilities above."></canvas>
+    <div class="hud hud-tl"><span id="hudStatus" class="pill-run">● Producing</span><span id="hudClock">Batch 02:00:00</span><span id="hudRate">300 vials/min</span></div>
+    <div class="hud hud-bl" id="hudFollow" hidden></div>
+    <div class="hud hud-br">Drag to pan · pinch or Ctrl + scroll to zoom · click a machine</div>
+  </div>
+  <div class="chips" id="chips" role="tablist" aria-label="Stations"></div>
+</section>
+
+<section class="wrap console">
+  <article class="panel station" id="station" aria-live="polite"></article>
+  <div class="side">
+    <article class="panel">
+      <div class="panel-h"><h3>Live line data</h3><span class="tag">Simulated</span></div>
+      <div class="tiles">
+        <div class="tile"><div class="k">OEE</div><div class="v" id="kOee">–</div>
+          <div class="bars"><div class="bar"><span>A</span><b><i id="bA"></i></b><span id="tA"></span></div><div class="bar"><span>P</span><b><i id="bP"></i></b><span id="tP"></span></div><div class="bar"><span>Q</span><b><i id="bQ"></i></b><span id="tQ"></span></div></div></div>
+        <div class="tile"><div class="k">Good vials</div><div class="v" id="kGood">–</div><div class="s">this batch</div></div>
+        <div class="tile"><div class="k">Rejected</div><div class="v" id="kRej">–</div><div class="s" id="kRejS"></div></div>
+        <div class="tile"><div class="k">Line rate</div><div class="v" id="kRate">–</div><div class="s">vials / min</div></div>
+      </div>
+      <div class="chart">
+        <div class="chart-h"><span>Net fill weight, last 60 vials (g)</span><span>target 2.000 · limits ±2 %</span></div>
+        <svg viewBox="0 0 320 96" id="spark" aria-label="Fill weight chart"></svg>
+      </div>
+      <div class="pcs">
+        <div class="pc"><div class="k">Grade A · ≥ 0.5 µm particles</div><div class="v" id="pc05">–</div><div class="gauge"><i id="g05"></i></div><div class="s">per m³ · limit 3,520 (log scale)</div></div>
+        <div class="pc"><div class="k">Viable air · fill point</div><div class="v" id="viable">0 CFU/m³</div><div class="gauge"><i style="width:0"></i></div><div class="s">Grade A limit: no growth</div></div>
+      </div>
+    </article>
+
+    <article class="panel">
+      <div class="panel-h"><h3>Changeover &amp; decontamination</h3><span class="tag">Time-lapse</span></div>
+      <div class="change-row">
+        <div class="seg" id="strat" role="group" aria-label="Changeover strategy">
+          <button type="button" data-v="conv" aria-pressed="true">Conventional</button><button type="button" data-v="lean">Streamlined</button>
+        </div>
+        <button class="btn primary" id="startCo" type="button">Start changeover</button>
+      </div>
+      <ol class="phases" id="phases"></ol>
+      <div class="readout" id="readout">Line producing. Start a changeover to clean, sterilise and decontaminate the line between batches.</div>
+      <p class="total" id="coTotal"></p>
+    </article>
+
+    <article class="panel">
+      <div class="panel-h"><h3>Event log</h3><span class="tag">Batch clock</span></div>
+      <ol class="log" id="log"></ol>
+    </article>
+  </div>
+</section>
+
+<section class="wrap section" aria-labelledby="supH">
+  <h2 id="supH">Supporting processes</h2>
+  <p class="intro">The fill itself takes seconds per vial. Most of the sterility assurance comes from the systems around it: cleaning, sterilising, decontaminating, the water and steam they use, and the air and monitoring that prove the critical zone stayed clean.</p>
+  <div class="cards" id="cards"></div>
+</section>
+
+<section class="wrap section" aria-labelledby="levH">
+  <h2 id="levH">Where the efficiency comes from</h2>
+  <div class="levers" id="levers"></div>
+</section>
+
+<footer class="wrap">
+  <p>Illustrative simulation. Line rate, counts, weights and particle readings are generated, and changeover phases run in time-lapse with typical real durations shown beside them. Parameters follow common practice and EU GMP Annex 1 (2022); a real line runs to its own validated values.</p>
+</footer>
+
+<script>
+(() => {
+'use strict';
+const $ = s => document.querySelector(s);
+const cv = $('#cv'), ctx = cv.getContext('2d');
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- world geometry ---------- */
+const W = 3500, H = 900, CEIL = 170, FLOOR = 760, CY = 560;
+const PITCH = 22, VW = 12, VH = 26, V = 110;              // 110 u/s at 22 u pitch = 300 vials/min
+const SPAWN_X = 660, END_X = 3330;
+const FZ0 = 1590, FZ1 = 1770, TARE_X = 1510, GROSS_X = 1820, STOP_X = 1960, CAP_X = 2500;
+const CAM1 = 2780, CAM2 = 2880, GATE_X = 3000, LABEL_X = 3165, CODE_X = 3230;
+const IDEAL = V / PITCH;                                  // vials per second
+const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+const sm = v => { v = clamp(v); return v * v * (3 - 2 * v); };
+const rn = () => { let u = 0, v = 0; while (!u) u = Math.random(); while (!v) v = Math.random(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); };
+
+/* ---------- palette from CSS tokens ---------- */
+const TOK = {bg:'bg',surface:'surface',surface2:'surface-2',ink:'ink',muted:'muted',line:'line',accent:'accent',heat:'heat',vhp:'vhp',wfi:'wfi',steam:'steam',product:'product',cip:'cip',ok:'ok',warn:'warn',bad:'bad',gA:'g-a',gB:'g-b',gC:'g-c',gD:'g-d',gN:'g-n',scene:'scene',wall:'wall',mezz:'mezz',steelHi:'steel-hi',steel:'steel',steelLo:'steel-lo',glass:'glass',frame:'frame',air:'air',rubber:'rubber',accentInk:'accent-ink'};
+const P = {};
+function readPalette(){ const cs = getComputedStyle(document.documentElement); for (const k in TOK) P[k] = cs.getPropertyValue('--' + TOK[k]).trim(); }
+readPalette();
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', readPalette);
+new MutationObserver(readPalette).observe(document.documentElement, {attributes: true, attributeFilter: ['data-theme']});
+const A = (h, a) => { const n = parseInt(h.slice(1), 16); return `rgba(${n >> 16 & 255},${n >> 8 & 255},${n & 255},${a})`; };
+
+/* ---------- content ---------- */
+const INFO = {
+  comp: {num:'', name:'Compounding & sterile filtration', grade:'C', room:'Grade C room · +30 Pa',
+    what:'The bulk solution is made up with WFI in a jacketed, agitated vessel. Filtered nitrogen then pushes it through two sterilising-grade filters in series, and the filtrate travels in a closed, pre-sterilised line straight into the isolator.',
+    params:[['Filtration','0.22 µm membrane, redundant pair'],['Integrity test','Pre-use after sterilisation (PUPSIT) and post-use'],['Bioburden before filtration','≤ 10 CFU / 100 mL'],['Vessel care','CIP spray ball, SIP with clean steam']],
+    eff:['Gamma-irradiated single-use bags, tubing and filter capsules remove a CIP/SIP cycle and its cleaning validation.','Automated integrity testers write results straight into the electronic batch record.']},
+  auto: {num:'', name:'Pass-through autoclave', grade:'C', room:'Built into the wall between Grade C and Grade D',
+    what:'A double-door steam steriliser for change parts, tools and stainless filter housings. The doors are interlocked so the clean side never opens to the loading side while a cycle is incomplete.',
+    params:[['Cycle','Saturated steam, 121 °C, ≥ 15 min at the coldest point'],['Air removal','Pre-vacuum pulses; daily Bowie-Dick test'],['Release','F₀ calculated per load; BIs at mapped cold spots']],
+    eff:['Validated fixed load patterns take decisions out of loading.','Sterile parts move into the isolator through an RTP without re-exposure.']},
+  wash: {num:'1', name:'Vial washer', grade:'D', room:'Filling hall · Grade D',
+    what:'A rotary washer grips each vial, turns it neck-down and blasts the inside and outside with alternating jets of recirculated water, fresh WFI and filtered compressed air.',
+    params:[['Final rinse','Fresh WFI'],['Drying air','0.2 µm filtered, oil-free'],['Performance','Particle removal shown by spiking studies']],
+    eff:['Early rinses reuse filtered water; only the final rinse draws fresh WFI.','Servo grippers change format by recipe, without tools.']},
+  tunnel: {num:'2', name:'Depyrogenation tunnel', grade:'A', room:'Grade A air inside · discharges into the isolator',
+    what:'Vials pass through a hot-air tunnel that sterilises the glass and destroys bacterial endotoxins, then cool under Grade A air before they enter the isolator.',
+    params:[['Heating zone','≈ 300–350 °C'],['Target','≥ 3-log endotoxin reduction'],['Cooling zone','Grade A unidirectional air to near room temperature'],['Monitoring','Belt speed, zone temperatures, pressure balance']],
+    eff:['Heat recovery on the exhaust and standby modes between batches cut energy use.','For small batches, ready-to-use nested vials skip washing and depyrogenation entirely.']},
+  isolator: {num:'', name:'Filling isolator', grade:'A', room:'Grade A inside · Grade D background',
+    what:'A sealed stainless-steel and glass enclosure keeps people out of the critical zone. Operators reach in only through glove ports, HEPA-filtered air flows down over the open vials, and vaporised hydrogen peroxide (VHP) decontaminates every surface before each campaign.',
+    params:[['Airflow','Unidirectional, 0.36–0.54 m/s at working height'],['Overpressure','≈ +50 Pa to the room'],['Decontamination','VHP, ≥ 6-log reduction of G. stearothermophilus BIs'],['Gloves','Integrity tested before and after each campaign']],
+    eff:['A Grade D background replaces a Grade B clean room: less air to treat, simpler gowning, fewer monitoring points.','Fewer open interventions mean fewer contamination risks and fewer stops.']},
+  fill: {num:'3', name:'Filling with 100 % weight control', grade:'A', room:'Inside the Grade A isolator',
+    what:'Eight peristaltic pumps dose product through single-use tubing into needles that travel with the vials. Every vial is weighed empty and full. A vial outside the limits is flagged for rejection, and a pump that drifts has its dose corrected automatically.',
+    params:[['Fill target','2.000 g (2.0 mL)'],['IPC limits','± 2 % of target'],['Check','100 % tare and gross weighing'],['Rated speed','300 vials/min']],
+    eff:['Closed-loop dose correction keeps fills tight, so less overfill is needed to stay above label claim.','The single-use fluid path needs no cleaning and has no carry-over between products.']},
+  stopper: {num:'4', name:'Stoppering', grade:'A', room:'Inside the Grade A isolator',
+    what:'Ready-to-use stoppers enter through a rapid transfer port (RTP) without breaking isolation. A vibratory bowl orients them and a placement head presses one into every vial. A camera confirms each stopper is present and seated.',
+    params:[['Stoppers','Washed, siliconised and sterilised by the supplier'],['Transfer','RTP alpha/beta port; bag docked from outside'],['Check','100 % stopper presence and height']],
+    eff:['Ready-to-use stoppers take the stopper washer and its autoclave cycle off the critical path.']},
+  cap: {num:'5', name:'Capping', grade:'A', room:'Grade A air supply · Grade D room',
+    what:'An aluminium flip-off cap is crimped over every stopper. Until the cap is on the vial is not fully sealed, so capping runs under a Grade A air supply.',
+    params:[['Seal','Aluminium crimp with flip-off cover'],['Checks','Stopper height before crimp, cap presence after'],['Option','Residual seal force monitoring']],
+    eff:['Servo crimp heads change format by recipe and record every crimp.']},
+  avi: {num:'6', name:'Automated visual inspection', grade:'N', room:'Controlled, not classified',
+    what:'Each vial is spun, braked and photographed, so particles still moving in the liquid stand out against the stationary glass. Camera stations look for particles, cracks, fill level and cap faults; rejects drop through a gate into a locked bin.',
+    params:[['Coverage','100 % of vials'],['Detects','Particles, cosmetic defects, fill height'],['Closure integrity','100 % HVLD or headspace laser where required'],['Reject gate','Verified diversion, locked bin']],
+    eff:['Runs at line speed and is qualified against a known defect set, with fewer false rejects than manual booths.','Defect images are trended back to the station that caused them.']},
+  label: {num:'7', name:'Labelling & serialisation', grade:'N', room:'Controlled, not classified',
+    what:'A wrap-around label is applied and a printer adds a 2D DataMatrix code carrying product code, serial number, batch and expiry. A camera reads every code before the vial moves on.',
+    params:[['Code','GS1 DataMatrix: GTIN, serial, batch, expiry'],['Verification','100 % vision check'],['Regulation','EU FMD, US DSCSA']],
+    eff:['Serial numbers are aggregated to trays and cases, so shipments are traced without opening packs.']},
+  pack: {num:'8', name:'Tray loading & packing', grade:'N', room:'Controlled, not classified',
+    what:'Finished vials are collected into trays and cases, linked to their serial numbers and moved to quarantine until QA releases the batch.',
+    params:[['Reconciliation','Vials in = good + rejected + samples'],['Release','QA review of the electronic batch record']],
+    eff:['Review by exception on the electronic batch record shortens release time.']},
+};
+const ST = [
+  {id:'comp', x0:60, x1:452, ly:208, short:'Compounding'},
+  {id:'auto', x0:460, x1:630, ly:425, short:'Autoclave'},
+  {id:'wash', x0:668, x1:882, ly:382, short:'Washer'},
+  {id:'tunnel', x0:892, x1:1428, ly:342, short:'Depyrogenation'},
+  {id:'fill', x0:1468, x1:1852, ly:378, short:'Fill + IPC'},
+  {id:'stopper', x0:1866, x1:2064, ly:378, short:'Stopper'},
+  {id:'isolator', x0:1436, x1:2346, ly:186, short:'Isolator · Grade A'},
+  {id:'cap', x0:2366, x1:2604, ly:232, short:'Capping'},
+  {id:'avi', x0:2684, x1:3074, ly:358, short:'Inspection'},
+  {id:'label', x0:3082, x1:3302, ly:382, short:'Labelling'},
+  {id:'pack', x0:3308, x1:3472, ly:500, short:'Packing'},
+];
+const stById = Object.fromEntries(ST.map(s => [s.id, s]));
+const GRADE = {A:'gA', B:'gB', C:'gC', D:'gD', N:'gN'};
+const GRADE_NAME = {A:'Grade A', B:'Grade B', C:'Grade C', D:'Grade D', N:'CNC'};
+
+const STRATS = {
+  conv: {name:'Conventional', note:'Stainless fill path, CIP/SIP, standard VHP aeration', phases:[
+    {id:'clear', name:'Line clearance', real:15, dur:0, focus:'overview'},
+    {id:'cip', name:'CIP of vessel and stainless fill path', real:90, dur:8, focus:'comp'},
+    {id:'sip', name:'SIP with clean steam, 121 °C', real:60, dur:7, focus:'comp'},
+    {id:'vhp', name:'VHP cycle, standard aeration', real:210, dur:12, focus:'isolator'},
+    {id:'glove', name:'Glove integrity tests, one by one', real:30, dur:4, focus:'isolator'},
+    {id:'restart', name:'Filter integrity test and line release', real:45, dur:4, focus:'comp'}]},
+  lean: {name:'Streamlined', note:'Single-use fluid path, rapid VHP with catalytic aeration', phases:[
+    {id:'clear', name:'Line clearance', real:15, dur:0, focus:'overview'},
+    {id:'swap', name:'Fit pre-sterilised single-use fluid path', real:30, dur:5, focus:'fill'},
+    {id:'vhp', name:'Rapid VHP, catalytic aeration', real:75, dur:9, focus:'isolator'},
+    {id:'glove', name:'Wireless glove testers in parallel', real:15, dur:3, focus:'isolator'},
+    {id:'restart', name:'Filter integrity test and line release', real:30, dur:3, focus:'comp'}]},
+};
+
+/* ---------- simulation state ---------- */
+const S = {
+  t: 0, batchT: 7200, playing: !reduce, speed: 1,
+  vials: [], nextId: 27301, belt: 0, stop: 0, nextMicro: 35, moving: true,
+  mode: 'run', strat: 'conv', phase: -1, phaseT: 0,
+  good: 27170, rej: {weight: 52, particle: 47, cosmetic: 31}, changeT: 1500, microT: 240,
+  bias: Array.from({length: 8}, () => rn() * 0.0015),
+  weights: [], flash: [0, 0], push: 0, tray: 37, bin: 4, pc05: 14, pcSpike: 0,
+  sel: 'fill', hover: null, events: [],
+};
+for (let i = 0; i < 60; i++) S.weights.push(2 + rn() * 0.0045);
+
+function fmtT(sec){ sec = Math.floor(sec); const h = Math.floor(sec / 3600), m = Math.floor(sec % 3600 / 60), s = sec % 60; return [h, m, s].map(n => String(n).padStart(2, '0')).join(':'); }
+function log(msg, kind = 'info', at){ S.events.unshift({t: at || fmtT(S.batchT), msg, kind}); if (S.events.length > 9) S.events.pop(); renderLog(); }
+
+function makeVial(x){ const id = S.nextId++; return {id, x, dy: 0, vy: 0, pump: id % 8, w: null, rej: null, drop: false, gone: false}; }
+function cross(v, a, b, silent){
+  if (a < GROSS_X && b >= GROSS_X){
+    let w = 2 + S.bias[v.pump] + rn() * 0.0045;
+    if (Math.random() < 0.0022) w = 2 + (Math.random() < 0.6 ? -1 : 1) * (0.045 + Math.random() * 0.03);
+    v.w = w;
+    if (!silent){
+      S.weights.push(w); if (S.weights.length > 60) S.weights.shift();
+      S.bias[v.pump] += rn() * 0.0007;
+      if (Math.abs(S.bias[v.pump]) > 0.006){
+        const pct = (Math.abs(S.bias[v.pump]) / 2 * 100).toFixed(2);
+        log(`IPC: pump ${v.pump + 1} drifting, dose corrected ${S.bias[v.pump] > 0 ? '−' : '+'}${pct} %`, 'ok');
+        S.bias[v.pump] = rn() * 0.0008;
+      }
+    }
+    if (Math.abs(w - 2) > 0.04){ v.rej = 'weight'; if (!silent) log(`IPC: vial ${v.id} weighs ${w.toFixed(3)} g, outside ±2 %, flagged`, 'bad'); }
+  }
+  if (a < CAM1 && b >= CAM1){ if (!silent) S.flash[0] = 0.14; if (!v.rej && Math.random() < 0.0011){ v.rej = 'cosmetic'; if (!silent) log(`AVI camera 1: crimp defect on vial ${v.id}`, 'bad'); } }
+  if (a < CAM2 && b >= CAM2){ if (!silent) S.flash[1] = 0.14; if (!v.rej && Math.random() < 0.0016){ v.rej = 'particle'; if (!silent) log(`AVI camera 2: moving particle in vial ${v.id}`, 'bad'); } }
+  if (a < GATE_X && b >= GATE_X && v.rej){
+    if (silent){ v.gone = true; return; }
+    v.drop = true; v.x = GATE_X + 6; S.rej[v.rej]++; S.push = 0.25;
+  }
+  if (b >= END_X && !v.drop){ v.gone = true; if (!silent){ S.good++; S.tray++; } }
+}
+// pre-populate a running line
+for (let x = END_X - PITCH / 2; x >= SPAWN_X; x -= PITCH){ const v = makeVial(SPAWN_X - 1); cross(v, SPAWN_X - 1, x, true); v.x = x; if (!v.gone) S.vials.push(v); }
+[['01:58:41','IPC: pump 3 drifting, dose corrected −0.21 %','ok'],['01:56:02','AVI camera 2: moving particle in vial 27118','bad'],['01:52:19','Micro-stop 3 s: tipped vial removed at infeed','warn'],['01:31:07','EM: settle plates exchanged at the fill point (4 h exposure)','info'],['00:25:00','Line released after VHP cycle and set-up','ok']].reverse().forEach(e => log(e[1], e[2], e[0]));
+
+/* air particles */
+const AZ = [{x0:1012, x1:1416, y0:390, y1:CY - 4, n:36}, {x0:1446, x1:2334, y0:248, y1:CY - 4, n:120}, {x0:2386, x1:2586, y0:292, y1:CY - 4, n:30}];
+const AIR = [];
+AZ.forEach(z => { for (let i = 0; i < z.n; i++) AIR.push({z, x: z.x0 + Math.random() * (z.x1 - z.x0), y: z.y0 + Math.random() * (z.y1 - z.y0), vx: 0}); });
+const HAZE = Array.from({length: 46}, () => ({x: 1450 + Math.random() * 880, y: 250 + Math.random() * 330, p: Math.random() * 6.28}));
+
+/* ---------- changeover ---------- */
+const phases = () => STRATS[S.strat].phases;
+const curPhase = () => S.mode === 'change' ? phases()[S.phase] : null;
+function startChangeover(){
+  if (S.mode !== 'run') return;
+  S.mode = 'change'; S.phase = -1; S.stop = 0;
+  log(`Changeover started: ${STRATS[S.strat].name.toLowerCase()} strategy`, 'vhp');
+  nextPhase();
+}
+function nextPhase(){
+  const ph = curPhase();
+  if (ph && ph.id === 'clear'){ const j = Math.max(0, ph.real * 60 - S.phaseT); S.batchT += j; S.changeT += j; }
+  S.phase++; S.phaseT = 0;
+  if (S.phase >= phases().length){ S.mode = 'run'; S.phase = -1; S.nextMicro = 40; log('Line released: production resumes', 'ok'); renderPhases(); return; }
+  const n = curPhase();
+  log(`Changeover: ${n.name}`, 'vhp');
+  if (view === 'tour' || view === 'overview' || view === 'focus'){ if (n.focus === 'overview') setView('overview'); else focusStation(n.focus, false); }
+  renderPhases();
+}
+function vhpState(){
+  const ph = curPhase(); if (!ph || ph.id !== 'vhp') return null;
+  const f = S.phaseT / ph.dur; let stage, ppm, rh;
+  if (f < 0.15){ stage = 'Conditioning: drying air'; ppm = 0; rh = 45 - 30 * f / 0.15; }
+  else if (f < 0.45){ stage = 'Gassing'; ppm = 420 * (f - 0.15) / 0.3; rh = 15 + 40 * (f - 0.15) / 0.3; }
+  else if (f < 0.6){ stage = 'Dwell'; ppm = 420 + 6 * Math.sin(S.t * 3); rh = 55; }
+  else { stage = 'Aeration'; ppm = 420 * Math.exp(-((f - 0.6) / 0.4) * 6.5); rh = 55 - 35 * (f - 0.6) / 0.4; }
+  return {stage, ppm, rh, f};
+}
+function readout(){
+  const ph = curPhase();
+  if (!ph){ return S.stop > 0 ? 'Micro-stop: operator clearing the infeed. Production resumes automatically.' : 'Line producing. Start a changeover to clean, sterilise and decontaminate the line between batches.'; }
+  const f = ph.dur ? clamp(S.phaseT / ph.dur) : 0;
+  switch (ph.id){
+    case 'clear': return `Infeed stopped. ${S.vials.length} vials still running out to be counted and reconciled.`;
+    case 'cip': { const st = f < .2 ? 'Pre-rinse, purified water' : f < .6 ? 'Alkaline wash, 1 % NaOH at 75 °C' : f < .8 ? 'Intermediate rinse' : 'Final rinse with WFI';
+      const c = f < .2 ? 0.4 + f * 30 : f < .6 ? 52 : f < .8 ? 52 * Math.exp(-(f - .6) * 30) * 1000 : Math.max(0.9, 300 * Math.exp(-(f - .8) * 30));
+      const unit = f >= .2 && f < .6 ? 'mS/cm' : 'µS/cm'; const val = f >= .2 && f < .6 ? c : (f < .2 ? c : c);
+      return `CIP · ${st} · return conductivity ${f >= .2 && f < .6 ? val.toFixed(0) : val.toFixed(1)} ${unit}${f > .95 ? ' · TOC within limit' : ''}`; }
+    case 'sip': { const T = f < .25 ? 25 + 96.6 * f / .25 : f < .9 ? 121.6 + Math.sin(S.t * 2) * .2 : 121.6 - (f - .9) * 600; const F0 = clamp((f - .25) / .65) * 32;
+      return `SIP · ${f < .25 ? 'Heating, air purged through drains' : f < .9 ? 'Hold at ≥ 121 °C' : 'Cooling with sterile air'} · coldest point ${T.toFixed(1)} °C · F₀ ${F0.toFixed(0)} min`; }
+    case 'swap': return `Single-use · ${f < .5 ? 'Removing used bag, tubing and needles for disposal' : 'Fitting gamma-sterilised assembly with aseptic connectors'} · no cleaning, no carry-over`;
+    case 'vhp': { const s = vhpState(); return `VHP · ${s.stage} · H₂O₂ ${s.ppm.toFixed(s.ppm < 10 ? 1 : 0)} ppm · RH ${s.rh.toFixed(0)} %${s.f > .97 ? ' · below 1 ppm, BIs to incubation' : ''}`; }
+    case 'glove': { const n = Math.min(6, Math.floor(f * 6) + 1); return `Glove test · pressure decay on port ${n} of 6 · ${f > .97 ? 'all passed' : 'pass, leak rate below limit'}`; }
+    case 'restart': return f < .65 ? 'Filter integrity · bubble point test on both 0.22 µm filters…' : 'Filter integrity PASS · line set-up verified · QA release to start filling';
+  }
+  return '';
+}
+
+/* ---------- update ---------- */
+function update(dt){
+  S.t += dt;
+  const ph = curPhase();
+  const scale = ph && ph.dur ? (ph.real * 60) / ph.dur : 1;
+  S.batchT += dt * scale;
+  if (S.mode === 'change'){
+    S.changeT += dt * scale; S.phaseT += dt;
+    if (ph.id === 'clear'){ if (!S.vials.length) nextPhase(); }
+    else if (S.phaseT >= ph.dur) nextPhase();
+  } else {
+    if (S.stop > 0){ S.stop -= dt; S.microT += dt; if (S.stop <= 0) log('Infeed cleared, line running', 'ok'); }
+    else { S.nextMicro -= dt; if (S.nextMicro <= 0){
+      const reasons = ['tipped vial removed at infeed', 'stopper bowl topped up through the RTP', 'fallen vial cleared at the star wheel'];
+      S.stop = 2 + Math.random() * 2; S.pcSpike = 1; S.nextMicro = 55 + Math.random() * 80;
+      log(`Micro-stop ${S.stop.toFixed(0)} s: ${reasons[Math.floor(Math.random() * reasons.length)]}`, 'warn'); } }
+  }
+  const p2 = curPhase();
+  S.moving = (S.mode === 'run' && S.stop <= 0) || (p2 && p2.id === 'clear');
+  const dx = S.moving ? V * dt : 0;
+  S.belt += dx;
+  for (const v of S.vials){
+    if (v.drop){ v.vy += 1300 * dt; v.dy += v.vy * dt; if (v.dy > 120){ v.gone = true; S.bin++; } continue; }
+    const a = v.x; v.x += dx; cross(v, a, v.x, false);
+  }
+  S.vials = S.vials.filter(v => !v.gone);
+  if (S.mode === 'run' && S.stop <= 0){
+    let minX = Infinity; for (const v of S.vials) if (!v.drop && v.x < minX) minX = v.x;
+    if (minX === Infinity){ S.vials.push(makeVial(SPAWN_X)); }
+    else while (minX - PITCH >= SPAWN_X){ minX -= PITCH; S.vials.push(makeVial(minX)); }
+  }
+  S.flash[0] = Math.max(0, S.flash[0] - dt); S.flash[1] = Math.max(0, S.flash[1] - dt); S.push = Math.max(0, S.push - dt);
+  // air
+  for (const p of AIR){
+    p.y += 150 * dt;
+    if (p.y > p.z.y1 - 26){ const mid = (p.z.x0 + p.z.x1) / 2; p.vx += (p.x < mid ? -1 : 1) * 260 * dt; }
+    p.x += p.vx * dt;
+    if (p.y > p.z.y1 || p.x < p.z.x0 || p.x > p.z.x1){ p.y = p.z.y0; p.x = p.z.x0 + Math.random() * (p.z.x1 - p.z.x0); p.vx = 0; }
+  }
+  // particle counter random walk
+  S.pc05 = Math.max(0, S.pc05 + (12 - S.pc05) * 0.02 + rn() * 2.2);
+  if (S.pcSpike > 0){ S.pc05 += 40 * S.pcSpike; S.pcSpike = Math.max(0, S.pcSpike - dt * 0.5); }
+}
+
+/* ---------- camera ---------- */
+let dpr = 1, cw = 1, ch = 1;
+const cam = {cx: 700, cy: H / 2, s: 0.5}, tgt = {cx: 700, cy: H / 2, s: 0.5};
+let view = reduce ? 'overview' : 'tour', focusR = null, followId = null, tourT = 0;
+function resize(){ const r = cv.getBoundingClientRect(); dpr = Math.min(window.devicePixelRatio || 1, 2); cw = Math.max(1, r.width); ch = Math.max(1, r.height); cv.width = Math.round(cw * dpr); cv.height = Math.round(ch * dpr); }
+const fitS = () => Math.min(cw / W, ch / H);
+function getFollow(){
+  let v = S.vials.find(q => q.id === followId && !q.drop);
+  if (!v){ let best = null; for (const q of S.vials) if (!q.drop && (!best || q.x < best.x)) best = q; v = best; followId = v ? v.id : null; }
+  return v;
+}
+function computeTarget(){
+  if (view === 'overview'){ tgt.s = fitS(); tgt.cx = W / 2; tgt.cy = H / 2; }
+  else if (view === 'tour'){ tgt.s = Math.max(fitS(), ch / (H * 0.96)); const half = cw / 2 / tgt.s, span = W - 2 * half; tgt.cx = span > 0 ? half + span * (0.5 - 0.5 * Math.cos(tourT * 2 * Math.PI / 90)) : W / 2; tgt.cy = H / 2; }
+  else if (view === 'follow'){ const v = getFollow(); tgt.s = clamp(ch / (H * 0.52), fitS(), 2.4); if (v){ tgt.cx = v.x + cw * 0.12 / tgt.s; tgt.cy = CY - 130 + v.dy * 0.5; } }
+  else if (view === 'focus' && focusR){ tgt.s = clamp(Math.min(cw / (focusR.x1 - focusR.x0 + 140), ch / focusR.h), fitS(), 2.2); tgt.cx = (focusR.x0 + focusR.x1) / 2; tgt.cy = focusR.cy; }
+}
+function clampCam(c){ c.s = clamp(c.s, fitS() * 0.85, 3.2); c.cx = clamp(c.cx, 0, W); c.cy = clamp(c.cy, 0, H); }
+function setView(v){ view = v; document.querySelectorAll('#view button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === v))); $('#hudFollow').hidden = v !== 'follow'; }
+function focusRect(r){ focusR = r; setView('focus'); }
+function focusStation(id, select = true){
+  const st = stById[id]; if (!st) return;
+  focusRect({x0: st.x0, x1: st.x1, cy: id === 'comp' ? 450 : 470, h: id === 'comp' || id === 'isolator' ? 640 : 560});
+  if (select) selectStation(id);
+}
+function zoomAt(px, py, ns){
+  const wx = (px - cw / 2) / cam.s + cam.cx, wy = (py - ch / 2) / cam.s + cam.cy;
+  ns = clamp(ns, fitS() * 0.85, 3.2);
+  cam.s = ns; cam.cx = wx - (px - cw / 2) / ns; cam.cy = wy - (py - ch / 2) / ns; clampCam(cam);
+  Object.assign(tgt, cam); setView('free');
+}
+const toWorld = (px, py) => [(px - cw / 2) / cam.s + cam.cx, (py - ch / 2) / cam.s + cam.cy];
+function hit(px, py){
+  const [wx, wy] = toWorld(px, py);
+  if (wy < CEIL - 10 || wy > FLOOR + 20) return null;
+  for (const st of ST){ if (st.id === 'isolator') continue; if (wx >= st.x0 && wx <= st.x1 && !(st.id === 'fill' || st.id === 'stopper') ) return st.id;
+    if ((st.id === 'fill' || st.id === 'stopper') && wx >= st.x0 && wx <= st.x1 && wy > 245) return st.id; }
+  const iso = stById.isolator; if (wx >= iso.x0 && wx <= iso.x1) return 'isolator';
+  return null;
+}
+
+/* ---------- drawing helpers ---------- */
+function rr(x, y, w, h, r){ ctx.beginPath(); ctx.roundRect(x, y, w, h, r); }
+function box(x, y, w, h, r, fill, stroke, lw = 2){ rr(x, y, w, h, r); if (fill){ ctx.fillStyle = fill; ctx.fill(); } if (stroke){ ctx.strokeStyle = stroke; ctx.lineWidth = lw; ctx.stroke(); } }
+function steel(x0, y0, x1, y1){ const g = ctx.createLinearGradient(x0, y0, x1, y1); g.addColorStop(0, P.steelHi); g.addColorStop(.55, P.steel); g.addColorStop(1, P.steelLo); return g; }
+function txt(t, x, y, size, color, align = 'center', weight = 500, cond = false){
+  if (size * cam.s < 6.5) return;
+  ctx.font = `${weight} ${size}px ${cond ? '"Barlow Condensed","Arial Narrow",Arial' : '"IBM Plex Sans",system-ui'},sans-serif`;
+  ctx.fillStyle = color; ctx.textAlign = align; ctx.textBaseline = 'middle'; ctx.fillText(t, x, y);
+}
+function poly(pts, color, lw, dash, off){ ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]); for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]); ctx.strokeStyle = color; ctx.lineWidth = lw; ctx.lineJoin = 'round'; ctx.setLineDash(dash || []); ctx.lineDashOffset = off || 0; ctx.stroke(); ctx.setLineDash([]); }
+function pipe(pts, color, lw, flow, speed = 40){ poly(pts, P.steelLo, lw + 3); poly(pts, A(color, .5), lw); if (flow) poly(pts, color, lw * .55, [9, 11], -S.t * speed); }
+function puff(x, y, k, n = 4){ for (let i = 0; i < n; i++){ const ph = (S.t * 0.8 + i / n + k) % 1; ctx.beginPath(); ctx.arc(x + Math.sin((i + k) * 9 + S.t) * 8 * ph, y - ph * 46, 5 + ph * 11, 0, 7); ctx.fillStyle = A(P.steam, .45 * (1 - ph)); ctx.fill(); } }
+const VPATH = (() => { const p = new Path2D(), hw = VW / 2, t = -VH / 2, b = VH / 2;
+  p.moveTo(-hw, b - 2); p.lineTo(-hw, t + 9); p.quadraticCurveTo(-hw, t + 6, -3.5, t + 5); p.lineTo(-3.5, t + 3); p.lineTo(-4.5, t + 3); p.lineTo(-4.5, t); p.lineTo(4.5, t); p.lineTo(4.5, t + 3); p.lineTo(3.5, t + 3); p.lineTo(3.5, t + 5); p.quadraticCurveTo(hw, t + 6, hw, t + 9); p.lineTo(hw, b - 2); p.quadraticCurveTo(hw, b, hw - 2, b); p.lineTo(-hw + 2, b); p.quadraticCurveTo(-hw, b, -hw, b - 2); p.closePath(); return p; })();
+const liqH = v => { const ff = clamp((v.x - FZ0) / (FZ1 - FZ0)); return (VH - 9) * 0.62 * ff * (v.w ? v.w / 2 : 1); };
+
+/* ---------- scene ---------- */
+const ROOMS = [{x0:22, x1:545, g:'C', name:'Compounding', pa:'+30 Pa'}, {x0:545, x1:2640, g:'D', name:'Filling hall', pa:'+15 Pa'}, {x0:2640, x1:W - 22, g:'N', name:'Inspection & packing', pa:'+5 Pa'}];
+const AZONES = [{x0:1010, x1:1420, y0:385, y1:CY + 40, name:'Tunnel: Grade A air'}, {x0:1440, x1:2340, y0:245, y1:590, name:'Isolator interior: Grade A · ≈ +50 Pa to room'}, {x0:2380, x1:2590, y0:288, y1:CY + 10, name:'Capping: Grade A air'}];
+
+function drawBuilding(){
+  ctx.fillStyle = P.mezz; ctx.fillRect(22, 14, W - 44, CEIL - 14);
+  ctx.fillStyle = P.scene; ctx.fillRect(22, CEIL, W - 44, FLOOR - CEIL);
+  if (L.press){
+    for (const r of ROOMS){ ctx.fillStyle = A(P[GRADE[r.g]], .13); ctx.fillRect(r.x0, CEIL, r.x1 - r.x0, FLOOR - CEIL); txt(`${GRADE_NAME[r.g]} · ${r.pa}`, (r.x0 + r.x1) / 2, FLOOR - 22, 20, P[GRADE[r.g]], 'center', 700, true); }
+  }
+  ctx.fillStyle = P.wall; ctx.fillRect(14, CEIL - 9, W - 28, 10); ctx.fillRect(14, FLOOR, W - 28, 12); ctx.fillRect(14, 8, 9, FLOOR); ctx.fillRect(W - 23, 8, 9, FLOOR); ctx.fillRect(14, 6, W - 28, 9);
+  ctx.fillRect(540, CEIL, 10, FLOOR - CEIL);
+  ctx.fillRect(2635, CEIL, 10, CY - 50 - CEIL); ctx.fillRect(2635, CY + 16, 10, FLOOR - CY - 16);
+  txt('TECHNICAL AREA · UTILITIES', 36, 28, 13, P.muted, 'left', 600, true);
+  // room HEPA terminals
+  for (const x of [120, 330, 660, 960, 2200, 3200]){ box(x - 30, CEIL + 1, 60, 10, 2, P.steel, P.frame, 1); for (let i = -24; i <= 24; i += 6) poly([[x + i, CEIL + 3], [x + i, CEIL + 9]], P.steelLo, 1); }
+}
+function drawStrip(){
+  const y = FLOOR + 22;
+  for (const r of ROOMS){ const c = P[GRADE[r.g]]; box(r.x0 + 4, y, r.x1 - r.x0 - 8, 40, 3, A(c, .16), A(c, .6), 1.5); txt(`${r.name.toUpperCase()} · ${GRADE_NAME[r.g]} · ${r.pa}`, (r.x0 + r.x1) / 2, y + 20, 20, P.ink, 'center', 600, true); }
+  for (const z of AZONES){ box(z.x0 + 2, y + 48, z.x1 - z.x0 - 4, 34, 3, A(P.gA, .18), A(P.gA, .7), 1.5); txt(z.name.toUpperCase(), (z.x0 + z.x1) / 2, y + 65, 16, P.ink, 'center', 600, true); }
+}
+function drawUtilities(){
+  // equipment in the mezzanine
+  box(32, 24, 100, 58, 5, steel(32, 0, 132, 0), P.frame, 2);
+  for (let i = 0; i < 3; i++) box(42 + i * 30, 34, 20, 40, 8, A(P.wfi, .25), P.frame, 1.2);
+  box(142, 22, 70, 62, 22, steel(142, 0, 212, 0), P.frame, 2);
+  box(228, 28, 86, 52, 5, steel(228, 0, 314, 0), P.frame, 2);
+  box(3060, 22, 400, 70, 5, steel(3060, 0, 3460, 0), P.frame, 2);
+  for (let i = 0; i < 3; i++){ const cx = 3330 + i * 42; ctx.beginPath(); ctx.arc(cx, 57, 16, 0, 7); ctx.fillStyle = P.steelLo; ctx.fill(); const a = S.t * 9 + i; for (let k = 0; k < 3; k++){ poly([[cx, 57], [cx + Math.cos(a + k * 2.09) * 14, 57 + Math.sin(a + k * 2.09) * 14]], P.steelHi, 3); } }
+  box(3075, 34, 70, 46, 3, A(P.steelLo, .5), P.frame, 1); for (let i = 0; i < 9; i++) poly([[3080 + i * 7.5, 38], [3080 + i * 7.5, 76]], P.frame, 1);
+  box(3160, 34, 70, 46, 3, A(P.wfi, .15), P.frame, 1);
+  txt('WFI generation', 82, 92, 12, P.ink, 'center', 600); txt('WFI tank 80 °C', 177, 92, 12, P.ink, 'center', 600); txt('Clean steam', 271, 92, 12, P.ink, 'center', 600);
+  txt('Air handling: filters · coil · fans → H14 HEPA', 3260, 102, 13, P.ink, 'center', 600);
+  if (!L.util) return;
+  const ph = curPhase(); const csOn = ph && (ph.id === 'sip' || ph.id === 'swap');
+  // HVAC duct and drops
+  poly([[3060, 112], [80, 112]], P.steelLo, 18); poly([[3060, 112], [80, 112]], A(P.air, .25), 13); poly([[3060, 112], [80, 112]], A(P.air, .8), 2, [6, 14], -S.t * 60);
+  for (const [x, y1] of [[120, CEIL], [330, CEIL], [660, CEIL], [960, CEIL], [1340, 368], [1890, 206], [2485, 250], [2200, CEIL], [3200, CEIL]]){ poly([[x, 112], [x, y1]], P.steelLo, 12); poly([[x, 112], [x, y1]], A(P.air, .25), 8); poly([[x, 118], [x, y1]], A(P.air, .8), 2, [6, 14], -S.t * 60); }
+  // WFI loop
+  pipe([[177, 84], [177, 136], [3010, 136]], P.wfi, 6, true, 45);
+  pipe([[3010, 136], [3010, 150], [150, 150], [150, 84]], P.wfi, 6, true, 45);
+  pipe([[232, 136], [232, 330]], P.wfi, 4, ph && ph.id === 'cip', 45);
+  pipe([[790, 136], [790, 402]], P.wfi, 4, S.moving, 45);
+  // clean steam
+  pipe([[271, 80], [271, 124], [1690, 124]], P.steam, 4, csOn, 30);
+  pipe([[96, 124], [271, 124]], P.steam, 4, csOn, -30);
+  pipe([[96, 124], [96, 338]], P.steam, 4, ph && ph.id === 'sip', 30);
+  pipe([[370, 124], [370, 432]], P.steam, 4, ph && ph.id === 'sip', 30);
+  pipe([[500, 124], [500, 452]], P.steam, 4, csOn, 30);
+  txt('WFI loop · 80 °C · turbulent flow', 1140, 143, 12, P.wfi, 'center', 600);
+  txt('Clean steam', 1140, 117, 12, P.muted, 'center', 600);
+  txt('HVAC supply air', 1700, 104, 12, P.air, 'center', 600);
+}
+function drawComp(){
+  const ph = curPhase(), id = ph ? ph.id : 'run';
+  const tx = 110, tw = 140, ty = 340, th = 270, cx = tx + tw / 2;
+  ctx.fillStyle = P.steelLo; for (const x of [124, 236]) ctx.fillRect(x - 3, ty + th, 6, FLOOR - ty - th);
+  const path = new Path2D(); path.moveTo(tx, ty); path.ellipse(cx, ty, tw / 2, 18, 0, Math.PI, 0); path.lineTo(tx + tw, ty + th); path.ellipse(cx, ty + th, tw / 2, 22, 0, 0, Math.PI); path.closePath();
+  ctx.fillStyle = steel(tx, 0, tx + tw, 0); ctx.fill(path); ctx.strokeStyle = P.frame; ctx.lineWidth = 2; ctx.stroke(path);
+  // cut-away window
+  ctx.save(); rr(tx + 14, ty + 4, tw - 28, th + 8, 6); ctx.clip();
+  ctx.fillStyle = A(P.steelLo, .55); ctx.fillRect(tx, ty, tw, th + 20);
+  const lvl = id === 'cip' ? ty + th - 14 : id === 'sip' || id === 'swap' ? ty + th + 30 : ty + 92 + (S.mode === 'change' ? 60 : 0);
+  ctx.fillStyle = A(id === 'cip' ? P.cip : P.product, .7); ctx.beginPath(); ctx.moveTo(tx, lvl);
+  for (let x = tx; x <= tx + tw; x += 6) ctx.lineTo(x, lvl + Math.sin(x * .12 + S.t * 4) * 2); ctx.lineTo(tx + tw, ty + th + 30); ctx.lineTo(tx, ty + th + 30); ctx.fill();
+  if (id === 'cip'){ for (let i = 0; i < 26; i++){ const a = i / 26 * Math.PI * 2, r = ((S.t * 90 + i * 37) % 80); ctx.fillStyle = A(P.cip, .8 * (1 - r / 80)); ctx.beginPath(); ctx.arc(cx + Math.cos(a) * r, ty + 26 + Math.abs(Math.sin(a)) * r * 1.4, 2.2, 0, 7); ctx.fill(); } }
+  if (id === 'sip') for (let i = 0; i < 4; i++) puff(cx - 30 + i * 20, ty + th - 10, i * .23, 3);
+  ctx.restore();
+  // jacket, agitator, spray ball
+  poly([[tx + 4, ty + 60], [tx + 4, ty + th - 10]], P.heat, 2, [4, 4]); poly([[tx + tw - 4, ty + 60], [tx + tw - 4, ty + th - 10]], P.heat, 2, [4, 4]);
+  box(cx - 15, ty - 50, 30, 32, 4, P.steelLo, P.frame, 1.5);
+  poly([[cx, ty - 18], [cx, ty + th - 30]], P.frame, 3);
+  const a = S.t * (S.mode === 'run' ? 6 : 1.5); const bw = Math.cos(a) * 26;
+  poly([[cx - bw, ty + th - 30], [cx + bw, ty + th - 30]], P.frame, 5);
+  ctx.beginPath(); ctx.arc(cx + 34, ty + 20, 6, 0, 7); ctx.fillStyle = P.steel; ctx.fill(); ctx.strokeStyle = P.frame; ctx.lineWidth = 1; ctx.stroke();
+  txt('Compounding vessel', cx, 712, 13, P.ink, 'center', 600);
+  txt('jacketed · agitated · CIP/SIP', cx, 728, 11, P.muted, 'center');
+  // product line: tank → filters → isolator
+  const route = [[cx, ty + th + 22], [cx, 688], [335, 688], [335, 440], [335, 420], [370, 420], [370, 590], [405, 590], [405, 440], [405, 410], [440, 410], [440, 190], [1530, 190], [1530, 262]];
+  let col = P.product, flow = S.moving && S.mode === 'run';
+  if (id === 'cip'){ col = P.cip; flow = true; } else if (id === 'sip'){ col = P.steam; flow = true; } else if (id === 'swap'){ col = P.accent; flow = false; }
+  if (id === 'swap'){ poly(route, A(P.accent, .35 + .25 * Math.sin(S.t * 5)), 12); }
+  pipe(route, col, 5, flow, 50);
+  // filters
+  for (const fx of [335, 405]){ box(fx - 17, 440, 34, 120, 8, steel(fx - 17, 0, fx + 17, 0), P.frame, 2); poly([[fx - 8, 452], [fx - 8, 548]], A(P.frame, .6), 1, [3, 3]); poly([[fx + 8, 452], [fx + 8, 548]], A(P.frame, .6), 1, [3, 3]); }
+  if (id === 'sip'){ puff(335, 436, .1, 3); puff(405, 436, .6, 3); }
+  txt('0.22 µm × 2', 370, 576, 12, P.ink, 'center', 600);
+  // integrity tester
+  box(296, 700, 150, 50, 4, P.surface, P.frame, 1.5);
+  let it = 'PASS', itc = P.ok; if (id === 'restart'){ const f = S.phaseT / ph.dur; if (f < .65){ it = 'TESTING'; itc = Math.sin(S.t * 8) > 0 ? P.warn : P.muted; } } else if (id === 'cip' || id === 'sip' || id === 'swap' || id === 'vhp' || id === 'glove'){ it = 'PENDING'; itc = P.muted; }
+  txt('Filter integrity tester', 371, 715, 11, P.muted, 'center', 500); txt(it, 371, 734, 15, itc, 'center', 700, true);
+}
+function drawAutoclave(){
+  const ph = curPhase(), on = ph && (ph.id === 'sip' || ph.id === 'swap');
+  box(465, 452, 160, FLOOR - 452, 4, steel(465, 0, 625, 0), P.frame, 2);
+  box(470, 460, 12, FLOOR - 470, 2, P.steelLo, P.frame, 1); box(608, 460, 12, FLOOR - 470, 2, P.steelLo, P.frame, 1);
+  ctx.beginPath(); ctx.arc(545, 560, 40, 0, 7); ctx.fillStyle = A(on ? P.heat : P.steelLo, on ? .35 : .4); ctx.fill(); ctx.strokeStyle = P.frame; ctx.lineWidth = 3; ctx.stroke();
+  for (let i = 0; i < 3; i++) box(522, 540 + i * 12, 46, 6, 2, P.steel, null);
+  box(510, 470, 70, 26, 3, P.surface, P.frame, 1); txt(on ? '121.4 °C' : 'READY', 545, 484, 14, on ? P.heat : P.ok, 'center', 700, true);
+  if (on) puff(545, 452, .3, 4);
+  txt('Pass-through autoclave', 545, 650, 12, P.ink, 'center', 600); txt('double door · interlocked', 545, 666, 10, P.muted);
+}
+function drawConveyor(){
+  const x0 = 628, x1 = END_X + 8;
+  ctx.fillStyle = P.steelLo; ctx.fillRect(x0, CY, x1 - x0, 8);
+  ctx.strokeStyle = A(P.steelHi, .7); ctx.lineWidth = 1.2; ctx.beginPath();
+  const off = S.belt % 12; for (let x = x0 + off; x < x1; x += 12){ ctx.moveTo(x, CY + 1); ctx.lineTo(x, CY + 7); } ctx.stroke();
+  ctx.fillStyle = P.frame; for (const x of [640, 890, 2362, 2620, 3090, 3300]) ctx.fillRect(x - 3, CY + 8, 6, FLOOR - CY - 8);
+  // infeed table with depth rows
+  box(628, CY - 2, 40, 12, 2, P.steel, P.frame, 1);
+  ctx.globalAlpha = .35; for (let r = 1; r <= 2; r++) for (let x = 636; x < 664; x += 13){ ctx.save(); ctx.translate(x, CY - VH / 2 - r * 4); ctx.fillStyle = A(P.glass, .4); ctx.fill(VPATH); ctx.strokeStyle = P.frame; ctx.lineWidth = .8; ctx.stroke(VPATH); ctx.restore(); } ctx.globalAlpha = 1;
+}
+function drawWasher(back){
+  if (back){
+    box(680, 402, 192, CY + 40 - 402, 6, steel(680, 0, 872, 0), P.frame, 2);
+    box(690, 430, 172, CY - 430 + 6, 4, A(P.scene, .85), A(P.frame, .5), 1);
+    const a = S.belt / 70; ctx.strokeStyle = A(P.frame, .25); ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.arc(776, CY - 30, 62, 0, 7); ctx.stroke();
+    for (let k = 0; k < 8; k++){ const t = a + k * Math.PI / 4; poly([[776, CY - 30], [776 + Math.cos(t) * 62, CY - 30 + Math.sin(t) * 62]], A(P.frame, .18), 2); }
+    box(680, CY + 40, 192, FLOOR - CY - 40, 3, steel(680, 0, 872, 0), P.frame, 1.5);
+    txt('Rotary washer', 776, 416, 12, P.ink, 'center', 600);
+    txt('WFI · recirc. water · filtered air', 776, CY + 60, 10, P.muted);
+    return;
+  }
+  if (!S.moving) return;
+  for (const v of S.vials){ if (v.x < 712 || v.x > 840) continue;
+    const air = Math.floor(v.x / 40) % 3 === 2;
+    for (let k = 0; k < 5; k++){ const ph = (S.t * 6 + k / 5 + v.id * .3) % 1; ctx.fillStyle = A(air ? P.air : P.wfi, .8 * (1 - ph)); ctx.beginPath(); ctx.arc(v.x + Math.sin(k * 3 + S.t * 20) * 2, CY - 4 - ph * 26, 1.6, 0, 7); ctx.fill(); }
+  }
+  poly([[708, CY - 3], [846, CY - 3]], P.frame, 3);
+}
+function drawTunnel(){
+  box(900, 368, 520, CY + 44 - 368, 6, steel(900, 0, 1420, 0), P.frame, 2);
+  for (const [a, b] of [[1012, 1256], [1262, 1416]]){ box(a, 370, b - a, 18, 2, P.steel, P.frame, 1); for (let x = a + 6; x < b; x += 8) poly([[x, 373], [x, 385]], P.steelLo, 1); }
+  box(906, 392, 508, CY + 12 - 392, 3, A(P.scene, .9), A(P.frame, .5), 1);
+  const g = ctx.createLinearGradient(1010, 0, 1260, 0); g.addColorStop(0, A(P.heat, 0)); g.addColorStop(.25, A(P.heat, .28)); g.addColorStop(.75, A(P.heat, .28)); g.addColorStop(1, A(P.heat, 0));
+  ctx.fillStyle = g; ctx.fillRect(1010, 392, 250, CY + 12 - 392);
+  ctx.beginPath(); for (let x = 1020; x < 1250; x += 10){ ctx.lineTo(x, 404 + (x / 10 % 2) * 8); } ctx.strokeStyle = P.heat; ctx.lineWidth = 2; ctx.stroke();
+  ctx.strokeStyle = A(P.heat, .35); ctx.lineWidth = 1.2;
+  for (let i = 0; i < 9; i++){ const x = 1030 + i * 25; ctx.beginPath(); for (let y = CY - 40; y > 425; y -= 6) ctx.lineTo(x + Math.sin(y * .08 + S.t * 5 + i) * 3, y); ctx.stroke(); }
+  poly([[1010, 392], [1010, CY + 12]], A(P.frame, .6), 1.5, [5, 4]); poly([[1260, 392], [1260, CY + 12]], A(P.frame, .6), 1.5, [5, 4]);
+  txt('Infeed', 955, 470, 12, P.muted, 'center', 600); txt('Heating 320 °C', 1135, 470, 15, P.heat, 'center', 700, true); txt('Cooling · Grade A', 1340, 470, 13, P.gA, 'center', 700, true);
+  txt('Dry-heat depyrogenation tunnel', 1160, CY + 30, 12, P.ink, 'center', 600);
+  box(900, CY + 44, 520, FLOOR - CY - 44, 3, steel(900, 0, 1420, 0), P.frame, 1.5);
+}
+function drawIsolatorBack(){
+  box(1436, 590, 910, FLOOR - 590, 3, steel(1436, 0, 2346, 0), P.frame, 2);
+  box(1436, 204, 910, 42, 3, steel(1436, 0, 2346, 0), P.frame, 2);
+  for (let x = 1446; x < 2338; x += 9) poly([[x, 236], [x, 244]], P.steelLo, 1);
+  txt('H14 HEPA · unidirectional airflow 0.45 m/s', 1890, 224, 13, P.ink, 'center', 600);
+  ctx.fillStyle = A(P.scene, .6); ctx.fillRect(1440, 246, 900, 344);
+  // surge vessel and pumps
+  box(1500, 258, 60, 66, 10, A(P.steel, .9), P.frame, 1.5);
+  ctx.fillStyle = A(P.product, .6); ctx.fillRect(1504, 290, 52, 30);
+  poly([[1560, 300], [1592, 300]], A(P.product, .7), 3);
+  box(1588, 284, 182, 32, 4, P.steelLo, P.frame, 1);
+  const run = S.moving && S.mode === 'run';
+  for (let i = 0; i < 8; i++){ const x = 1600 + i * 22; ctx.beginPath(); ctx.arc(x, 300, 9, 0, 7); ctx.fillStyle = P.steel; ctx.fill(); ctx.strokeStyle = P.frame; ctx.lineWidth = 1; ctx.stroke();
+    const a = run ? S.t * 7 + i : i; for (let k = 0; k < 3; k++){ ctx.beginPath(); ctx.arc(x + Math.cos(a + k * 2.09) * 5.5, 300 + Math.sin(a + k * 2.09) * 5.5, 2, 0, 7); ctx.fillStyle = P.frame; ctx.fill(); } }
+  txt('Peristaltic pumps × 8', 1679, 330, 11, P.muted);
+  txt('Surge', 1530, 336, 11, P.muted);
+  // load cells
+  for (const [x, l] of [[TARE_X, 'Tare'], [GROSS_X, 'Gross']]){ box(x - 14, CY + 9, 28, 12, 2, P.accent, null); txt(l, x, CY + 32, 11, P.accent, 'center', 600); }
+  // stopper bowl and chute
+  ctx.beginPath(); ctx.ellipse(1955, 296, 50, 14, 0, 0, 7); ctx.fillStyle = P.steel; ctx.fill(); ctx.strokeStyle = P.frame; ctx.lineWidth = 1.5; ctx.stroke();
+  box(1910, 296, 90, 22, 4, P.steelLo, P.frame, 1);
+  for (let i = 0; i < 10; i++){ const a = S.t * (run ? 1.6 : .2) + i * .628; ctx.beginPath(); ctx.ellipse(1955 + Math.cos(a) * 40, 296 + Math.sin(a) * 9, 4, 2.5, 0, 0, 7); ctx.fillStyle = P.rubber; ctx.fill(); }
+  poly([[2003, 300], [2010, 360], [1972, 470]], P.frame, 3);
+  txt('Stopper bowl', 1955, 334, 11, P.muted);
+  // RTP port
+  ctx.beginPath(); ctx.arc(2140, 300, 22, 0, 7); ctx.strokeStyle = P.frame; ctx.lineWidth = 4; ctx.stroke(); ctx.fillStyle = A(P.steel, .6); ctx.fill();
+  txt('RTP', 2140, 300, 12, P.ink, 'center', 700, true); txt('stopper bags dock here', 2140, 334, 10, P.muted);
+}
+function drawIsolatorFront(){
+  const ph = curPhase();
+  // needles and tubes for vials in fill zone
+  const run = S.moving && S.mode === 'run';
+  for (const v of S.vials){
+    if (v.drop || v.x < FZ0 - 4 || v.x > FZ1 + 4) continue;
+    const f = clamp((v.x - FZ0) / (FZ1 - FZ0)), d = Math.sin(Math.PI * f);
+    const tip = CY - VH - 4 + d * 12, top = tip - 32, px = 1600 + v.pump * 22;
+    ctx.beginPath(); ctx.moveTo(px, 309); ctx.quadraticCurveTo(px, top - 50, v.x, top); ctx.strokeStyle = A(P.product, .45); ctx.lineWidth = 1.4; ctx.stroke();
+    box(v.x - 3, top, 6, 10, 1, P.steel, P.frame, .8);
+    poly([[v.x, top + 10], [v.x, tip]], P.frame, 1.2);
+    if (run && f > .1 && f < .9) poly([[v.x, tip], [v.x, CY - 1.5 - liqH(v)]], P.product, 1.6);
+  }
+  // stopper head
+  let near = 99; for (const v of S.vials) if (!v.drop) near = Math.min(near, Math.abs(v.x - STOP_X));
+  const press = near < 6 ? (1 - near / 6) * 5 : 0;
+  poly([[STOP_X, 430], [STOP_X, CY - VH - 8 + press]], P.frame, 4);
+  box(STOP_X - 9, CY - VH - 12 + press, 18, 6, 2, P.steel, P.frame, 1);
+  // glass, mullions, glove ports
+  ctx.fillStyle = A(P.glass, .1); ctx.fillRect(1440, 246, 900, 344);
+  ctx.strokeStyle = P.frame; ctx.lineWidth = 3; ctx.strokeRect(1440, 246, 900, 344);
+  for (const x of [1660, 1880, 2110]) poly([[x, 246], [x, 590]], A(P.frame, .5), 2);
+  ctx.fillStyle = A(P.scene, 1); ctx.fillRect(2336, CY - 34, 10, 34);
+  const gi = ph && ph.id === 'glove' ? Math.min(5, Math.floor(S.phaseT / ph.dur * 6)) : -1;
+  [1505, 1620, 1780, 1985, 2200, 2295].forEach((x, i) => {
+    ctx.beginPath(); ctx.arc(x, 430, 17, 0, 7);
+    ctx.fillStyle = A(P.steelLo, .18); ctx.fill();
+    ctx.strokeStyle = i === gi ? P.accent : i < gi ? P.ok : A(P.frame, .9); ctx.lineWidth = i === gi ? 5 + Math.sin(S.t * 8) * 1.5 : 3; ctx.stroke();
+    if (i === gi){ box(x - 14, 452, 28, 14, 2, P.surface, P.accent, 1); txt('Δp', x, 459, 9, P.accent, 'center', 700); }
+  });
+  // VHP generator
+  box(2200, 640, 120, FLOOR - 640, 4, steel(2200, 0, 2320, 0), P.frame, 1.5);
+  const s = vhpState();
+  txt('VHP generator', 2260, 662, 11, P.ink, 'center', 600);
+  box(2216, 676, 88, 22, 2, P.surface, P.frame, 1); txt(s ? `${s.ppm.toFixed(s.ppm < 10 ? 1 : 0)} ppm` : 'STANDBY', 2260, 687, 13, s ? P.vhp : P.muted, 'center', 700, true);
+  pipe([[2236, 640], [2236, 592]], P.vhp, 4, !!s && s.f > .15 && s.f < .45, 30);
+  pipe([[2290, 640], [2290, 592]], P.vhp, 4, !!s && s.f >= .6, -30);
+  if (ph && ph.id === 'swap'){ txt('New single-use fluid path', 1680, 360, 14, P.accent, 'center', 700, true); }
+  txt('Glove ports', 1505, 460, 10, P.muted);
+}
+function drawHaze(){
+  const s = vhpState(); if (!s) return;
+  const k = clamp(s.ppm / 420);
+  ctx.fillStyle = A(P.vhp, .32 * k); ctx.fillRect(1440, 246, 900, 344);
+  for (const h of HAZE){ const x = h.x + Math.sin(S.t * .7 + h.p) * 30, y = h.y + Math.cos(S.t * .5 + h.p) * 20; ctx.beginPath(); ctx.arc(x, y, 14 + 8 * Math.sin(h.p + S.t), 0, 7); ctx.fillStyle = A(P.vhp, .16 * k); ctx.fill(); }
+  txt(`VHP · ${s.stage} · ${s.ppm.toFixed(s.ppm < 10 ? 1 : 0)} ppm H₂O₂`, 1890, 280, 20, P.vhp, 'center', 700, true);
+}
+function drawCapping(){
+  box(2380, 250, 210, 38, 3, steel(2380, 0, 2590, 0), P.frame, 2);
+  for (let x = 2388; x < 2584; x += 8) poly([[x, 280], [x, 287]], P.steelLo, 1);
+  txt('Grade A air supply', 2485, 266, 12, P.ink, 'center', 600);
+  ctx.fillStyle = P.frame; ctx.fillRect(2384, 288, 4, CY - 288); ctx.fillRect(2582, 288, 4, CY - 288);
+  ctx.beginPath(); ctx.moveTo(2400, 310); ctx.lineTo(2468, 310); ctx.lineTo(2452, 356); ctx.lineTo(2416, 356); ctx.closePath(); ctx.fillStyle = P.steel; ctx.fill(); ctx.strokeStyle = P.frame; ctx.lineWidth = 1.5; ctx.stroke();
+  for (let i = 0; i < 5; i++){ ctx.fillStyle = P.accent; ctx.fillRect(2410 + i * 10, 318 + (i % 2) * 6, 8, 4); }
+  poly([[2434, 356], [2462, 440], [CAP_X - 8, CY - VH - 16]], P.frame, 3);
+  let near = 99; for (const v of S.vials) if (!v.drop) near = Math.min(near, Math.abs(v.x - CAP_X));
+  const press = near < 7 ? (1 - near / 7) * 4 : 0;
+  poly([[CAP_X, 330], [CAP_X, CY - VH - 22 + press]], P.frame, 5);
+  const hy = CY - VH - 14 + press; ctx.beginPath(); ctx.arc(CAP_X, hy, 11, 0, 7); ctx.fillStyle = P.steel; ctx.fill(); ctx.strokeStyle = P.frame; ctx.lineWidth = 1.5; ctx.stroke();
+  const a = S.t * (S.moving ? 14 : 0); for (let k = 0; k < 3; k++){ ctx.beginPath(); ctx.arc(CAP_X + Math.cos(a + k * 2.09) * 7, hy + Math.sin(a + k * 2.09) * 3, 2.2, 0, 7); ctx.fillStyle = P.frame; ctx.fill(); }
+  box(2370, CY + 10, 230, FLOOR - CY - 10, 3, steel(2370, 0, 2600, 0), P.frame, 1.5);
+  txt('Crimp capper', 2485, CY + 34, 12, P.ink, 'center', 600);
+}
+function drawAVI(back){
+  if (back){
+    box(2690, 380, 295, 92, 4, steel(2690, 0, 2985, 0), P.frame, 2);
+    box(2696, CY - 46, 283, 44, 2, A(P.surface, .9), A(P.frame, .4), 1);
+    box(2690, CY + 12, 295, FLOOR - CY - 12, 3, steel(2690, 0, 2985, 0), P.frame, 1.5);
+    txt('Automated visual inspection', 2838, 400, 13, P.ink, 'center', 600);
+    txt('spin · brake · image sequence', 2838, 418, 10, P.muted);
+    // reject bin
+    box(2990, 620, 80, FLOOR - 620, 3, A(P.bad, .12), P.bad, 2);
+    txt(`Rejects ${S.bin}`, 3030, 700, 13, P.bad, 'center', 700, true); txt('locked bin', 3030, 718, 10, P.muted);
+    return;
+  }
+  [[CAM1, 0], [CAM2, 1]].forEach(([x, i]) => {
+    box(x - 16, 472, 32, 22, 3, P.steelLo, P.frame, 1.5); box(x - 6, 494, 12, 10, 2, P.ink, null);
+    const f = S.flash[i] / .14; if (f > 0){ ctx.fillStyle = A(P.air, .45 * f); ctx.beginPath(); ctx.moveTo(x - 6, 504); ctx.lineTo(x + 6, 504); ctx.lineTo(x + 26, CY); ctx.lineTo(x - 26, CY); ctx.closePath(); ctx.fill(); }
+    txt(`Cam ${i + 1}`, x, 462, 10, P.muted, 'center', 600);
+  });
+  // reject pusher
+  const pv = S.push > 0 ? 10 : 0; box(GATE_X - 22 + pv, CY - 22, 14, 8, 2, P.bad, null);
+  txt('Reject gate', GATE_X, CY - 34, 10, P.bad, 'center', 600);
+}
+function drawLabeler(){
+  box(3085, CY + 12, 215, FLOOR - CY - 12, 3, steel(3085, 0, 3300, 0), P.frame, 1.5);
+  ctx.fillStyle = P.frame; ctx.fillRect(3100, 392, 10, CY - 392);
+  const a = S.belt / 30; ctx.beginPath(); ctx.arc(3150, 432, 28, 0, 7); ctx.fillStyle = P.surface; ctx.fill(); ctx.strokeStyle = P.frame; ctx.lineWidth = 2; ctx.stroke();
+  ctx.beginPath(); ctx.arc(3150, 432, 9, 0, 7); ctx.fillStyle = P.steelLo; ctx.fill(); for (let k = 0; k < 3; k++) poly([[3150, 432], [3150 + Math.cos(a + k * 2.09) * 9, 432 + Math.sin(a + k * 2.09) * 9]], P.steelHi, 2);
+  poly([[3170, 452], [3180, 515], [LABEL_X - 6, CY - 14]], P.accent, 2);
+  box(3205, 440, 50, 30, 3, P.steelLo, P.frame, 1.5); txt('Print', 3230, 455, 11, P.steelHi, 'center', 700, true);
+  box(3268, 450, 22, 18, 2, P.steelLo, P.frame, 1); box(3274, 468, 10, 8, 1, P.ink, null);
+  txt('Label · DataMatrix · verify', 3192, CY + 34, 12, P.ink, 'center', 600);
+}
+function drawPack(){
+  ctx.fillStyle = P.frame; ctx.fillRect(3325, CY + 8, 6, FLOOR - CY - 8); ctx.fillRect(3455, CY + 8, 6, FLOOR - CY - 8);
+  box(3320, CY + 4, 145, 8, 2, P.steel, P.frame, 1);
+  box(3338, CY - 30, 120, 34, 3, A(P.steelLo, .25), P.frame, 1.5);
+  const n = S.tray % 5; for (let i = 0; i < 5; i++){ if (i >= n) break; drawVial({x: END_X + 1, dy: 0, w: 2, rej: null, id: -1}, 3352 + i * 22, CY + 2); }
+  txt(`Tray ${S.tray % 100}/100 → case → quarantine`, 3398, CY + 34, 11, P.ink, 'center', 600);
+}
+function drawVial(v, X = v.x, BASE = CY){
+  const x = v.x; let ang = 0, lift = 0;
+  if (X === v.x && x > 688 && x < 862){ const a = sm((x - 688) / 26) * (1 - sm((x - 836) / 26)); ang = Math.PI * a; lift = -34 * a; }
+  ctx.save(); ctx.translate(X, BASE - VH / 2 + lift + v.dy); if (ang) ctx.rotate(ang);
+  const top = -VH / 2, bot = VH / 2;
+  ctx.fillStyle = A(P.glass, .32); ctx.fill(VPATH);
+  const lh = liqH(v); if (lh > 0){ ctx.save(); ctx.clip(VPATH); ctx.fillStyle = A(P.product, .85); ctx.fillRect(-VW / 2, bot - 1.5 - lh, VW, lh); ctx.restore(); }
+  if (x > 1010 && x < 1320){ const h = sm((x - 1010) / 70) * (1 - sm((x - 1230) / 90)); ctx.fillStyle = A(P.heat, .55 * h); ctx.fill(VPATH); }
+  ctx.strokeStyle = v.rej ? P.bad : P.frame; ctx.lineWidth = v.rej ? 2 : 1; ctx.stroke(VPATH);
+  ctx.fillStyle = A(P.steelHi, .6); ctx.fillRect(-VW / 2 + 2, top + 10, 1.6, VH - 14);
+  if (x >= STOP_X){ ctx.fillStyle = P.rubber; ctx.fillRect(-4, top - 3, 8, 5); }
+  if (x >= CAP_X){ ctx.fillStyle = P.steel; ctx.fillRect(-5.5, top - 3.5, 11, 8); ctx.strokeStyle = P.frame; ctx.lineWidth = .6; ctx.strokeRect(-5.5, top - 3.5, 11, 8); ctx.fillStyle = P.accent; ctx.fillRect(-4.5, top - 6, 9, 2.6); }
+  if (x >= LABEL_X){ ctx.fillStyle = P.surface; ctx.fillRect(-VW / 2, top + 11, VW, 10); ctx.fillStyle = P.accent; ctx.fillRect(-VW / 2, top + 11, VW, 1.6); if (x >= CODE_X){ ctx.fillStyle = P.ink; ctx.fillRect(-2.5, top + 14.5, 4, 4); } }
+  ctx.restore();
+  if (v.id === followId && view === 'follow'){ ctx.beginPath(); ctx.arc(X, BASE - VH / 2 + lift + v.dy, 22, 0, 7); ctx.strokeStyle = P.accent; ctx.lineWidth = 2.5 / Math.max(cam.s, .4); ctx.stroke(); }
+}
+function drawAir(){
+  if (!L.air) return;
+  ctx.strokeStyle = A(P.air, .55); ctx.lineWidth = 1.3; ctx.beginPath();
+  for (const p of AIR){ ctx.moveTo(p.x, p.y); ctx.lineTo(p.x - p.vx * .03, p.y - 11); }
+  ctx.stroke();
+}
+function drawEM(){
+  if (!L.em) return;
+  const pc = curPhase() && curPhase().id === 'vhp' ? 'paused' : `${Math.round(S.pc05)}/m³`;
+  // isokinetic probe at the fill point
+  poly([[1700, 246], [1700, 486]], P.ok, 2);
+  ctx.beginPath(); ctx.moveTo(1693, 486); ctx.lineTo(1707, 486); ctx.lineTo(1703, 500); ctx.lineTo(1697, 500); ctx.closePath(); ctx.fillStyle = P.ok; ctx.fill();
+  box(1712, 474, 112, 22, 3, P.surface, P.ok, 1.2); txt(`≥0.5 µm ${pc}`, 1768, 485, 11, P.ok, 'center', 600);
+  // active air sampler
+  box(2044, 520, 30, 20, 3, P.ok, null); txt('Air sampler', 2059, 508, 10, P.ok, 'center', 600);
+  for (const x of [1560, 1880, 2250]){ ctx.beginPath(); ctx.ellipse(x, 584, 12, 4, 0, 0, 7); ctx.fillStyle = A(P.ok, .35); ctx.fill(); ctx.strokeStyle = P.ok; ctx.lineWidth = 1.2; ctx.stroke(); }
+  txt('Settle plates', 1880, 574, 10, P.ok, 'center', 600);
+  for (const [x, y] of [[300, 360], [800, 360], [2490, 400], [3000, 330]]){ box(x - 10, y, 20, 14, 2, A(P.ok, .5), P.ok, 1); }
+  txt('Room particle counters & differential-pressure sensors', 800, 384, 11, P.ok, 'center', 600);
+}
+function drawSelection(){
+  const st = stById[S.sel]; if (!st) return;
+  const y0 = Math.max(CEIL + 4, st.ly - 26);
+  ctx.setLineDash([10 / cam.s, 6 / cam.s]); ctx.strokeStyle = P.accent; ctx.lineWidth = 2 / cam.s;
+  ctx.strokeRect(st.x0, y0, st.x1 - st.x0, FLOOR - 6 - y0); ctx.setLineDash([]);
+  if (S.hover && S.hover !== S.sel){ const h = stById[S.hover], hy = Math.max(CEIL + 4, h.ly - 26); ctx.fillStyle = A(P.accent, .06); ctx.fillRect(h.x0, hy, h.x1 - h.x0, FLOOR - 6 - hy); }
+}
+function drawLabels(){
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.font = '600 13px "Barlow Condensed","Arial Narrow",Arial,sans-serif'; ctx.textBaseline = 'middle';
+  for (const st of ST){
+    const info = INFO[st.id], sx = ((st.x0 + st.x1) / 2 - cam.cx) * cam.s + cw / 2, sy = (st.ly - cam.cy) * cam.s + ch / 2;
+    const label = st.short.toUpperCase(), tw = ctx.measureText(label).width, nw = info.num ? 20 : 0, w = tw + nw + 14;
+    if (w > (st.x1 - st.x0) * cam.s + 30 || sx < -w || sx > cw + w || sy < 0 || sy > ch) continue;
+    const x = sx - w / 2, sel = st.id === S.sel;
+    box(x, sy - 11, w, 22, 3, sel ? P.accent : A(P.surface, .93), sel ? P.accent : P.line, 1);
+    if (nw){ box(x + 4, sy - 7, 16, 14, 2, sel ? P.accentInk : P.ink, null); ctx.fillStyle = sel ? P.accent : P.bg; ctx.textAlign = 'center'; ctx.fillText(info.num, x + 12, sy + .5); }
+    ctx.fillStyle = sel ? P.accentInk : P.ink; ctx.textAlign = 'left'; ctx.fillText(label, x + 7 + nw, sy + .5);
+  }
+}
+function draw(){
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.fillStyle = P.bg; ctx.fillRect(0, 0, cv.width, cv.height);
+  const s = cam.s * dpr;
+  ctx.setTransform(s, 0, 0, s, cv.width / 2 - cam.cx * s, cv.height / 2 - cam.cy * s);
+  drawBuilding(); drawUtilities(); drawComp(); drawAutoclave();
+  drawWasher(true); drawTunnel(); drawIsolatorBack(); drawCapping(); drawAVI(true); drawLabeler(); drawPack();
+  drawConveyor();
+  for (const v of S.vials) drawVial(v);
+  drawWasher(false); drawIsolatorFront(); drawAVI(false);
+  drawAir(); drawHaze(); drawEM(); drawStrip(); drawSelection();
+  drawLabels();
+}
+
+/* ---------- UI ---------- */
+const L = {air: true, util: true, press: false, em: false};
+function selectStation(id){
+  S.sel = id; const d = INFO[id];
+  const g = d.grade;
+  $('#station').innerHTML = `
+    <p class="eyebrow">${d.num ? 'Step ' + d.num + ' of 8' : 'Supporting equipment'} · <span class="grade"><i style="background:var(--g-${g === 'N' ? 'n' : g.toLowerCase()})"></i>${d.room}</span></p>
+    <h2>${d.name}</h2>
+    <p class="what">${d.what}</p>
+    <dl class="params">${d.params.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>
+    <h3>Efficiency</h3>
+    <ul class="eff">${d.eff.map(x => `<li>${x}</li>`).join('')}</ul>`;
+  document.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-selected', String(c.dataset.id === id)));
+}
+function buildChips(){
+  const order = ['wash', 'tunnel', 'fill', 'stopper', 'cap', 'avi', 'label', 'pack', '|', 'comp', 'auto', 'isolator'];
+  $('#chips').innerHTML = order.map(id => id === '|' ? '<span class="chip-sep">Supporting</span>' :
+    `<button type="button" role="tab" class="chip ${INFO[id].num ? 'proc' : ''}" data-id="${id}" aria-selected="false"><span class="n">${INFO[id].num || 'S'}</span>${INFO[id].name.replace(' with 100 % weight control', ' + 100 % IPC')}</button>`).join('');
+  $('#chips').addEventListener('click', e => { const b = e.target.closest('.chip'); if (b) focusStation(b.dataset.id); });
+}
+function renderPhases(){
+  const list = phases(), ph = curPhase();
+  $('#phases').innerHTML = list.map((p, i) => {
+    const cls = S.mode === 'change' ? (i < S.phase ? 'done' : i === S.phase ? 'active' : '') : '';
+    const dur = p.real >= 60 ? `${Math.floor(p.real / 60)} h${p.real % 60 ? ' ' + p.real % 60 + ' min' : ''}` : `${p.real} min`;
+    const prog = cls === 'active' ? `<span class="prog"><i id="phProg" style="width:0%"></i></span>` : '';
+    return `<li class="${cls}"><span class="st"></span><span>${p.name}</span><span class="d">≈ ${dur}</span>${prog}</li>`;
+  }).join('');
+  const tot = list.reduce((a, p) => a + p.real, 0), other = STRATS[S.strat === 'conv' ? 'lean' : 'conv'].phases.reduce((a, p) => a + p.real, 0);
+  $('#coTotal').innerHTML = `${STRATS[S.strat].note}. Typical total <b>${(tot / 60).toFixed(1)} h</b> against <b>${(other / 60).toFixed(1)} h</b> for the ${S.strat === 'conv' ? 'streamlined' : 'conventional'} route.`;
+  $('#startCo').disabled = S.mode !== 'run';
+  document.querySelectorAll('#strat button').forEach(b => { b.disabled = S.mode !== 'run'; b.setAttribute('aria-pressed', String(b.dataset.v === S.strat)); });
+}
+function renderLog(){ $('#log').innerHTML = S.events.slice(0, 8).map(e => `<li class="${e.kind}"><time>${e.t}</time><span class="m"></span><span>${e.msg}</span></li>`).join(''); }
+const where = x => x < 680 ? 'infeed table' : x < 880 ? 'washer, inverted under WFI and air jets' : x < 1010 ? 'depyrogenation tunnel, infeed zone' : x < 1260 ? 'depyrogenation tunnel at 320 °C' : x < 1425 ? 'cooling under Grade A air' : x < FZ0 ? 'isolator, tare weighing' : x < FZ1 ? 'isolator, being filled' : x < GROSS_X + 15 ? 'isolator, gross weighing' : x < STOP_X + 5 ? 'isolator, stoppering' : x < 2345 ? 'leaving the isolator' : x < CAP_X + 10 ? 'capping under Grade A air' : x < 2690 ? 'transfer to inspection' : x < 2990 ? 'automated visual inspection' : x < 3085 ? 'past the reject gate' : x < 3300 ? 'labelling and serialisation' : 'tray loading';
+function ui(){
+  const ph = curPhase();
+  const st = $('#hudStatus');
+  if (S.mode === 'change'){ st.className = 'pill-change'; st.textContent = `◆ Changeover · ${ph.name}`; }
+  else if (S.stop > 0){ st.className = 'pill-stop'; st.textContent = '■ Micro-stop'; }
+  else { st.className = 'pill-run'; st.textContent = '● Producing'; }
+  $('#hudClock').textContent = `Batch ${fmtT(S.batchT)}${S.mode === 'change' && ph.dur ? ' · time-lapse' : ''}`;
+  const rate = S.moving ? Math.round(IDEAL * 60) : 0;
+  $('#hudRate').textContent = `${rate} vials/min`;
+  $('#kRate').textContent = rate;
+  const out = S.good + S.rej.weight + S.rej.particle + S.rej.cosmetic, rej = out - S.good;
+  const op = Math.max(1, S.batchT - S.changeT);
+  const Av = op / S.batchT, Pf = clamp(out / (IDEAL * op)), Q = S.good / out;
+  $('#kOee').textContent = (Av * Pf * Q * 100).toFixed(1) + ' %';
+  [['A', Av], ['P', Pf], ['Q', Q]].forEach(([k, v]) => { $('#b' + k).style.width = (v * 100).toFixed(1) + '%'; $('#t' + k).textContent = (v * 100).toFixed(0) + '%'; });
+  $('#kGood').textContent = S.good.toLocaleString('en-GB');
+  $('#kRej').textContent = rej.toLocaleString('en-GB');
+  $('#kRejS').textContent = `wt ${S.rej.weight} · part ${S.rej.particle} · cosm ${S.rej.cosmetic}`;
+  const vhp = ph && ph.id === 'vhp';
+  $('#pc05').textContent = vhp || (ph && ph.id !== 'clear') ? 'not in operation' : Math.round(S.pc05).toLocaleString('en-GB');
+  $('#g05').style.width = (vhp ? 0 : clamp(Math.log10(1 + S.pc05) / Math.log10(3521)) * 100) + '%';
+  $('#readout').textContent = readout();
+  const pp = document.getElementById('phProg'); if (pp && ph && ph.dur) pp.style.width = (clamp(S.phaseT / ph.dur) * 100).toFixed(0) + '%';
+  if (ph && ph.id === 'clear' && pp) pp.style.width = (100 - Math.min(100, S.vials.length / 1.25)).toFixed(0) + '%';
+  // spark
+  const ws = S.weights, y = w => 48 - (w - 2) / 0.05 * 40, x = i => 34 + i * (280 / 59);
+  const pts = ws.map((w, i) => `${x(i).toFixed(1)},${clamp(y(w), 4, 92).toFixed(1)}`).join(' ');
+  $('#spark').innerHTML = `<rect class="band" x="34" y="${y(2.02)}" width="280" height="${y(1.98) - y(2.02)}"></rect>
+    <line class="lim" x1="34" x2="314" y1="${y(2.04)}" y2="${y(2.04)}"></line><line class="lim" x1="34" x2="314" y1="${y(1.96)}" y2="${y(1.96)}"></line>
+    <line class="tgt" x1="34" x2="314" y1="${y(2)}" y2="${y(2)}"></line>
+    <text class="ax" x="0" y="${y(2.04) + 3}">2.040</text><text class="ax" x="0" y="${y(2) + 3}">2.000</text><text class="ax" x="0" y="${y(1.96) + 3}">1.960</text>
+    <polyline class="pl" points="${pts}"></polyline>
+    ${ws.map((w, i) => Math.abs(w - 2) > .04 || i === ws.length - 1 ? `<circle class="pt ${Math.abs(w - 2) > .04 ? 'bad' : ''}" cx="${x(i).toFixed(1)}" cy="${clamp(y(w), 4, 92).toFixed(1)}" r="3"></circle>` : '').join('')}`;
+  if (view === 'follow'){ const v = getFollow(); if (v) $('#hudFollow').textContent = `Vial ${v.id} · ${where(v.x)}${v.w ? ' · ' + v.w.toFixed(3) + ' g' : ''}${v.rej ? ' · flagged: ' + v.rej : ''}`; }
+}
+
+/* support cards and levers */
+const CARDS = [
+  {t:'Clean-in-place (CIP)', c:'cip', steps:['Pre-rinse', 'Alkaline wash', 'Rinse', 'Final WFI rinse'], d:'Spray balls and turbulent flow clean the vessel and stainless lines without taking them apart. Coverage is proven with a riboflavin test; the cycle ends when return conductivity and TOC meet the rinse limits.', k:'Typical: 1 % NaOH at 70–80 °C · final rinse conductivity ≤ 1.3 µS/cm', go:'comp'},
+  {t:'Steam-in-place (SIP)', c:'steam', steps:['Air purge', 'Heat-up', 'Hold ≥ 121 °C', 'Sterile-air cool'], d:'Clean steam sterilises the vessel, filters and transfer line in place. Thermocouples sit at the coldest points, usually low drains, and steam traps remove condensate so every surface reaches temperature.', k:'Coldest point ≥ 121 °C · F₀ recorded · filter integrity tested afterwards', go:'comp'},
+  {t:'VHP bio-decontamination', c:'vhp', steps:['Condition', 'Gas', 'Dwell', 'Aerate'], d:'Vaporised hydrogen peroxide is circulated through the closed isolator to kill microorganisms on every exposed surface, then removed until the residual is safe for product and people.', k:'≥ 6-log kill of G. stearothermophilus BIs · aeration to < 1 ppm', go:'isolator'},
+  {t:'Dry-heat depyrogenation', c:'heat', steps:['Heat', 'Hold', 'Cool under Grade A'], d:'Hot air at around 300–350 °C sterilises the glass and destroys bacterial endotoxins that steam cannot remove. Validation uses endotoxin indicators spiked onto vials.', k:'≥ 3-log endotoxin reduction · Grade A cooling zone', go:'tunnel'},
+  {t:'Sterile filtration & integrity testing', c:'product', steps:['Pre-use test', 'Filter', 'Post-use test'], d:'Two 0.22 µm filters in series make the product sterile. Each filter is integrity tested by bubble point, diffusion or pressure hold, before use after sterilisation and again after use.', k:'Bioburden ≤ 10 CFU/100 mL before filtration · PUPSIT where risk-assessed', go:'comp'},
+  {t:'WFI & clean steam', c:'wfi', steps:['Generate', 'Store hot', 'Circulate'], d:'Water for injections comes from distillation or, since Ph. Eur. 2017, membrane systems. It is stored and circulated hot in a sanitary loop so nothing can grow; clean steam condensate meets the same quality.', k:'Conductivity ≤ 1.3 µS/cm · TOC ≤ 500 ppb · endotoxin < 0.25 EU/mL', go:'util'},
+  {t:'Environmental monitoring', c:'ok', steps:['Particles', 'Air samples', 'Plates', 'Trending'], d:'Grade A is watched continuously for airborne particles at the fill point, with active air samples, settle plates and glove contact plates for viable organisms. Room pressures are logged against alarms.', k:'Grade A ≥ 0.5 µm: 3,520/m³ · viable: no growth', go:'em'},
+  {t:'HVAC & pressure cascade', c:'air', steps:['AHU', 'HEPA', 'Cascade'], d:'Filtered air flows from the cleanest spaces to the less clean ones. The isolator sits above its Grade D room, which sits above the corridors, so any leak blows outwards, away from open product.', k:'≈ 10–15 Pa between grades · H14 terminal HEPA filters', go:'press'},
+];
+const LEVERS = [
+  ['Isolator instead of RABS', 'Grade A behind glass needs only a Grade D room around it, not Grade B. Less air to condition, simpler gowning, fewer people in the core.', 'Contamination control + energy'],
+  ['Single-use fluid path', 'Pre-sterilised bags, tubing and needles swap in with aseptic connectors. No CIP/SIP of the fill path and no carry-over between products.', 'Faster changeover'],
+  ['Rapid VHP with catalytic aeration', 'Optimised gassing and catalytic converters cut the aeration phase that dominates conventional cycles.', 'Faster changeover'],
+  ['100 % IPC with dose correction', 'Weighing every vial and trimming each pump keeps the fill on target, so overfill and product giveaway shrink.', 'Yield'],
+  ['Ready-to-use components', 'RTU stoppers via an RTP, and nested RTU vials for smaller batches, remove washing and sterilising steps from the line.', 'Fewer steps'],
+  ['Automated inspection and digital records', 'Machine vision at line speed, an electronic batch record and live OEE make problems visible and release faster.', 'Throughput + release time'],
+  ['Utility efficiency', 'Heat recovery on the tunnel exhaust, standby modes, recirculated wash water and a well-insulated hot WFI loop cut energy and water use.', 'Energy + water'],
+];
+function buildSections(){
+  $('#cards').innerHTML = CARDS.map((c, i) => `<article class="card"><div class="top"><h3>${c.t}</h3><span class="sw" style="background:var(--${c.c})"></span></div>
+    <ol class="steps">${c.steps.map(s => `<li>${s}</li>`).join('')}</ol><p>${c.d}</p><p class="crit">${c.k}</p>
+    <button class="btn" type="button" data-card="${i}">Show on the line</button></article>`).join('');
+  $('#cards').addEventListener('click', e => { const b = e.target.closest('[data-card]'); if (!b) return; const c = CARDS[+b.dataset.card];
+    if (c.go === 'util'){ setLayer('util', true); focusRect({x0: 20, x1: 1300, cy: 260, h: 560}); }
+    else if (c.go === 'em'){ setLayer('em', true); focusStation('fill'); }
+    else if (c.go === 'press'){ setLayer('press', true); setLayer('air', true); setView('overview'); }
+    else focusStation(c.go);
+    document.querySelector('.stage').scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block: 'center'}); });
+  $('#levers').innerHTML = LEVERS.map(([b, s, e]) => `<div class="lever"><em>${e}</em><b>${b}</b><span>${s}</span></div>`).join('');
+}
+function setLayer(k, on){ L[k] = on; const b = document.querySelector(`[data-l="${k}"]`); if (b) b.setAttribute('aria-pressed', String(on)); }
+
+/* ---------- events ---------- */
+$('#play').addEventListener('click', () => { S.playing = !S.playing; $('#play').textContent = S.playing ? 'Pause' : 'Play'; });
+$('#speed').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; S.speed = +b.dataset.v; document.querySelectorAll('#speed button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); });
+$('#view').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; if (b.dataset.v === 'follow') followId = null; if (b.dataset.v === 'tour') tourT = 0; setView(b.dataset.v); });
+$('#zin').addEventListener('click', () => zoomAt(cw / 2, ch / 2, cam.s * 1.35));
+$('#zout').addEventListener('click', () => zoomAt(cw / 2, ch / 2, cam.s / 1.35));
+$('#layers').addEventListener('click', e => { const b = e.target.closest('[data-l]'); if (b) setLayer(b.dataset.l, !L[b.dataset.l]); });
+$('#strat').addEventListener('click', e => { const b = e.target.closest('button'); if (!b || S.mode !== 'run') return; S.strat = b.dataset.v; renderPhases(); });
+$('#startCo').addEventListener('click', () => { if (!S.playing){ S.playing = true; $('#play').textContent = 'Pause'; } startChangeover(); });
+
+const ptrs = new Map(); let moved = 0, pinch = null;
+const rel = e => { const r = cv.getBoundingClientRect(); return {x: e.clientX - r.left, y: e.clientY - r.top}; };
+cv.addEventListener('pointerdown', e => { cv.setPointerCapture(e.pointerId); ptrs.set(e.pointerId, rel(e)); moved = 0;
+  if (ptrs.size === 2){ const [a, b] = [...ptrs.values()]; pinch = {d: Math.hypot(a.x - b.x, a.y - b.y), s: cam.s}; } });
+cv.addEventListener('pointermove', e => {
+  const p = rel(e);
+  if (!ptrs.has(e.pointerId)){ const h = hit(p.x, p.y); S.hover = h; cv.classList.toggle('pointing', !!h); return; }
+  const q = ptrs.get(e.pointerId), dx = p.x - q.x, dy = p.y - q.y;
+  if (ptrs.size === 1){ moved += Math.abs(dx) + Math.abs(dy); if (moved > 5){ if (view !== 'free') setView('free'); cv.classList.add('dragging'); cam.cx -= dx / cam.s; cam.cy -= dy / cam.s; clampCam(cam); Object.assign(tgt, cam); } }
+  else if (ptrs.size === 2 && pinch){ ptrs.set(e.pointerId, p); const [a, b] = [...ptrs.values()]; moved = 99; zoomAt((a.x + b.x) / 2, (a.y + b.y) / 2, pinch.s * Math.hypot(a.x - b.x, a.y - b.y) / pinch.d); return; }
+  ptrs.set(e.pointerId, p);
+});
+const end = e => { const p = rel(e); if (ptrs.size === 1 && moved <= 5 && e.type === 'pointerup'){ const h = hit(p.x, p.y); if (h) focusStation(h); } ptrs.delete(e.pointerId); if (ptrs.size < 2) pinch = null; cv.classList.remove('dragging'); };
+cv.addEventListener('pointerup', end); cv.addEventListener('pointercancel', end);
+cv.addEventListener('pointerleave', () => { S.hover = null; });
+cv.addEventListener('wheel', e => { if (!(e.ctrlKey || e.metaKey)) return; e.preventDefault(); const p = rel(e); zoomAt(p.x, p.y, cam.s * Math.exp(-clamp(e.deltaY, -60, 60) * 0.006)); }, {passive: false});
+
+/* ---------- boot ---------- */
+buildChips(); buildSections(); selectStation('fill'); renderPhases(); renderLog();
+if (!S.playing) $('#play').textContent = 'Play';
+setView(view);
+resize(); new ResizeObserver(() => { resize(); }).observe(cv);
+computeTarget(); Object.assign(cam, tgt);
+let last = performance.now(), uiT = 0;
+function frame(now){
+  const dt = Math.min(0.05, (now - last) / 1000); last = now;
+  if (S.playing){ update(dt * S.speed); if (view === 'tour') tourT += dt; }
+  computeTarget();
+  if (view !== 'free'){ const k = 1 - Math.exp(-dt * (view === 'tour' ? 6 : 3.2)); cam.cx += (tgt.cx - cam.cx) * k; cam.cy += (tgt.cy - cam.cy) * k; cam.s += (tgt.s - cam.s) * k; }
+  clampCam(cam);
+  draw();
+  uiT -= dt; if (uiT <= 0){ ui(); uiT = 0.25; }
+  requestAnimationFrame(frame);
+}
+ui(); requestAnimationFrame(frame);
+})();
+</script>
+
+</body>
+</html>
