@@ -188,6 +188,78 @@ button{font:inherit;color:inherit}
 .lever em{font-style:normal;font:500 .72rem var(--f-mono);color:var(--accent);text-transform:uppercase;letter-spacing:.07em}
 footer{padding-block:28px 40px;color:var(--muted);font-size:.82rem;display:grid;gap:6px;max-width:90ch}
 @media (prefers-reduced-motion: reduce){.phases li.active .st{animation:none;border-top-color:var(--vhp)}}
+.jump{display:flex;flex-wrap:wrap;gap:6px 18px;padding-block:0 14px;font:500 .78rem var(--f-mono);text-transform:uppercase;letter-spacing:.07em}
+.jump a{color:var(--accent);text-decoration:none;border-bottom:1px solid transparent}
+.jump a:hover{border-bottom-color:var(--accent)}
+.sub{margin-top:14px}
+/* floor plan */
+.plan-tools{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.plan-grid{display:grid;grid-template-columns:minmax(0,1.9fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:980px){.plan-grid{grid-template-columns:minmax(0,1fr)}}
+.plan-box{background:var(--surface);border:1px solid var(--line);border-radius:6px;min-width:0}
+.plan-scroll{overflow-x:auto}
+#planSvg{display:block;width:100%;min-width:760px;height:auto}
+#planSvg .rf{fill:var(--surface-2);stroke:var(--ink);stroke-width:2.5}
+#planSvg .gA{fill:var(--g-a)} #planSvg .gC{fill:var(--g-c)} #planSvg .gD{fill:var(--g-d)} #planSvg .gN{fill:var(--g-n)} #planSvg .gT{fill:var(--steel)}
+#planSvg .rf.g{fill-opacity:.2}
+#planSvg.no-grade .rf.g{fill:var(--surface);fill-opacity:1}
+#planSvg .hatch{fill:url(#hatch);pointer-events:none}
+#planSvg .hatch-line{stroke:var(--muted);stroke-width:1.2;opacity:.45}
+#planSvg .room{cursor:pointer}
+#planSvg .room:hover .rf{stroke:var(--accent)}
+#planSvg .room:focus{outline:none}
+#planSvg .room:focus-visible .rf,#planSvg .room.sel .rf{stroke:var(--accent);stroke-width:5}
+#planSvg .rn{fill:var(--ink);font:600 13px var(--f-display);text-transform:uppercase;letter-spacing:.04em;pointer-events:none}
+#planSvg .rp{fill:var(--muted);font:500 10.5px var(--f-mono);pointer-events:none}
+#planSvg.no-pa .rp{display:none}
+#planSvg .eq{fill:var(--steel);stroke:var(--frame);stroke-width:1.5;pointer-events:none}
+#planSvg .eq.iso{fill:var(--g-a);fill-opacity:.3;stroke:var(--g-a);stroke-width:2.5}
+#planSvg .eq.heat{fill:var(--heat);fill-opacity:.35;stroke:var(--heat)}
+#planSvg .eq.hood{fill:none;stroke:var(--g-a);stroke-dasharray:5 3;stroke-width:1.5}
+#planSvg .eq.bad{fill:var(--bad);fill-opacity:.25;stroke:var(--bad)}
+#planSvg .eq.vhp{fill:var(--vhp);fill-opacity:.3;stroke:var(--vhp)}
+#planSvg .eq.wfi{fill:var(--wfi);fill-opacity:.25;stroke:var(--wfi)}
+#planSvg .eq.port{fill:var(--surface);stroke:var(--frame);stroke-width:1.5}
+#planSvg .conv{stroke:var(--frame);stroke-width:4;fill:none;pointer-events:none}
+#planSvg .el{fill:var(--muted);font:500 9.5px var(--f-body);pointer-events:none}
+#planSvg .door{stroke:var(--surface);stroke-width:5;pointer-events:none}
+#planSvg .fl{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+#planSvg .f-prod{stroke:var(--product)} #planSvg .f-mat{stroke:var(--wfi)} #planSvg .f-pers{stroke:var(--ok);stroke-dasharray:7 5} #planSvg .f-waste{stroke:var(--bad);stroke-dasharray:2 5}
+#planSvg .mk-prod{fill:var(--product)} #planSvg .mk-mat{fill:var(--wfi)} #planSvg .mk-pers{fill:var(--ok)} #planSvg .mk-waste{fill:var(--bad)}
+#planSvg.hide-prod .g-prod,#planSvg.hide-mat .g-mat,#planSvg.hide-pers .g-pers,#planSvg.hide-waste .g-waste{display:none}
+@media (prefers-reduced-motion: no-preference){#planSvg .fl.anim{stroke-dasharray:10 8;animation:flow 1.4s linear infinite}#planSvg .f-pers.anim{stroke-dasharray:7 5}}
+@keyframes flow{to{stroke-dashoffset:-18}}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;padding:10px 14px;border-top:1px solid var(--line);font:500 .74rem var(--f-mono);color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:2px}
+.legend b{display:inline-block;width:22px;height:0;border-top:3px solid}
+.room-info{display:grid;gap:12px}
+.room-info .meta{display:flex;flex-wrap:wrap;gap:6px}
+.badge{font:600 .72rem var(--f-mono);padding:3px 8px;border-radius:3px;background:var(--surface-2);color:var(--ink)}
+.req{margin:0;padding:0;list-style:none;display:grid;gap:8px}
+.req li{padding-left:16px;position:relative;font-size:.9rem}
+.req li::before{content:"";position:absolute;left:0;top:.55em;width:7px;height:7px;background:var(--accent);border-radius:1px}
+/* regulations */
+.fw{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.fw .card dl{margin:0;display:grid;gap:8px}
+.fw dt{font:500 .68rem var(--f-mono);text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.fw dd{margin:0;font-size:.88rem}
+.fw .rg{font:600 .7rem var(--f-mono);letter-spacing:.07em;color:var(--accent);text-transform:uppercase}
+.filters{display:flex;flex-wrap:wrap;gap:6px}
+.tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+table.reg{border-collapse:collapse;width:100%;min-width:860px;font-size:.86rem}
+table.reg th,table.reg td{text-align:left;vertical-align:top;padding:10px 12px;border-bottom:1px solid var(--line)}
+table.reg thead th{font:600 .7rem var(--f-mono);text-transform:uppercase;letter-spacing:.07em;color:var(--muted);background:var(--surface-2);position:sticky;top:0}
+table.reg tbody th{font-family:var(--f-display);font-size:1.02rem;font-weight:600;width:15%}
+table.reg td ul{margin:0;padding-left:16px;display:grid;gap:4px}
+table.reg td .ref{display:block;margin-top:5px;font:400 .72rem var(--f-mono);color:var(--muted)}
+table.reg td.line{width:15%;color:var(--muted)}
+table.reg td.line .btn{margin-top:6px;min-height:28px;padding:3px 9px;font-size:.78rem}
+table.lim{min-width:760px;font-variant-numeric:tabular-nums}
+table.lim td,table.lim th{white-space:nowrap}
+table.lim td.n{font-family:var(--f-mono);text-align:right}
+table.lim .gsw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px}
+.note{font-size:.82rem;color:var(--muted);max-width:90ch}
 </style>
 
 <header class="masthead wrap">
@@ -195,8 +267,9 @@ footer{padding-block:28px 40px;color:var(--muted);font-size:.82rem;display:grid;
   <h1>Aseptic Vial Filling Line</h1>
   <p class="lead">Follow a vial from <b>washing and depyrogenation</b> through a <b>Grade A isolator</b> where it is filled, weighed and stoppered, then <b>capped, inspected and serialised</b>. The utilities and clean-room systems that keep it sterile run alongside. Run a <b>changeover</b> to watch CIP, SIP and VHP decontamination, and compare a conventional set-up with a streamlined one.</p>
 </header>
+<nav class="wrap jump" aria-label="Sections"><a href="#line">Process line</a><a href="#plan">Floor plan</a><a href="#regs">Regulations</a><a href="#supH">Supporting processes</a><a href="#levH">Efficiency</a></nav>
 
-<section class="wrap" aria-label="Filling line simulation">
+<section class="wrap" id="line" aria-label="Filling line simulation">
   <div class="toolbar">
     <div class="grp">
       <button class="btn" id="play" type="button">Pause</button>
@@ -271,6 +344,44 @@ footer{padding-block:28px 40px;color:var(--muted);font-size:.82rem;display:grid;
   </div>
 </section>
 
+<section class="wrap section" id="plan" aria-labelledby="planH">
+  <h2 id="planH">Shop floor layout</h2>
+  <p class="intro">A plan view of the same suite. Clean rooms sit in a core wrapped by unclassified support areas. People and materials enter only through airlocks, and air pressure steps down from the filling room outwards, so any leak flows away from open product. Click a room to see what happens there and which rules apply.</p>
+  <div class="plan-tools" id="planTools" role="group" aria-label="Plan layers">
+    <button class="tog" type="button" data-p="grade" aria-pressed="true"><span class="dot"></span>Clean-room grades</button>
+    <button class="tog" type="button" data-p="pa" aria-pressed="true"><span class="dot"></span>Pressures</button>
+    <button class="tog" type="button" data-p="prod" aria-pressed="true"><span class="dot"></span>Product &amp; vials</button>
+    <button class="tog" type="button" data-p="mat" aria-pressed="false"><span class="dot"></span>Materials</button>
+    <button class="tog" type="button" data-p="pers" aria-pressed="true"><span class="dot"></span>Personnel</button>
+    <button class="tog" type="button" data-p="waste" aria-pressed="false"><span class="dot"></span>Waste</button>
+  </div>
+  <div class="plan-grid">
+    <div class="plan-box">
+      <div class="plan-scroll"><svg id="planSvg" viewBox="0 0 1200 800" role="img" aria-label="Floor plan of the aseptic filling suite with clean-room grades, pressures and flows of product, materials, personnel and waste."></svg></div>
+      <div class="legend" id="planLegend"></div>
+    </div>
+    <article class="panel room-info" id="roomInfo" aria-live="polite"></article>
+  </div>
+</section>
+
+<section class="wrap section" id="regs" aria-labelledby="regH">
+  <h2 id="regH">Regulations and what they require</h2>
+  <p class="intro">A sterile injectable sold in Europe and the United States has to satisfy two rule books that agree on intent but differ in wording and in a few numbers. EU GMP Annex 1, revised in 2022, is shared word for word with PIC/S and closely mirrored by WHO, so it reaches well beyond Europe. FDA works from 21 CFR Part 211, its 2004 aseptic processing guidance and the USP chapters.</p>
+  <div class="fw" id="fw"></div>
+  <h3 class="sub">Requirements by topic</h3>
+  <div class="filters" id="regFilter" role="group" aria-label="Filter topics">
+    <button class="tog" type="button" data-c="all" aria-pressed="true"><span class="dot"></span>All</button>
+    <button class="tog" type="button" data-c="fac" aria-pressed="false"><span class="dot"></span>Facility &amp; air</button>
+    <button class="tog" type="button" data-c="ster" aria-pressed="false"><span class="dot"></span>Sterilisation &amp; utilities</button>
+    <button class="tog" type="button" data-c="proc" aria-pressed="false"><span class="dot"></span>Process, testing &amp; release</button>
+    <button class="tog" type="button" data-c="data" aria-pressed="false"><span class="dot"></span>Systems, data &amp; supply chain</button>
+  </div>
+  <div class="tbl-scroll"><table class="reg" id="regTable"><thead><tr><th scope="col">Topic</th><th scope="col">EU · PIC/S · WHO</th><th scope="col">US FDA · USP</th><th scope="col">On this line</th></tr></thead><tbody></tbody></table></div>
+  <h3 class="sub">Clean-room limits side by side</h3>
+  <div class="tbl-scroll"><table class="reg lim" id="limTable"></table></div>
+  <p class="note">EU figures: Annex 1 (2022) Table 1 (classification), Table 5 (total particle monitoring) and Table 6 (viable action limits). The ≥ 5.0 µm limit of 29/m³ in Grade A is a monitoring limit for trending, not a classification limit. FDA figures are the in-operation action levels in Table 1 of the 2004 aseptic processing guidance. Viable limits are CFU per m³ of air, per 90 mm settle plate over 4 h, and per 55 mm contact plate or glove print.</p>
+</section>
+
 <section class="wrap section" aria-labelledby="supH">
   <h2 id="supH">Supporting processes</h2>
   <p class="intro">The fill itself takes seconds per vial. Most of the sterility assurance comes from the systems around it: cleaning, sterilising, decontaminating, the water and steam they use, and the air and monitoring that prove the critical zone stayed clean.</p>
@@ -284,6 +395,7 @@ footer{padding-block:28px 40px;color:var(--muted);font-size:.82rem;display:grid;
 
 <footer class="wrap">
   <p>Illustrative simulation. Line rate, counts, weights and particle readings are generated, and changeover phases run in time-lapse with typical real durations shown beside them. Parameters follow common practice and EU GMP Annex 1 (2022); a real line runs to its own validated values.</p>
+  <p>Regulatory summary as of November 2026, written for orientation. Check the current text of each regulation, guidance and pharmacopoeia chapter before relying on it.</p>
 </footer>
 
 <script>
@@ -323,18 +435,18 @@ const INFO = {
     what:'A double-door steam steriliser for change parts, tools and stainless filter housings. The doors are interlocked so the clean side never opens to the loading side while a cycle is incomplete.',
     params:[['Cycle','Saturated steam, 121 °C, ≥ 15 min at the coldest point'],['Air removal','Pre-vacuum pulses; daily Bowie-Dick test'],['Release','F₀ calculated per load; BIs at mapped cold spots']],
     eff:['Validated fixed load patterns take decisions out of loading.','Sterile parts move into the isolator through an RTP without re-exposure.']},
-  wash: {num:'1', name:'Vial washer', grade:'D', room:'Filling hall · Grade D',
+  wash: {num:'1', name:'Vial washer', grade:'D', room:'Washing room · Grade D',
     what:'A rotary washer grips each vial, turns it neck-down and blasts the inside and outside with alternating jets of recirculated water, fresh WFI and filtered compressed air.',
     params:[['Final rinse','Fresh WFI'],['Drying air','0.2 µm filtered, oil-free'],['Performance','Particle removal shown by spiking studies']],
     eff:['Early rinses reuse filtered water; only the final rinse draws fresh WFI.','Servo grippers change format by recipe, without tools.']},
-  tunnel: {num:'2', name:'Depyrogenation tunnel', grade:'A', room:'Grade A air inside · discharges into the isolator',
+  tunnel: {num:'2', name:'Depyrogenation tunnel', grade:'A', room:'Grade A air inside · runs from the Grade D washing room into the Grade C filling room',
     what:'Vials pass through a hot-air tunnel that sterilises the glass and destroys bacterial endotoxins, then cool under Grade A air before they enter the isolator.',
     params:[['Heating zone','≈ 300–350 °C'],['Target','≥ 3-log endotoxin reduction'],['Cooling zone','Grade A unidirectional air to near room temperature'],['Monitoring','Belt speed, zone temperatures, pressure balance']],
     eff:['Heat recovery on the exhaust and standby modes between batches cut energy use.','For small batches, ready-to-use nested vials skip washing and depyrogenation entirely.']},
-  isolator: {num:'', name:'Filling isolator', grade:'A', room:'Grade A inside · Grade D background',
+  isolator: {num:'', name:'Filling isolator', grade:'A', room:'Grade A inside · Grade C background (open isolator)',
     what:'A sealed stainless-steel and glass enclosure keeps people out of the critical zone. Operators reach in only through glove ports, HEPA-filtered air flows down over the open vials, and vaporised hydrogen peroxide (VHP) decontaminates every surface before each campaign.',
     params:[['Airflow','Unidirectional, 0.36–0.54 m/s at working height'],['Overpressure','≈ +50 Pa to the room'],['Decontamination','VHP, ≥ 6-log reduction of G. stearothermophilus BIs'],['Gloves','Integrity tested before and after each campaign']],
-    eff:['A Grade D background replaces a Grade B clean room: less air to treat, simpler gowning, fewer monitoring points.','Fewer open interventions mean fewer contamination risks and fewer stops.']},
+    eff:['An open isolator needs a Grade C room around it, and a closed one only Grade D, where a RABS needs Grade B: less air to treat, simpler gowning, fewer monitoring points.','Fewer open interventions mean fewer contamination risks and fewer stops.']},
   fill: {num:'3', name:'Filling with 100 % weight control', grade:'A', room:'Inside the Grade A isolator',
     what:'Eight peristaltic pumps dose product through single-use tubing into needles that travel with the vials. Every vial is weighed empty and full. A vial outside the limits is flagged for rejection, and a pump that drifts has its dose corrected automatically.',
     params:[['Fill target','2.000 g (2.0 mL)'],['IPC limits','± 2 % of target'],['Check','100 % tare and gross weighing'],['Rated speed','300 vials/min']],
@@ -343,7 +455,7 @@ const INFO = {
     what:'Ready-to-use stoppers enter through a rapid transfer port (RTP) without breaking isolation. A vibratory bowl orients them and a placement head presses one into every vial. A camera confirms each stopper is present and seated.',
     params:[['Stoppers','Washed, siliconised and sterilised by the supplier'],['Transfer','RTP alpha/beta port; bag docked from outside'],['Check','100 % stopper presence and height']],
     eff:['Ready-to-use stoppers take the stopper washer and its autoclave cycle off the critical path.']},
-  cap: {num:'5', name:'Capping', grade:'A', room:'Grade A air supply · Grade D room',
+  cap: {num:'5', name:'Capping', grade:'A', room:'Grade A air supply · Grade C filling room',
     what:'An aluminium flip-off cap is crimped over every stopper. Until the cap is on the vial is not fully sealed, so capping runs under a Grade A air supply.',
     params:[['Seal','Aluminium crimp with flip-off cover'],['Checks','Stopper height before crimp, cap presence after'],['Option','Residual seal force monitoring']],
     eff:['Servo crimp heads change format by recipe and record every crimp.']},
@@ -353,7 +465,7 @@ const INFO = {
     eff:['Runs at line speed and is qualified against a known defect set, with fewer false rejects than manual booths.','Defect images are trended back to the station that caused them.']},
   label: {num:'7', name:'Labelling & serialisation', grade:'N', room:'Controlled, not classified',
     what:'A wrap-around label is applied and a printer adds a 2D DataMatrix code carrying product code, serial number, batch and expiry. A camera reads every code before the vial moves on.',
-    params:[['Code','GS1 DataMatrix: GTIN, serial, batch, expiry'],['Verification','100 % vision check'],['Regulation','EU FMD, US DSCSA']],
+    params:[['Code','GS1 DataMatrix: GTIN, serial, batch, expiry'],['Verification','100 % vision check'],['Regulation','EU FMD (code and tamper seal on the carton), US DSCSA']],
     eff:['Serial numbers are aggregated to trays and cases, so shipments are traced without opening packs.']},
   pack: {num:'8', name:'Tray loading & packing', grade:'N', room:'Controlled, not classified',
     what:'Finished vials are collected into trays and cases, linked to their serial numbers and moved to quarantine until QA releases the batch.',
@@ -593,7 +705,7 @@ const VPATH = (() => { const p = new Path2D(), hw = VW / 2, t = -VH / 2, b = VH 
 const liqH = v => { const ff = clamp((v.x - FZ0) / (FZ1 - FZ0)); return (VH - 9) * 0.62 * ff * (v.w ? v.w / 2 : 1); };
 
 /* ---------- scene ---------- */
-const ROOMS = [{x0:22, x1:545, g:'C', name:'Compounding', pa:'+30 Pa'}, {x0:545, x1:2640, g:'D', name:'Filling hall', pa:'+15 Pa'}, {x0:2640, x1:W - 22, g:'N', name:'Inspection & packing', pa:'+5 Pa'}];
+const ROOMS = [{x0:22, x1:545, g:'C', name:'Compounding', pa:'+30 Pa'}, {x0:545, x1:985, g:'D', name:'Washing', pa:'+15 Pa'}, {x0:985, x1:2640, g:'C', name:'Aseptic filling', pa:'+30 Pa'}, {x0:2640, x1:W - 22, g:'N', name:'Inspection & packing', pa:'+5 Pa'}];
 const AZONES = [{x0:1010, x1:1420, y0:385, y1:CY + 40, name:'Tunnel: Grade A air'}, {x0:1440, x1:2340, y0:245, y1:590, name:'Isolator interior: Grade A · ≈ +50 Pa to room'}, {x0:2380, x1:2590, y0:288, y1:CY + 10, name:'Capping: Grade A air'}];
 
 function drawBuilding(){
@@ -603,7 +715,7 @@ function drawBuilding(){
     for (const r of ROOMS){ ctx.fillStyle = A(P[GRADE[r.g]], .13); ctx.fillRect(r.x0, CEIL, r.x1 - r.x0, FLOOR - CEIL); txt(`${GRADE_NAME[r.g]} · ${r.pa}`, (r.x0 + r.x1) / 2, FLOOR - 22, 20, P[GRADE[r.g]], 'center', 700, true); }
   }
   ctx.fillStyle = P.wall; ctx.fillRect(14, CEIL - 9, W - 28, 10); ctx.fillRect(14, FLOOR, W - 28, 12); ctx.fillRect(14, 8, 9, FLOOR); ctx.fillRect(W - 23, 8, 9, FLOOR); ctx.fillRect(14, 6, W - 28, 9);
-  ctx.fillRect(540, CEIL, 10, FLOOR - CEIL);
+  ctx.fillRect(540, CEIL, 10, FLOOR - CEIL); ctx.fillRect(980, CEIL, 10, 368 - CEIL); ctx.fillRect(980, CY + 44, 10, FLOOR - CY - 44);
   ctx.fillRect(2635, CEIL, 10, CY - 50 - CEIL); ctx.fillRect(2635, CY + 16, 10, FLOOR - CY - 16);
   txt('TECHNICAL AREA · UTILITIES', 36, 28, 13, P.muted, 'left', 600, true);
   // room HEPA terminals
@@ -1017,10 +1129,10 @@ const CARDS = [
   {t:'Sterile filtration & integrity testing', c:'product', steps:['Pre-use test', 'Filter', 'Post-use test'], d:'Two 0.22 µm filters in series make the product sterile. Each filter is integrity tested by bubble point, diffusion or pressure hold, before use after sterilisation and again after use.', k:'Bioburden ≤ 10 CFU/100 mL before filtration · PUPSIT where risk-assessed', go:'comp'},
   {t:'WFI & clean steam', c:'wfi', steps:['Generate', 'Store hot', 'Circulate'], d:'Water for injections comes from distillation or, since Ph. Eur. 2017, membrane systems. It is stored and circulated hot in a sanitary loop so nothing can grow; clean steam condensate meets the same quality.', k:'Conductivity ≤ 1.3 µS/cm · TOC ≤ 500 ppb · endotoxin < 0.25 EU/mL', go:'util'},
   {t:'Environmental monitoring', c:'ok', steps:['Particles', 'Air samples', 'Plates', 'Trending'], d:'Grade A is watched continuously for airborne particles at the fill point, with active air samples, settle plates and glove contact plates for viable organisms. Room pressures are logged against alarms.', k:'Grade A ≥ 0.5 µm: 3,520/m³ · viable: no growth', go:'em'},
-  {t:'HVAC & pressure cascade', c:'air', steps:['AHU', 'HEPA', 'Cascade'], d:'Filtered air flows from the cleanest spaces to the less clean ones. The isolator sits above its Grade D room, which sits above the corridors, so any leak blows outwards, away from open product.', k:'≈ 10–15 Pa between grades · H14 terminal HEPA filters', go:'press'},
+  {t:'HVAC & pressure cascade', c:'air', steps:['AHU', 'HEPA', 'Cascade'], d:'Filtered air flows from the cleanest spaces to the less clean ones. The isolator sits above its Grade C room, which sits above the Grade D areas and corridors, so any leak blows outwards, away from open product.', k:'≈ 10–15 Pa between grades · H14 terminal HEPA filters', go:'press'},
 ];
 const LEVERS = [
-  ['Isolator instead of RABS', 'Grade A behind glass needs only a Grade D room around it, not Grade B. Less air to condition, simpler gowning, fewer people in the core.', 'Contamination control + energy'],
+  ['Isolator instead of RABS', 'Grade A behind glass needs a Grade C room around it (Grade D for a closed isolator), not the Grade B a RABS needs. Less air to condition, simpler gowning, fewer people in the core.', 'Contamination control + energy'],
   ['Single-use fluid path', 'Pre-sterilised bags, tubing and needles swap in with aseptic connectors. No CIP/SIP of the fill path and no carry-over between products.', 'Faster changeover'],
   ['Rapid VHP with catalytic aeration', 'Optimised gassing and catalytic converters cut the aeration phase that dominates conventional cycles.', 'Faster changeover'],
   ['100 % IPC with dose correction', 'Weighing every vial and trimming each pump keeps the fill on target, so overfill and product giveaway shrink.', 'Yield'],
@@ -1032,12 +1144,7 @@ function buildSections(){
   $('#cards').innerHTML = CARDS.map((c, i) => `<article class="card"><div class="top"><h3>${c.t}</h3><span class="sw" style="background:var(--${c.c})"></span></div>
     <ol class="steps">${c.steps.map(s => `<li>${s}</li>`).join('')}</ol><p>${c.d}</p><p class="crit">${c.k}</p>
     <button class="btn" type="button" data-card="${i}">Show on the line</button></article>`).join('');
-  $('#cards').addEventListener('click', e => { const b = e.target.closest('[data-card]'); if (!b) return; const c = CARDS[+b.dataset.card];
-    if (c.go === 'util'){ setLayer('util', true); focusRect({x0: 20, x1: 1300, cy: 260, h: 560}); }
-    else if (c.go === 'em'){ setLayer('em', true); focusStation('fill'); }
-    else if (c.go === 'press'){ setLayer('press', true); setLayer('air', true); setView('overview'); }
-    else focusStation(c.go);
-    document.querySelector('.stage').scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block: 'center'}); });
+  $('#cards').addEventListener('click', e => { const b = e.target.closest('[data-card]'); if (b) showOnLine(CARDS[+b.dataset.card].go); });
   $('#levers').innerHTML = LEVERS.map(([b, s, e]) => `<div class="lever"><em>${e}</em><b>${b}</b><span>${s}</span></div>`).join('');
 }
 function setLayer(k, on){ L[k] = on; const b = document.querySelector(`[data-l="${k}"]`); if (b) b.setAttribute('aria-pressed', String(on)); }
@@ -1069,8 +1176,198 @@ cv.addEventListener('pointerup', end); cv.addEventListener('pointercancel', end)
 cv.addEventListener('pointerleave', () => { S.hover = null; });
 cv.addEventListener('wheel', e => { if (!(e.ctrlKey || e.metaKey)) return; e.preventDefault(); const p = rel(e); zoomAt(p.x, p.y, cam.s * Math.exp(-clamp(e.deltaY, -60, 60) * 0.006)); }, {passive: false});
 
+/* ---------- floor plan ---------- */
+const PROOMS = [
+  {id:'util', x:20, y:20, w:200, h:200, g:'T', pa:'technical', name:'Utilities plant', what:'Generates and distributes WFI, clean steam, compressed air and nitrogen. The air-handling units for the clean core sit on the roof above.',
+    req:['WFI to Ph. Eur. 0169 / USP monograph; stored and circulated in a way that prevents growth, e.g. above 70 °C (Annex 1 §6)', 'Clean-steam condensate meets WFI quality where steam touches product or product-contact surfaces', 'Gases in contact with product pass a sterilising-grade filter at point of use']},
+  {id:'wh', x:20, y:220, w:200, h:510, g:'N', pa:'+5 Pa', name:'Warehouse & goods-in', what:'Receives, samples and stores glass, stoppers, caps, raw materials and printed packaging in quarantine until QC releases them.',
+    req:['Clear status for every lot: quarantine, released, rejected (EU GMP Ch. 5; 21 CFR 211.82–211.89)', 'Components tested, or supplier qualified and identity tested, before use (21 CFR 211.84)', 'Ready-to-use components arrive with sterility and endotoxin certificates from qualified suppliers']},
+  {id:'gc', x:220, y:20, w:50, h:710, g:'N', pa:'+5', name:'Grey corridor', short:'', what:'Controlled but unclassified corridor that links the warehouse, gowning rooms and material airlocks.',
+    req:['Controlled, not classified', 'Kept positive to outside and negative to the clean core']},
+  {id:'gc2', x:220, y:730, w:960, h:50, g:'N', pa:'+5 Pa', name:'Grey corridor', what:'Controlled but unclassified corridor that links the warehouse, gowning rooms and material airlocks.',
+    req:['Controlled, not classified', 'Kept positive to outside and negative to the clean core']},
+  {id:'weigh', x:270, y:20, w:120, h:180, g:'D', pa:'+15 Pa', name:'Weighing', what:'Raw materials are weighed under a downflow booth and passed to compounding through a hatch.',
+    req:['Downflow booth protects operator and material during open handling', 'Materials move to compounding through a pass hatch rather than corridors']},
+  {id:'comp', x:390, y:20, w:230, h:180, g:'C', pa:'+30 Pa', name:'Compounding', what:'The solution is made up in a closed vessel, sampled for bioburden and pushed through two 0.22 µm filters into the isolator.',
+    req:['Solutions for sterile filtration prepared in at least Grade C (Annex 1 §8)', 'Bioburden tested before filtration; hold times from preparation to filtration validated', 'Post-use filter integrity test required; pre-use test after sterilisation (PUPSIT) unless a risk assessment justifies otherwise (Annex 1 §8.87)']},
+  {id:'partsw', x:620, y:20, w:140, h:180, g:'D', pa:'+15 Pa', name:'Parts wash', what:'Change parts and tools are washed and loaded into the double-door autoclave, which unloads into the Grade C side.',
+    req:['Cleaning procedures validated (EU Annex 15; 21 CFR 211.67)', 'Autoclave load patterns, cycles and wrapping validated so items stay sterile during transfer']},
+  {id:'store', x:760, y:20, w:140, h:180, g:'C', pa:'+30 Pa', name:'Sterile staging', what:'Sterilised parts and stopper bags wait here, within their validated hold time, for transfer into the isolator.',
+    req:['Maximum hold time between sterilisation and use defined and validated', 'Entry into the isolator only through an RTP or a decontaminating pass-through']},
+  {id:'wash', x:270, y:200, w:150, h:360, g:'D', pa:'+15 Pa', name:'Washing', what:'Vials are debagged, washed with WFI and fed into the depyrogenation tunnel, which carries them through the wall into the filling room.',
+    req:['Component washing in at least Grade D (Annex 1 §8)', 'Final rinse with WFI', 'Depyrogenation validated for ≥ 3-log endotoxin reduction (Annex 1 §8)']},
+  {id:'mald', x:270, y:470, w:70, h:90, g:'D', al:true, pa:'+10', name:'MAL-D', what:'Material airlock from the grey corridor into Grade D. Outer bags come off and packs are wiped with disinfectant.',
+    req:['Outer packaging removed or disinfected before entry', 'Interlocked doors: one open at a time']},
+  {id:'fill', x:420, y:200, w:480, h:270, g:'C', pa:'+30 Pa · isolator +50 Pa', name:'Aseptic filling room', what:'Houses the open isolator (Grade A inside, mouse-hole exit), capping under Grade A air, the VHP generator and the RTP docking point.',
+    req:['Open isolator background at least Grade C; closed isolator at least Grade D; RABS Grade B (Annex 1 §4.20)', 'Grade A unidirectional air, 0.36–0.54 m/s at the working position (guidance value)', 'Continuous particle monitoring in Grade A for the whole operation, set-up included', 'Gloves checked visually at each use and physically tested at least at the start and end of each batch or campaign', 'Aseptic process simulation (media fill) about every 6 months per line and shift']},
+  {id:'tech', x:420, y:470, w:100, h:90, g:'C', pa:'+30', name:'Glove & RTP prep', what:'Spare gloves, glove testers and stopper bags prepared for docking to the RTP.',
+    req:['Glove change frequency set in the contamination control strategy', 'Outer surfaces of RTP bags decontaminated before docking']},
+  {id:'palc', x:520, y:470, w:90, h:90, g:'C', al:true, pa:'+22', name:'PAL-C', what:'Personnel airlock from the Grade D corridor into the Grade C filling suite, with a step-over bench and gowning sequence.',
+    req:['Gowning qualification for every operator (Annex 1 §7)', 'Final stage of an airlock at rest is the same grade as the room it leads into (Annex 1 §4)', 'Interlocked doors and hand disinfection']},
+  {id:'malc', x:610, y:470, w:90, h:90, g:'C', al:true, pa:'+22', name:'MAL-C', what:'Material airlock into Grade C with a VHP pass-box for items that must be surface-decontaminated.',
+    req:['Items entering Grade C and above decontaminated by a validated method', 'Pass-box ventilation and interlocks keep the pressure cascade']},
+  {id:'degown', x:700, y:470, w:90, h:90, g:'C', al:true, pa:'+22', name:'Exit', what:'One-way exit and degowning, so leaving staff never cross people entering in clean gowns.',
+    req:['Separate exit route where practical', 'Used garments bagged for laundering and sterilisation']},
+  {id:'waste', x:790, y:470, w:110, h:90, g:'C', al:true, pa:'+15', name:'Waste out', what:'Rejects, used single-use assemblies and broken glass leave the suite by a dedicated airlock.',
+    req:['Dedicated waste route out of the clean area', 'Rejects and losses reconciled against the batch']},
+  {id:'corrd', x:270, y:560, w:630, h:60, g:'D', pa:'+15 Pa', name:'Grade D corridor', what:'Clean corridor linking the washing room, the Grade C airlocks and the Grade D gowning room.',
+    req:['Grade D', 'Cascade: Grade C rooms > airlocks > Grade D corridor > grey corridor (10–15 Pa steps)']},
+  {id:'pald', x:270, y:620, w:110, h:110, g:'D', al:true, pa:'+10', name:'PAL-D', what:'First gowning stage: street clothes and shoes off, facility garments, hair cover, hand wash.',
+    req:['Step-over bench separates the dirty and clean sides', 'Hand washing before gowning']},
+  {id:'em', x:380, y:620, w:220, h:110, g:'N', pa:'+5', name:'QC micro & EM lab', what:'Reads settle, contact and air-sample plates, runs endotoxin and bioburden tests and trends the environmental data.',
+    req:['Excursions investigated and trends reviewed (Annex 1 §9; FDA 2004 guidance)', 'Sterility testing under aseptic conditions, typically in a dedicated isolator']},
+  {id:'ctrl', x:600, y:620, w:300, h:110, g:'N', pa:'+5', name:'Line control & offices', what:'SCADA, electronic batch record and EM system terminals; production and QA offices.',
+    req:['Computerised systems validated (EU Annex 11; 21 CFR Part 11)', 'Audit trails reviewed; data meets ALCOA+ principles']},
+  {id:'pkstore', x:900, y:20, w:280, h:180, g:'N', pa:'+5 Pa', name:'Packaging materials', what:'Labels, cartons and leaflets held under restricted access.',
+    req:['Printed materials controlled, issued and reconciled (EU GMP Ch. 5; 21 CFR 211.122–211.125)']},
+  {id:'insp', x:900, y:200, w:280, h:220, g:'N', pa:'+5 Pa', name:'Visual inspection', what:'Automated visual inspection, manual re-inspection booths and container closure integrity testing.',
+    req:['100 % inspection of filled containers; manual inspectors qualified with eyesight checks and defect sets (Annex 1 §8)', 'USP <790>: 100 % inspection plus AQL sampling; <1790> as guidance', 'Container closure integrity by a validated method (Annex 1 §8; USP <1207>)']},
+  {id:'pack', x:900, y:420, w:280, h:170, g:'N', pa:'+5 Pa', name:'Labelling & packing', what:'Labeller, cartoner with serialisation and aggregation, case packer and palletiser.',
+    req:['Line clearance and label reconciliation (EU GMP Ch. 5; 21 CFR 211.130)', 'EU FMD: unique identifier and anti-tampering device on the carton, data uploaded to the EU hub', 'US DSCSA: product identifier on package and case, interoperable electronic tracing']},
+  {id:'fg', x:900, y:590, w:280, h:140, g:'N', pa:'+5 Pa', name:'Finished goods', what:'Quarantine until release, then dispatch under good distribution practice.',
+    req:['EU: a Qualified Person certifies every batch before release (Annex 16)', 'US: the quality unit approves release after testing and record review (21 CFR 211.22, 211.165, 211.192)']},
+];
+const PFLOWS = {
+  prod:[[[470,100],[555,100],[555,200],[555,288]], [[300,330],[930,330]], [[1050,330],[1110,330],[1110,470],[1105,470]], [[1070,470],[1060,530]], [[960,545],[960,638]], [[990,655],[1006,660]]],
+  mat:[[[120,515],[305,515],[305,360]], [[120,545],[380,545],[380,590],[655,590],[655,430],[735,430],[735,385]], [[120,300],[245,300],[245,120],[330,120],[420,120]], [[660,70],[715,175],[715,286]]],
+  pers:[[[245,690],[325,690],[325,592],[565,592],[565,430]], [[745,430],[745,604],[350,604],[350,640]]],
+  waste:[[[845,430],[845,515],[950,515],[950,575]]],
+};
+const PFL_NAME = {prod:'Product & vials', mat:'Materials', pers:'Personnel', waste:'Waste'};
+const PL = {grade:true, pa:true, prod:true, mat:false, pers:true, waste:false};
+let selRoom = 'fill';
+function buildPlan(){
+  const svg = $('#planSvg');
+  let s = `<defs><pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line class="hatch-line" x1="0" y1="0" x2="0" y2="8"></line></pattern>`;
+  for (const k of Object.keys(PFLOWS)) s += `<marker id="ar-${k}" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path class="mk-${k}" d="M0,0 L10,5 L0,10 z"></path></marker>`;
+  s += `</defs>`;
+  for (const r of PROOMS){
+    const lines = r.name.split(' ');
+    const small = r.w < 130;
+    let label = '';
+    if (r.id === 'gc'){ label = `<text class="rn" transform="translate(${r.x + 30},${r.y + 360}) rotate(-90)" text-anchor="middle">Grey corridor · CNC · +5</text>`; }
+    else {
+      const nameLines = small && lines.length > 1 ? [lines.slice(0, Math.ceil(lines.length / 2)).join(' '), lines.slice(Math.ceil(lines.length / 2)).join(' ')] : [r.name];
+      label = nameLines.map((t, i) => `<text class="rn" x="${r.x + 8}" y="${r.y + 19 + i * 15}">${t.replace('&', '&amp;')}</text>`).join('');
+      const gname = r.g === 'T' ? 'Technical' : r.g === 'N' ? 'CNC' : 'Grade ' + r.g;
+      label += `<text class="rp" x="${r.x + 8}" y="${r.y + 19 + nameLines.length * 15}">${r.al ? 'Airlock · ' : ''}${small ? '' : gname + ' · '}${r.pa}</text>`;
+    }
+    s += `<g class="room${r.id === selRoom ? ' sel' : ''}" data-id="${r.id}" tabindex="0" role="button" aria-label="${r.name}"><rect class="rf g g${r.g}" x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}"></rect>${r.al ? `<rect class="hatch" x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}"></rect>` : ''}${label}</g>`;
+  }
+  // doors (gaps painted over walls)
+  const doors = [[270,515,270,545,'v'],[305,470,335,470,'h'],[380,560,410,560,'h'],[325,620,355,620,'h'],[550,560,580,560,'h'],[550,470,580,470,'h'],[640,560,670,560,'h'],[640,470,670,470,'h'],[730,470,760,470,'h'],[730,560,760,560,'h'],[830,470,860,470,'h'],[900,500,900,530,'v'],[220,500,220,530,'v'],[220,530,220,560,'v'],[300,200,330,200,'h'],[420,100,420,130,'v'],[240,620,240,650,'v'],[270,675,270,705,'v'],[830,200,860,200,'h']];
+  for (const [x1, y1, x2, y2] of doors) s += `<line class="door" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"></line>`;
+  // equipment
+  const E = (cls, x, y, w, h, rx = 3) => `<rect class="eq ${cls}" x="${x}" y="${y}" width="${w}" height="${h}" rx="${rx}"></rect>`;
+  const C = (cls, x, y, r) => `<circle class="eq ${cls}" cx="${x}" cy="${y}" r="${r}"></circle>`;
+  const T = (t, x, y, a = 'middle') => `<text class="el" x="${x}" y="${y}" text-anchor="${a}">${t}</text>`;
+  s += E('wfi', 36, 64, 60, 46) + T('WFI still', 66, 124) + C('wfi', 152, 86, 26) + T('WFI tank', 152, 126) + E('', 36, 150, 60, 44) + T('Clean steam', 66, 207) + E('', 120, 150, 84, 44) + T('Air & N₂', 162, 207);
+  s += E('', 120, 280, 80, 60) + T('Sampling booth', 160, 356) + E('', 40, 420, 150, 24, 2) + E('', 40, 470, 150, 24, 2) + E('', 40, 520, 150, 24, 2) + E('', 40, 600, 150, 24, 2) + T('Racking', 115, 660);
+  s += `<rect class="eq hood" x="282" y="58" width="96" height="66"></rect>` + E('', 300, 80, 40, 26) + T('Downflow booth', 330, 140);
+  s += C('', 470, 100, 34) + T('Vessel', 470, 150) + C('', 555, 84, 9) + C('', 555, 116, 9) + T('0.22 µm × 2', 555, 142) + E('', 585, 150, 30, 24) + T('IT', 600, 166);
+  s += E('', 636, 64, 60, 44) + T('Parts washer', 666, 122) + E('', 690, 150, 56, 96) + T('Autoclave', 718, 192) ;
+  s += E('', 774, 64, 112, 16, 2) + E('', 774, 94, 112, 16, 2) + E('', 774, 124, 112, 16, 2) + T('Hold-time racks', 830, 160);
+  s += E('', 282, 316, 40, 28) + T('Infeed', 302, 304) + C('', 362, 330, 22) + T('Washer', 362, 372);
+  s += E('heat', 388, 318, 102, 24) + T('Depyro tunnel', 440, 306);
+  s += `<path class="conv" d="M300,330 H1110 V470 M860,330 H930"></path>`;
+  s += E('iso', 490, 290, 282, 80, 2) + T('Isolator · Grade A', 631, 284);
+  for (const x of [520, 570, 620, 670]) s += C('port', x, 370, 6);
+  s += C('port', 735, 370, 9) + T('RTP', 735, 396) + T('Glove ports', 595, 392);
+  s += `<rect class="eq hood" x="778" y="304" width="86" height="54"></rect>` + E('', 790, 316, 62, 30) + T('Capping · Grade A air', 821, 296);
+  s += E('vhp', 470, 412, 54, 32) + T('VHP generator', 497, 456) + E('', 840, 400, 44, 28) + T('Particle counter', 862, 442);
+  s += E('', 930, 306, 120, 48) + T('Automated visual inspection', 990, 296) + E('bad', 1062, 348, 30, 26) + T('Rejects', 1077, 388) + E('', 990, 380, 60, 26) + T('Manual booth', 1020, 420) + E('', 1110, 238, 52, 34) + T('CCI tester', 1136, 228);
+  s += E('', 1070, 452, 76, 34) + T('Labeller', 1108, 500) + E('', 940, 515, 120, 30) + T('Cartoner + serialisation', 1000, 560) + E('', 930, 640, 60, 30) + T('Case packer', 960, 684) + E('', 1010, 640, 60, 44) + T('Pallet', 1040, 700);
+  s += E('', 400, 645, 70, 24) + E('', 490, 645, 90, 24) + T('Incubators · readers', 490, 690) + E('', 640, 650, 220, 26) + T('SCADA · EBR · EM system', 750, 695);
+  // flows
+  for (const k of Object.keys(PFLOWS)){
+    s += `<g class="g-${k}">` + PFLOWS[k].map(p => `<polyline class="fl anim f-${k}" points="${p.map(q => q.join(',')).join(' ')}" marker-end="url(#ar-${k})"></polyline>`).join('') + `</g>`;
+  }
+  svg.innerHTML = s;
+  svg.addEventListener('click', e => { const g = e.target.closest('.room'); if (g) selectRoom(g.dataset.id); });
+  svg.addEventListener('keydown', e => { if (e.key !== 'Enter' && e.key !== ' ') return; const g = e.target.closest('.room'); if (g){ e.preventDefault(); selectRoom(g.dataset.id); } });
+  $('#planTools').addEventListener('click', e => { const b = e.target.closest('[data-p]'); if (!b) return; const k = b.dataset.p; PL[k] = !PL[k]; b.setAttribute('aria-pressed', String(PL[k])); applyPlan(); });
+  $('#planLegend').innerHTML = [['A', 'Grade A'], ['C', 'Grade C'], ['D', 'Grade D'], ['N', 'CNC']].map(([g, n]) => `<span><i style="background:var(--g-${g.toLowerCase()})"></i>${n}</span>`).join('') +
+    `<span><i style="background:repeating-linear-gradient(45deg,var(--muted) 0 1px,transparent 1px 5px)"></i>Airlock</span>` +
+    [['prod', 'var(--product)', 'solid'], ['mat', 'var(--wfi)', 'solid'], ['pers', 'var(--ok)', 'dashed'], ['waste', 'var(--bad)', 'dotted']].map(([k, c, st]) => `<span><b style="border-top-color:${c};border-top-style:${st}"></b>${PFL_NAME[k]}</span>`).join('') +
+    `<span>Pa: pressure above outside air</span>`;
+  applyPlan(); selectRoom(selRoom);
+}
+function applyPlan(){
+  const svg = $('#planSvg');
+  svg.classList.toggle('no-grade', !PL.grade); svg.classList.toggle('no-pa', !PL.pa);
+  for (const k of Object.keys(PFLOWS)) svg.classList.toggle('hide-' + k, !PL[k]);
+}
+function selectRoom(id){
+  selRoom = id; const r = PROOMS.find(q => q.id === id);
+  document.querySelectorAll('#planSvg .room').forEach(g => g.classList.toggle('sel', g.dataset.id === id || (id.startsWith('gc') && g.dataset.id.startsWith('gc'))));
+  const gname = r.g === 'T' ? 'Technical area' : r.g === 'N' ? 'Controlled, not classified' : 'Grade ' + r.g;
+  const gv = r.g === 'T' ? 'var(--steel)' : `var(--g-${r.g.toLowerCase()})`;
+  $('#roomInfo').innerHTML = `<p class="eyebrow">Floor plan · room detail</p><h2>${r.name}</h2>
+    <div class="meta"><span class="badge grade"><i style="background:${gv}"></i>${gname}</span>${r.al ? '<span class="badge">Airlock</span>' : ''}<span class="badge">${/^\+/.test(r.pa) ? r.pa.replace(/^(\+\d+)$/, '$1 Pa') : r.pa}</span></div>
+    <p>${r.what}</p><h3>Key requirements</h3><ul class="req">${r.req.map(q => `<li>${q}</li>`).join('')}</ul>`;
+}
+
+/* ---------- regulations ---------- */
+const FW = [
+  {rg:'European Union · EMA', t:'EU GMP and Annex 1', law:'Directive 2001/83/EC; Delegated Regulation (EU) 2017/1572 on GMP principles', guide:'EudraLex Vol. 4: Annex 1 Manufacture of Sterile Medicinal Products (revised 2022, in force 25 Aug 2023), Annex 11, 15 and 16; EMA guidelines on sterilisation (2019) and water for pharmaceutical use (2020)', ph:'European Pharmacopoeia (Ph. Eur.)', insp:'National competent authorities inspect; a Qualified Person certifies every batch. The UK MHRA applies the same Annex 1.'},
+  {rg:'United States · FDA', t:'cGMP and aseptic guidance', law:'FD&C Act §501(a)(2)(B); 21 CFR Parts 210 and 211; 21 CFR 600–680 for biologics; 21 CFR Part 11', guide:'Sterile Drug Products Produced by Aseptic Processing (2004); Process Validation (2011); Data Integrity Q&A (2018); DSCSA', ph:'USP–NF general chapters (<71>, <85>, <788>, <790>, <1207>, <1211>, <1229>, <1231> and others)', insp:'Pre-approval and surveillance inspections; findings on Form 483, then warning letters. CDER or CBER depending on product.'},
+  {rg:'PIC/S · WHO', t:'Harmonised worldwide', law:'Adopted into national law by member authorities', guide:'PIC/S GMP Guide PE 009 Annex 1 is identical to the EU text (developed jointly); WHO TRS 1044 Annex 2 (2022) covers sterile products along the same lines', ph:'International Pharmacopoeia or national pharmacopoeias', insp:'More than 50 PIC/S participating authorities, including Canada, Australia, Japan, Brazil and Switzerland.'},
+  {rg:'Standards & ICH', t:'Methods behind the rules', law:'Not law in themselves; referenced by regulators and used to show compliance', guide:'ICH Q9(R1) risk management, Q10 quality system; ISO 14644 clean rooms (‑1 classification, ‑2 monitoring, ‑7 separative devices); ISO 13408 aseptic processing; PDA Technical Reports; ISPE Baseline Guide for sterile facilities', ph:'—', insp:'Japan applies the MHLW GMP Ministerial Ordinance and its aseptic processing guidance; Japan has been a PIC/S member since 2014.'},
+];
+const REG = [
+  {c:'fac', t:'Overall approach', eu:['A written contamination control strategy (CCS) covering facility, equipment, people, utilities, materials and monitoring', 'Quality risk management (ICH Q9) behind every design and control decision'], euR:'Annex 1 §2–3', us:['cGMP requirements for buildings, equipment, controls and records', 'Risk-based expectations set out in the 2004 aseptic guidance; no named CCS document, but the same elements are inspected'], usR:'21 CFR 211; FDA 2004 guidance', go:'isolator', line:'Whole line'},
+  {c:'fac', t:'Clean-room grades', eu:['Grades A–D, each with at-rest and in-operation states', 'Classified to ISO 14644-1; requalified every 6 months (A, B) or 12 months (C, D)'], euR:'Annex 1 §4, Table 1', us:['Critical area ISO 5 in operation; supporting areas ISO 7 or ISO 8', 'Aseptic processing areas must have systems to control the environment'], usR:'21 CFR 211.42(c)(10); FDA 2004 §IV', go:'press', line:'Grades & pressure layer'},
+  {c:'fac', t:'Barrier technology', eu:['RABS or isolators expected for new aseptic lines', 'Open isolator in at least Grade C; closed isolator in at least Grade D; RABS in Grade B', 'Isolator leak and glove integrity testing'], euR:'Annex 1 §2.1, §4.17–4.22', us:['Appendix 1 sets out isolator design, leak testing, glove management and decontamination', 'Isolators typically sited in a controlled, classified room'], usR:'FDA 2004 Appendix 1', go:'isolator', line:'Open isolator in Grade C'},
+  {c:'fac', t:'Airflow & pressure', eu:['Grade A unidirectional air, 0.36–0.54 m/s at working position (guidance value)', 'Airflow visualised with smoke studies, including interventions', '10–15 Pa between adjacent grades (guidance value), continuously monitored with alarms'], euR:'Annex 1 §4.23–4.32', us:['Unidirectional air at a velocity proven by smoke studies to sweep the critical area', 'At least 10–15 Pa between rooms of different classification, doors closed'], usR:'FDA 2004 §IV.A–B', go:'press', line:'Airflow layer'},
+  {c:'fac', t:'Personnel & gowning', eu:['Training and gowning qualification; operators must pass an aseptic process simulation before unsupervised work in Grade A/B', 'Minimal, documented interventions'], euR:'Annex 1 §7', us:['Training, gowning qualification and aseptic technique; personnel monitoring of gloves and gowns'], usR:'21 CFR 211.25, 211.28; FDA 2004 §V', go:'fill', line:'Glove ports, PAL-C'},
+  {c:'fac', t:'Environmental monitoring', eu:['Continuous total particle monitoring in Grade A for the full operation, including set-up; similar system in Grade B', 'Viable monitoring in Grade A throughout: active air, settle plates, gloves at the end of each session', 'Alert and action limits, trending and investigation'], euR:'Annex 1 §9, Tables 5–6', us:['Monitoring every production shift in ISO 5; action levels in Table 1', 'Trending, investigation and product impact assessment for excursions'], usR:'FDA 2004 §X; USP <1116>', go:'em', line:'Monitoring layer'},
+  {c:'ster', t:'Sterilisation of parts & glass', eu:['Validated moist heat (Ph. Eur. reference 121 °C, 15 min) with BIs and load mapping', 'Dry-heat depyrogenation with ≥ 3-log endotoxin reduction', 'Sterilised items wrapped to stay sterile until use, with hold times'], euR:'Annex 1 §8; Ph. Eur. 5.1.1; EMA sterilisation guideline', us:['Containers and closures cleaned, sterilised and processed to remove pyrogens', 'Sterilisation processes validated'], usR:'21 CFR 211.94(c), 211.113(b); USP <1228>, <1229>', go:'tunnel', line:'Tunnel, autoclave'},
+  {c:'ster', t:'Isolator bio-decontamination', eu:['Validated, reproducible decontamination of the whole isolator interior (commonly VHP)', 'Cycle proven with biological indicators at worst-case locations'], euR:'Annex 1 §4.22', us:['Validated sporicidal decontamination of isolator surfaces, proven with BIs and with residues controlled'], usR:'FDA 2004 Appendix 1', go:'isolator', line:'VHP in changeover'},
+  {c:'ster', t:'Cleaning & CIP/SIP', eu:['Cleaning validated; for shared facilities, limits based on health-based exposure limits', 'SIP validated with temperature mapping at the coldest points'], euR:'Annex 15 §10; Annex 1 §6, §8; EMA HBEL guideline', us:['Equipment cleaned and sanitised or sterilised at set intervals with written procedures', 'Cleaning validation as part of process validation'], usR:'21 CFR 211.67; FDA cleaning inspection guide', go:'comp', line:'CIP/SIP in changeover'},
+  {c:'ster', t:'Sterile filtration', eu:['Sterilising-grade filter, normally 0.22 µm, validated for the product', 'Integrity test after use mandatory; before use after sterilisation (PUPSIT) unless justified by risk assessment', 'Bioburden limit before filtration'], euR:'Annex 1 §8.79–8.95', us:['Filter validation: retention of ≥ 10⁷ CFU/cm² B. diminuta under process conditions', 'Integrity testing before and after use is recommended; post-use expected'], usR:'FDA 2004 §IX.B; USP <1229.4>', go:'comp', line:'Compounding'},
+  {c:'ster', t:'WFI & clean steam', eu:['WFI by distillation or an equivalent process such as reverse osmosis with further steps (Ph. Eur. since 2017)', 'Storage and loop designed against growth, e.g. above 70 °C; TOC and conductivity monitored', 'Clean-steam condensate meets WFI quality'], euR:'Annex 1 §6; Ph. Eur. 0169; EMA water guideline (2020)', us:['USP Water for Injection: distillation or an equivalent or superior process', 'Conductivity ≤ 1.3 µS/cm at 25 °C, TOC ≤ 500 ppb, endotoxin < 0.25 EU/mL'], usR:'USP <645>, <643>, <1231>', go:'util', line:'Utilities layer'},
+  {c:'proc', t:'Aseptic process simulation', eu:['Media fill of the whole process with worst-case interventions', 'Three consecutive successful runs initially, then about every 6 months per line and shift', 'Target zero growth; any contaminated unit fails the run'], euR:'Annex 1 §9.32–9.49', us:['Three consecutive successful runs initially, then semi-annually per line and shift', 'Target zero; one positive unit triggers investigation, more can require revalidation depending on run size'], usR:'FDA 2004 §IX.A', go:'fill', line:'Fill + IPC'},
+  {c:'proc', t:'Filling & in-process control', eu:['Fill weight or volume checks; process parameters monitored and recorded', 'Container closure validated; missing or displaced stoppers rejected before capping'], euR:'Annex 1 §8; EU GMP Ch. 5', us:['In-process controls to monitor output and validate performance', 'Equipment calibrated and checked'], usR:'21 CFR 211.110, 211.68', go:'fill', line:'100 % weighing'},
+  {c:'proc', t:'Capping', eu:['Capping as an aseptic process with sterile caps, or as a clean process under a Grade A air supply until the cap is crimped'], euR:'Annex 1 §8.24–8.29', us:['Closure systems must protect the product; capping area controls justified by risk'], usR:'21 CFR 211.94; FDA 2004', go:'cap', line:'Capping'},
+  {c:'proc', t:'Visual inspection & CCI', eu:['100 % inspection for particles and defects; inspectors qualified with eyesight checks; automated systems validated', 'Container closure integrity by validated methods; fusion-sealed containers 100 % tested'], euR:'Annex 1 §8.22, §8.30–8.33', us:['100 % inspection plus AQL sampling of accepted units', 'CCI with deterministic methods where possible; CCI may replace sterility tests in stability programmes'], usR:'USP <790>, <1790>, <1207>; FDA CCI guidance (2008)', go:'avi', line:'Inspection'},
+  {c:'proc', t:'Release testing', eu:['Sterility test (Ph. Eur. 2.6.1) on samples representing the whole batch', 'Bacterial endotoxins (2.6.14); visible and sub-visible particles (2.9.20, 2.9.19)', 'QP certification after review of the batch record and EM data'], euR:'Annex 1 §10; Annex 16', us:['Sterility and pyrogen/endotoxin tests for each batch', 'Quality unit reviews records and investigates every deviation before release'], usR:'21 CFR 211.165, 211.167, 211.192; USP <71>, <85>, <788>', go:'pack', line:'Batch release'},
+  {c:'proc', t:'Qualification & validation', eu:['URS, DQ, IQ, OQ, PQ for equipment and utilities', 'Process validation and ongoing verification'], euR:'Annex 15', us:['Process validation in three stages: design, qualification, continued verification'], usR:'21 CFR 211.100, 211.113; FDA Process Validation (2011)', go:'fill', line:'All equipment'},
+  {c:'data', t:'Computerised systems & data integrity', eu:['Validated systems with audit trails, access control and backup', 'Data meets ALCOA+ principles'], euR:'EU GMP Annex 11, Ch. 4; PIC/S PI 041', us:['Electronic records and signatures trustworthy and equivalent to paper', 'Audit trails reviewed; data integrity failures are a common warning-letter citation'], usR:'21 CFR Part 11; FDA Data Integrity Q&A (2018)', go:'fill', line:'SCADA, EBR, EM'},
+  {c:'data', t:'Serialisation', eu:['Unique identifier (product code, serial, batch, expiry) in a 2D DataMatrix plus an anti-tampering device on the outer pack', 'Data uploaded to the European Medicines Verification System; in force since 9 Feb 2019'], euR:'Directive 2011/62/EU; Delegated Regulation (EU) 2016/161', us:['Product identifier (NDC, serial, lot, expiry) in a 2D DataMatrix on packages and cases', 'Interoperable electronic tracing at package level; enhanced requirements from Nov 2023 with phased enforcement'], usR:'DSCSA, FD&C Act §582', go:'label', line:'Labelling'},
+  {c:'data', t:'Why aseptic, not terminal sterilisation', eu:['Terminal sterilisation is preferred; aseptic processing must be justified in the dossier using the EMA decision trees'], euR:'EMA sterilisation guideline (2019); Annex 1 §8', us:['Sterility assurance described and validated in the application; terminal sterilisation preferred where the product allows'], usR:'FDA guidance on sterilisation process validation submissions (1994)', go:'fill', line:'Product choice'},
+];
+const LIM = [
+  ['A', 'ISO 5 / ISO 5', '3,520', '29', 'No growth', 'No growth', 'No growth', 'ISO 5', '3,520', '1', '1'],
+  ['B', 'ISO 5 / ISO 7', '352,000', '2,930', '10', '5', '5', 'ISO 7', '352,000', '10', '3'],
+  ['C', 'ISO 7 / ISO 8', '3,520,000', '29,300', '100', '50', '25', 'ISO 8', '3,520,000', '100', '5'],
+  ['D', 'ISO 8 / not set', 'set in CCS', 'set in CCS', '200', '100', '50', '—', '—', '—', '—'],
+];
+function buildRegs(){
+  $('#fw').innerHTML = FW.map(f => `<article class="card"><span class="rg">${f.rg}</span><h3>${f.t}</h3><dl>
+    <div><dt>Binding law</dt><dd>${f.law}</dd></div><div><dt>Key texts</dt><dd>${f.guide}</dd></div><div><dt>Pharmacopoeia</dt><dd>${f.ph}</dd></div><div><dt>Enforcement</dt><dd>${f.insp}</dd></div></dl></article>`).join('');
+  const body = $('#regTable tbody');
+  body.innerHTML = REG.map((r, i) => `<tr data-c="${r.c}"><th scope="row">${r.t}</th>
+    <td><ul>${r.eu.map(x => `<li>${x}</li>`).join('')}</ul><span class="ref">${r.euR}</span></td>
+    <td><ul>${r.us.map(x => `<li>${x}</li>`).join('')}</ul><span class="ref">${r.usR}</span></td>
+    <td class="line">${r.line}<br><button class="btn" type="button" data-reg="${i}">Show on the line</button></td></tr>`).join('');
+  body.addEventListener('click', e => { const b = e.target.closest('[data-reg]'); if (b) showOnLine(REG[+b.dataset.reg].go); });
+  $('#regFilter').addEventListener('click', e => { const b = e.target.closest('[data-c]'); if (!b) return;
+    document.querySelectorAll('#regFilter .tog').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    body.querySelectorAll('tr').forEach(tr => { tr.hidden = b.dataset.c !== 'all' && tr.dataset.c !== b.dataset.c; }); });
+  $('#limTable').innerHTML = `<thead><tr><th rowspan="2" scope="col">Grade</th><th rowspan="2" scope="col">ISO class<br>at rest / in op.</th><th colspan="2" scope="colgroup">EU particles /m³, in op.</th><th colspan="3" scope="colgroup">EU viable action limits</th><th colspan="4" scope="colgroup">FDA 2004, in operation</th></tr>
+    <tr><th scope="col">≥ 0.5 µm</th><th scope="col">≥ 5.0 µm</th><th scope="col">Air CFU/m³</th><th scope="col">Settle plate</th><th scope="col">Contact plate</th><th scope="col">Class</th><th scope="col">≥ 0.5 µm/m³</th><th scope="col">Air CFU/m³</th><th scope="col">Settle plate</th></tr></thead>
+    <tbody>${LIM.map(r => `<tr><th scope="row"><span class="gsw" style="background:var(--g-${r[0].toLowerCase()})"></span>Grade ${r[0]}</th>${r.slice(1).map((v, i) => `<td class="${i ? 'n' : ''}">${v}</td>`).join('')}</tr>`).join('')}</tbody>`;
+}
+function showOnLine(go){
+  if (go === 'util'){ setLayer('util', true); focusRect({x0: 20, x1: 1300, cy: 260, h: 560}); }
+  else if (go === 'em'){ setLayer('em', true); focusStation('fill'); }
+  else if (go === 'press'){ setLayer('press', true); setLayer('air', true); setView('overview'); }
+  else focusStation(go);
+  document.querySelector('.stage').scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block: 'center'});
+}
+
 /* ---------- boot ---------- */
-buildChips(); buildSections(); selectStation('fill'); renderPhases(); renderLog();
+buildChips(); buildSections(); buildPlan(); buildRegs(); selectStation('fill'); renderPhases(); renderLog();
 if (!S.playing) $('#play').textContent = 'Play';
 setView(view);
 resize(); new ResizeObserver(() => { resize(); }).observe(cv);

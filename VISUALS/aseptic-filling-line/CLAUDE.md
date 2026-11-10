@@ -11,3 +11,7 @@ One file, no build: open `index.html` in a browser. Fonts load from Google Fonts
 - Station copy is in `INFO`, supporting-process cards in `CARDS`, efficiency levers in `LEVERS`.
 - Colours come from CSS tokens (light and dark) and are read into `P` for the canvas.
 - All numbers on the page are simulated and illustrative.
+- Floor plan (`#plan`): SVG built from `PROOMS` (rooms, grade, pressure, requirements) and `PFLOWS`
+  (product, materials, personnel, waste polylines) in a 1200×800 viewBox.
+- Regulations (`#regs`): framework cards `FW`, topic matrix `REG` (EU/PIC/S vs FDA/USP with references),
+  clean-room limits `LIM`. Written as of November 2026; recheck sources before relying on them.
