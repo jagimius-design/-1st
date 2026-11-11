@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Loopstone</title>
+<meta name="description" content="Loopstone — the ancient loop-capture board game of Surakarta. Play the AI, a friend, or take on the Journey.">
+<meta name="theme-color" content="#1a120c">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-512.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main id="app">
+
+  <section id="menu" class="screen active">
+    <div class="hero">
+      <img class="logo" src="icon.svg" alt="" width="112" height="112">
+      <h1>Loopstone</h1>
+      <p class="tag">The ancient loop-capture game of Surakarta</p>
+    </div>
+    <nav class="stack">
+      <button class="btn primary" id="btn-resume" hidden>Resume game</button>
+      <button class="btn primary" data-go="campaign">The Journey</button>
+      <button class="btn" data-go="quick">Quick Play</button>
+      <button class="btn" data-action="pass">Pass &amp; Play</button>
+      <button class="btn" data-action="tutorial">How to Play</button>
+      <button class="btn ghost" data-go="settings">Settings</button>
+    </nav>
+    <p class="demo-note" data-demo hidden>Free demo · <a href="#" data-buy>Get the full game</a></p>
+  </section>
+
+  <section id="campaign" class="screen">
+    <header class="bar"><button class="back" data-go="menu" aria-label="Back">‹</button><h2>The Journey</h2><span class="stars-total" id="stars-total"></span></header>
+    <p class="intro">Eight masters stand between you and the title of Loopmaster. Win to move on; keep more stones to earn more stars.</p>
+    <ol class="opponents" id="opponents"></ol>
+  </section>
+
+  <section id="quick" class="screen">
+    <header class="bar"><button class="back" data-go="menu" aria-label="Back">‹</button><h2>Quick Play</h2></header>
+    <h3>Opponent</h3>
+    <div class="choices" id="levels"></div>
+    <h3>Your stones</h3>
+    <div class="choices row" id="sides">
+      <button class="choice selected" data-side="1"><span class="stone s1"></span>Ivory<small>moves first</small></button>
+      <button class="choice" data-side="2"><span class="stone s2"></span>Obsidian<small>moves second</small></button>
+    </div>
+    <button class="btn primary wide" id="btn-quick-start">Play</button>
+  </section>
+
+  <section id="settings" class="screen">
+    <header class="bar"><button class="back" data-go="menu" aria-label="Back">‹</button><h2>Settings</h2></header>
+    <label class="toggle"><span>Sound</span><input type="checkbox" data-setting="sound"></label>
+    <label class="toggle"><span>Show moves<small>Dots and capture paths for the selected stone</small></span><input type="checkbox" data-setting="hints"></label>
+    <label class="toggle"><span>Show threats<small>Mark your stones the opponent can capture</small></span><input type="checkbox" data-setting="threats"></label>
+    <h3>Board</h3>
+    <div class="themes" id="themes"></div>
+    <h3>Record</h3>
+    <dl class="stats" id="stats"></dl>
+    <button class="btn ghost danger-text" id="btn-reset">Reset progress</button>
+    <p class="fine">Loopstone v1.0 · Surakarta is a traditional game from Java, Indonesia.</p>
+  </section>
+
+  <section id="game" class="screen">
+    <header class="bar game-bar">
+      <button class="back" id="btn-leave" aria-label="Menu">‹</button>
+      <h2 id="game-title"></h2>
+      <div class="tools">
+        <button class="tool" id="btn-hint" title="Hint">Hint</button>
+        <button class="tool" id="btn-undo" title="Undo">Undo</button>
+      </div>
+    </header>
+    <div class="play" id="play">
+      <div class="lesson" id="lesson" hidden></div>
+      <div class="chip" id="chip-top"></div>
+      <div class="board-wrap"><canvas id="board" aria-label="Game board"></canvas></div>
+      <div class="chip" id="chip-bottom"></div>
+      <p class="status" id="status" aria-live="polite"></p>
+    </div>
+    <div class="overlay" id="overlay" hidden><div class="card" id="card"></div></div>
+  </section>
+
+</main>
+<script type="module" src="ui.js"></script>
+</body>
+</html>
