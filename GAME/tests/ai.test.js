@@ -18,3 +18,9 @@ test('the side to move can be P2', () => {
   const s = fromLayout(['......', '....o.', '......', '......', '...x..', '......'], P2);
   assert.ok(chooseMove(s, 2));
 });
+
+test('in Jaguar King the AI takes the king over a plain stone', () => {
+  // Obsidian to move can capture the jade king at (5,1) or a plain stone; the king wins the game.
+  const s = { ...fromLayout(['......', '...o..', '......', '......', '...x..', '.x....'], P2), variant: 'king', kings: [0, sqOf(5, 1), sqOf(1, 3)] };
+  assert.equal(chooseMove(s, 2).to, sqOf(5, 1));
+});

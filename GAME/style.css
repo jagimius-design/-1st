@@ -265,3 +265,10 @@ h3 { font: 700 12px var(--sans); text-transform: uppercase; letter-spacing: .16e
 @keyframes beckon { 50% { filter: brightness(1.12); } }
 @keyframes nudge { 50% { transform: translateX(3px); } }
 .lesson .task b { display: inline; margin: 0 4px 0 0; color: #2b1a06; font: 800 12px var(--sans); letter-spacing: .06em; }
+
+/* rule variants */
+.choice.variant { align-items: flex-start; }
+.choice.variant small { margin: 2px 0 0; line-height: 1.35; }
+.v-name { font: 700 15px var(--display); letter-spacing: .03em; color: var(--lime); }
+.card .rules { font-size: 14px; background: rgba(0, 0, 0, .25); padding: 8px 12px; clip-path: var(--steps); color: inherit; }
+.card .rules b { color: #f7c46a; }

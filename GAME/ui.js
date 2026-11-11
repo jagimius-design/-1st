@@ -1,8 +1,8 @@
 // Screens, board rendering, input and game flow.
-import { P1, P2, QUIET_LIMIT, CIRCUITS, row, col, newGame, fromLayout, movesFrom, legalMoves, applyMove, outcome,
+import { P1, P2, QUIET_LIMIT, CIRCUITS, row, col, newGame, fromLayout, stateMovesFrom, legalMoves, VARIANTS, applyMove, outcome,
   attackedBy, toJSON, fromJSON } from './core.js';
 import { chooseMove, LEVELS } from './ai.js';
-import { OPPONENTS, LESSONS, DRILLS, THEMES, STONES, ACHIEVEMENTS, DEMO_OPPONENTS, DEMO_LEVELS } from './content.js';
+import { OPPONENTS, LESSONS, DRILLS, THEMES, STONES, ACHIEVEMENTS, VARIANT_INFO, DEMO_OPPONENTS, DEMO_LEVELS } from './content.js';
 import { earned, reward } from './achievements.js';
 import { meetsGoal, coachTip } from './coach.js';
 import { portrait } from './portraits.js';
@@ -96,10 +96,14 @@ function renderPath() {
     + DRILLS.map((d, i) => item(`data-drill="${i}"`, `${i + 1}. ${d.title}`, d.text.split('. ')[0] + '.', data.drills[i])).join('');
 }
 
-let quickLevel = 1, quickSide = P1;
+// quickLevel -1 means a friend on this device (Pass & Play).
+let quickLevel = 1, quickSide = P1, quickVariant = 'classic';
 function renderQuick() {
-  if (!levelOpen(quickLevel)) quickLevel = 0;
-  $('#levels').innerHTML = LEVELS.map((L, i) => `<button class="choice ${i === quickLevel ? 'selected' : ''}" data-level="${i}" ${levelOpen(i) ? '' : 'disabled'}>
+  if (quickLevel >= 0 && !levelOpen(quickLevel)) quickLevel = 0;
+  $('#variants').innerHTML = VARIANTS.map(v => `<button class="choice variant ${v === quickVariant ? 'selected' : ''}" data-variant="${v}">
+    <span><span class="v-name">${VARIANT_INFO[v].name}</span><small>${VARIANT_INFO[v].text}</small></span></button>`).join('');
+  document.querySelectorAll('#sides, .sides-head').forEach(el => { el.hidden = quickLevel < 0; });
+  $('#levels').innerHTML = `<button class="choice ${quickLevel < 0 ? 'selected' : ''}" data-level="-1"><span class="pips"><i class="on"></i><i class="on"></i></span>A friend<small>pass &amp; play on this device</small></button>` + LEVELS.map((L, i) => `<button class="choice ${i === quickLevel ? 'selected' : ''}" data-level="${i}" ${levelOpen(i) ? '' : 'disabled'}>
     <span class="pips">${[0, 1, 2, 3, 4].map(k => `<i class="${k <= i ? 'on' : ''}"></i>`).join('')}</span>${L.name}<small>${levelOpen(i) ? '' : 'Full game 🔒'}</small></button>`).join('');
   document.querySelectorAll('[data-side]').forEach(b => b.classList.toggle('selected', +b.dataset.side === quickSide));
   $('#side1').textContent = sideName(P1); $('#side2').textContent = sideName(P2);
@@ -403,6 +407,13 @@ function stoneSprite(p, t) {
     c.beginPath(); c.moveTo(x - r * 0.15, y - r * 0.85); c.bezierCurveTo(x + r * 0.25, y - r * 0.3, x - r * 0.25, y + r * 0.3, x + r * 0.15, y + r * 0.85); c.stroke();
   } else if (finish === 'rubber') { // matte, pitted latex
     for (let i = 0; i < 40; i++) { c.globalAlpha = 0.12; c.fillStyle = rand() < 0.5 ? lo : hi; c.beginPath(); c.arc(x + (rand() - 0.5) * 2 * r, y + (rand() - 0.5) * 2 * r, r * 0.04, 0, 7); c.fill(); }
+  } else if (finish === 'spots') { // jaguar rosettes
+    for (let i = 0; i < 9; i++) {
+      const a = rand() * 7, d = rand() * r * 0.8, sx = x + Math.cos(a) * d, sy = y + Math.sin(a) * d;
+      c.globalAlpha = 0.7; c.strokeStyle = lo; c.lineWidth = r * 0.06;
+      c.beginPath(); c.arc(sx, sy, r * 0.13, 0, 7); c.stroke();
+      c.globalAlpha = 0.5; c.fillStyle = lo; c.beginPath(); c.arc(sx, sy, r * 0.04, 0, 7); c.fill();
+    }
   } else if (finish === 'glow') { // molten core
     const core = c.createRadialGradient(x, y, 0, x, y, r * 0.7);
     core.addColorStop(0, '#fffbe0'); core.addColorStop(1, 'rgba(255,200,80,0)');
@@ -422,6 +433,22 @@ function drawStone(x, y, p, scale = 1, alpha = 1) {
   ctx.globalAlpha = alpha;
   ctx.drawImage(sp, x - w / 2, y - w / 2, w, w);
   ctx.globalAlpha = 1;
+}
+
+// The Jaguar King's crown: a gold three-pointed diadem on the stone.
+function drawCrown(x, y) {
+  const r = V.s * 0.2;
+  ctx.save();
+  ctx.translate(x, y - r * 0.1);
+  ctx.beginPath();
+  ctx.moveTo(-r, r * 0.55); ctx.lineTo(-r, -r * 0.2); ctx.lineTo(-r * 0.5, r * 0.15); ctx.lineTo(0, -r * 0.65);
+  ctx.lineTo(r * 0.5, r * 0.15); ctx.lineTo(r, -r * 0.2); ctx.lineTo(r, r * 0.55); ctx.closePath();
+  ctx.fillStyle = '#f2c14e'; ctx.strokeStyle = '#4a2a06'; ctx.lineWidth = r * 0.14; ctx.lineJoin = 'round';
+  ctx.shadowColor = 'rgba(0,0,0,.5)'; ctx.shadowBlur = r * 0.4;
+  ctx.fill(); ctx.stroke();
+  ctx.shadowColor = 'transparent';
+  ctx.fillStyle = '#3f9a72'; ctx.beginPath(); ctx.arc(0, r * 0.2, r * 0.17, 0, 7); ctx.fill();
+  ctx.restore();
 }
 
 function strokePts(pts) { strokeOn(ctx, pts); }
@@ -508,6 +535,7 @@ function draw(now) {
       const k = Math.max(0, (anim.p - 0.85) / 0.15);
       drawStone(x, y, board[sq], 1 - 0.4 * k, 1 - k);
     } else drawStone(x, y, board[sq]);
+    if (G.state.kings?.[board[sq]] === sq && !(anim && anim.move.capture && sq === anim.move.to && anim.p > 0.85)) drawCrown(x, y);
   }
 
   // capture targets drawn above stones
@@ -527,6 +555,7 @@ function draw(now) {
     }
     const [x, y] = pointAt(e);
     drawStone(x, y, anim.player, 1 + 0.12 * Math.sin(Math.PI * p));
+    if (G.state.kings?.[anim.player] === anim.move.from) drawCrown(x, y);
     if (p >= 1) { const done = anim.done; anim = null; done(); }
   }
 
@@ -655,7 +684,8 @@ function refresh() {
   $('#coach').className = `coach ${tip ? tip.kind : 'idle'}`;
   $('#coach').innerHTML = tip ? `<b>Coach</b>${tip.text}` : `<b>Coach</b>Watching ${opponentInfo().name}…`;
   resize();
-  $('#game-title').textContent = lesson ? 'How to Play' : drill ? 'Beginner\u2019s Path' : G.mode === 'pass' ? 'Pass & Play' : G.opponent !== null ? 'Temple Ascent' : 'Quick Play';
+  const variantTag = G.state.variant && G.state.variant !== 'classic' ? ` \u00b7 ${VARIANT_INFO[G.state.variant].name}` : '';
+  $('#game-title').textContent = (lesson ? 'How to Play' : drill ? 'Beginner\u2019s Path' : G.mode === 'pass' ? 'Pass & Play' : G.opponent !== null ? 'Temple Ascent' : 'Quick Play') + variantTag;
   $('#btn-undo').hidden = G.opponent !== null || !!lesson || !!drill;
   $('#btn-hint').hidden = G.opponent !== null || G.mode === 'pass';
   $('#btn-undo').disabled = G.busy || G.thinking || !G.history.length || !!G.over;
@@ -678,7 +708,7 @@ function onTap(sq) {
   if (b[sq] === G.state.turn) {
     if (G.selected === sq) { G.selected = null; G.moves = []; return refresh(); }
     G.selected = sq;
-    G.moves = movesFrom(b, sq, G.state.turn, true);
+    G.moves = stateMovesFrom(G.state, sq, true);
     sfx.select();
     return refresh();
   }
@@ -734,7 +764,7 @@ function maybeAI() {
     setTimeout(() => {
       if (tk !== G.token) return;
       G.thinking = false;
-      play(movesFrom(state.board, mv.from, state.turn, true).find(m => m.to === mv.to));
+      play(stateMovesFrom(state, mv.from, true).find(m => m.to === mv.to));
     }, Math.max(0, 550 - (performance.now() - t0)));
   });
 }
@@ -754,7 +784,7 @@ function hint() {
     const d = DRILLS[G.drill];
     G.hint = legalMoves(G.state.board, G.human).find(m => meetsGoal(d.goal, G.state, m));
     G.selected = G.hint.from;
-    G.moves = movesFrom(G.state.board, G.hint.from, G.state.turn, true);
+    G.moves = stateMovesFrom(G.state, G.hint.from, true);
     return refresh();
   }
   G.thinking = true;
@@ -765,7 +795,7 @@ function hint() {
     G.thinking = false;
     G.hint = mv;
     G.selected = mv.from;
-    G.moves = movesFrom(G.state.board, mv.from, G.state.turn, true);
+    G.moves = stateMovesFrom(G.state, mv.from, true);
     refresh();
   });
 }
@@ -832,6 +862,17 @@ function introduce(i) {
   $('#card').innerHTML = `<div class="card-portrait big">${portrait(o.look, o.color)}</div>
     <p class="step-label">${o.title}</p><h2>${o.name}</h2>
     <p class="quote">\u201c${pick(o.lines.intro)}\u201d</p>
+    ${o.variant ? `<p class="rules"><b>${VARIANT_INFO[o.variant].name} rules.</b> ${VARIANT_INFO[o.variant].text}</p>` : ''}
+    <div class="stack"><button class="btn primary" data-begin>Begin</button></div>`;
+  $('#overlay').hidden = false;
+}
+
+// Before a variant game outside the Temple Ascent: what is different.
+function explainRules(variant) {
+  const v = VARIANT_INFO[variant];
+  $('#card').className = 'card';
+  $('#card').innerHTML = `<p class="step-label">Variant</p><h2>${v.name}</h2><p>${v.text}</p>
+    ${variant === 'king' ? '<p>The king wears a gold crown.</p>' : ''}
     <div class="stack"><button class="btn primary" data-begin>Begin</button></div>`;
   $('#overlay').hidden = false;
 }
@@ -862,7 +903,7 @@ function finish(res) {
   G.over = res;
   saveGame();
   refresh();
-  const why = { all: 'Every stone captured.', quiet: `${QUIET_LIMIT} moves without a capture — more stones wins.`, stuck: 'No legal moves left.' }[res.reason];
+  const why = { king: 'The king has fallen.', all: 'Every stone captured.', quiet: `${QUIET_LIMIT} moves without a capture — more stones wins.`, stuck: 'No legal moves left.' }[res.reason];
   const humanWon = res.winner === G.human, draw = res.winner === 0;
   let html;
 
@@ -880,7 +921,7 @@ function finish(res) {
   if (G.mode === 'pass') {
     sfx.win();
     html = `<h2>${draw ? 'Draw' : sideName(res.winner) + ' wins'}</h2><p>${why}</p>
-      <div class="stack"><button class="btn primary" data-action="pass">Play again</button><button class="btn ghost" data-go="menu">Menu</button></div>`;
+      <div class="stack"><button class="btn primary" data-replay>Play again</button><button class="btn ghost" data-go="menu">Menu</button></div>`;
     return overlay(html);
   }
 
@@ -890,7 +931,8 @@ function finish(res) {
 
   if (G.opponent !== null) {
     const i = G.opponent, left = G.state.counts[G.human];
-    const stars = humanWon ? (left >= 8 ? 3 : left >= 4 ? 2 : 1) : 0;
+    const start = newGame(G.state.variant).counts[G.human], three = Math.ceil(start * 2 / 3);
+    const stars = humanWon ? (left >= three ? 3 : left >= Math.ceil(start / 3) ? 2 : 1) : 0;
     const before = data.stars[i] || 0;
     data.stars[i] = Math.max(before, stars);
     const hasNext = i + 1 < OPPONENTS.length;
@@ -904,7 +946,7 @@ function finish(res) {
       <h2>${humanWon ? 'Victory!' : draw ? 'Draw' : 'Defeat'}</h2>
       ${humanWon ? `<div class="stars">${starsHTML(stars)}</div>` : ''}
       <p>${humanWon ? `You beat ${OPPONENTS[i].name} with ${left} stone${left === 1 ? '' : 's'} left.` : why}</p>
-      ${humanWon && stars < 3 ? `<p>Keep 8 stones for three stars.</p>` : ''}
+      ${humanWon && stars < 3 ? `<p>Keep ${three} stones for three stars.</p>` : ''}
       <div class="stack">${nextBtn}${humanWon ? `<button class="btn" data-opp="${i}">Replay</button>` : ''}<button class="btn ghost" data-go="campaign">The pyramid</button></div>`;
   } else {
     html = `<h2>${humanWon ? 'You win!' : draw ? 'Draw' : 'You lost'}</h2><p>${why}</p>
@@ -913,7 +955,7 @@ function finish(res) {
       <button class="btn ghost" data-go="menu">Menu</button></div>`;
   }
   persist();
-  checkAchievements({ type: 'game', won: humanWon, left: G.state.counts[G.human], level: G.level, opponent: G.opponent });
+  checkAchievements({ type: 'game', won: humanWon, left: G.state.counts[G.human], level: G.level, opponent: G.opponent, reason: res.reason });
   overlay(html);
 }
 
@@ -946,7 +988,7 @@ document.addEventListener('click', e => {
   if (d.opp !== undefined && el.closest('#opponents, #card')) {
     const i = +d.opp;
     if (!FULL_VERSION && i >= DEMO_OPPONENTS) { if (STORE_URL) window.open(STORE_URL, '_blank', 'noopener'); return; }
-    startGame({ mode: 'ai', opponent: i, level: OPPONENTS[i].level, human: P1 });
+    startGame({ mode: 'ai', opponent: i, level: OPPONENTS[i].level, human: P1, state: newGame(OPPONENTS[i].variant || 'classic') });
     introduce(i);
     return;
   }
@@ -956,9 +998,10 @@ document.addEventListener('click', e => {
   if (d.step) { const [kind, i] = d.step.split(':'); return kind === 'lesson' ? startLesson(+i) : startDrill(+i); }
   if ('begin' in d) { $('#overlay').hidden = true; return; }
   if ('nextDrill' in d) return startDrill(G.drill + 1);
-  if ('replay' in d) return startGame({ mode: 'ai', level: G.level, human: G.human });
-  if ('levelUp' in d) return startGame({ mode: 'ai', level: G.level + 1, human: G.human });
-  if (d.action === 'pass') return startGame({ mode: 'pass' });
+  if ('replay' in d) return startGame({ mode: G.mode, level: G.level, human: G.human, state: newGame(G.state.variant) });
+  if ('levelUp' in d) return startGame({ mode: 'ai', level: G.level + 1, human: G.human, state: newGame(G.state.variant) });
+  if (d.action === 'pass') { quickLevel = -1; return show('quick'); }
+  if (d.variant) { quickVariant = d.variant; renderQuick(); return; }
   if (d.action === 'tutorial') return startLesson(0);
   if (d.level !== undefined) { quickLevel = +d.level; renderQuick(); return; }
   if (d.side !== undefined) { quickSide = +d.side; renderQuick(); return; }
@@ -966,7 +1009,12 @@ document.addEventListener('click', e => {
   if (d.stones) { data.settings.stones = d.stones; persist(); applyStones(); renderSettings(); return; }
 });
 
-$('#btn-quick-start').onclick = () => startGame({ mode: 'ai', level: quickLevel, human: quickSide });
+$('#btn-quick-start').onclick = () => {
+  const variant = quickVariant;
+  if (quickLevel < 0) startGame({ mode: 'pass', state: newGame(variant) });
+  else startGame({ mode: 'ai', level: quickLevel, human: quickSide, state: newGame(variant) });
+  if (variant !== 'classic') explainRules(variant);
+};
 $('#btn-resume').onclick = () => {
   const s = data.saved;
   startGame({ mode: s.mode, human: s.human, level: s.level, opponent: s.opponent, state: fromJSON(s.state) });

@@ -5,7 +5,7 @@ const stars = d => (d.stars || []).reduce((a, b) => a + (b || 0), 0);
 const beat = (d, i) => (d.stars?.[i] || 0) > 0;
 
 // event: { type: 'capture', loops } for a capture by the player,
-// { type: 'game', won, left, level, opponent } when a game against the computer ends; or none.
+// { type: 'game', won, left, level, opponent, reason } when a game against the computer ends; or none.
 const CONDITIONS = {
   tutorial: d => !!d.lessonsDone,
   student: d => DRILLS.every((_, i) => d.drills?.[i]),
@@ -17,6 +17,7 @@ const CONDITIONS = {
   summit: d => beat(d, OPPONENTS.length - 1),
   stars18: d => stars(d) >= 18,
   perfect: d => OPPONENTS.every((_, i) => d.stars?.[i] === 3),
+  regicide: (d, e) => e?.type === 'game' && e.won && e.reason === 'king',
   master: (d, e) => e?.type === 'game' && e.won && e.opponent === null && e.level === 4,
 };
 

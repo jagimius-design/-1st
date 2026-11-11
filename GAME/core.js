@@ -32,11 +32,24 @@ const NEIGHBOURS = Array.from({ length: 36 }, (_, sq) => {
   return out;
 });
 
-export function newGame() {
+// Variants. classic: the traditional game. king: each side has a king stone (kings[p] is its
+// square); capturing it wins, and it may not step into a corner. skirmish: six stones each, starting
+// face to face on the inner-circuit rows. kings[p] is -1 with no king, -2 once captured.
+export const VARIANTS = ['classic', 'king', 'skirmish'];
+const NO_KINGS = [0, -1, -1];
+export const isCorner = sq => (sq === 0 || sq === 5 || sq === 30 || sq === 35);
+
+export function newGame(variant = 'classic') {
   const board = new Int8Array(36);
+  if (variant === 'skirmish') {
+    for (let sq = 6; sq < 12; sq++) board[sq] = P2;
+    for (let sq = 24; sq < 30; sq++) board[sq] = P1;
+    return { board, turn: P1, quiet: 0, counts: [0, 6, 6], ply: 0, variant, kings: NO_KINGS };
+  }
   for (let sq = 0; sq < 12; sq++) board[sq] = P2;
   for (let sq = 24; sq < 36; sq++) board[sq] = P1;
-  return { board, turn: P1, quiet: 0, counts: [0, 12, 12], ply: 0 };
+  const kings = variant === 'king' ? [0, sqOf(5, 2), sqOf(0, 3)] : NO_KINGS;
+  return { board, turn: P1, quiet: 0, counts: [0, 12, 12], ply: 0, variant, kings };
 }
 
 // rows: six 6-char strings, 'x' = P1, 'o' = P2, anything else empty.
@@ -48,7 +61,7 @@ export function fromLayout(rows, turn = P1) {
     counts[p]++;
   }));
   counts[0] = 0;
-  return { board, turn, quiet: 0, counts, ply: 0 };
+  return { board, turn, quiet: 0, counts, ply: 0, variant: 'classic', kings: NO_KINGS };
 }
 
 // Captures by the piece on `from`. With `withPath`, each move carries
@@ -104,6 +117,14 @@ export function legalMoves(board, player, withPath = false) {
   return caps.concat(steps);
 }
 
+// Legal moves in a game state: as legalMoves, but a king may not step into a corner.
+const kingRule = (state, moves) => {
+  const k = state.kings?.[state.turn] ?? -1;
+  return k < 0 ? moves : moves.filter(m => m.from !== k || !isCorner(m.to));
+};
+export const stateMoves = (state, withPath = false) => kingRule(state, legalMoves(state.board, state.turn, withPath));
+export const stateMovesFrom = (state, sq, withPath = false) => kingRule(state, movesFrom(state.board, sq, state.turn, withPath));
+
 // Enemy squares `player` can capture right now.
 export function attackedBy(board, player) {
   const hit = new Set();
@@ -116,22 +137,27 @@ export function applyMove(state, move) {
   const board = state.board.slice();
   board[move.to] = board[move.from];
   board[move.from] = 0;
-  const counts = state.counts.slice();
-  if (move.capture) counts[other(state.turn)]--;
-  return { board, turn: other(state.turn), quiet: move.capture ? 0 : state.quiet + 1, counts, ply: state.ply + 1 };
+  const counts = state.counts.slice(), kings = (state.kings || NO_KINGS).slice(), op = other(state.turn);
+  if (move.capture) counts[op]--;
+  if (kings[state.turn] === move.from) kings[state.turn] = move.to;
+  if (move.capture && kings[op] === move.to) kings[op] = -2;
+  return { board, turn: op, quiet: move.capture ? 0 : state.quiet + 1, counts, ply: state.ply + 1,
+    variant: state.variant || 'classic', kings };
 }
 
-// null while the game goes on, else { winner: P1 | P2 | 0 (draw), reason: 'all' | 'quiet' | 'stuck' }.
+// null while the game goes on, else { winner: P1 | P2 | 0 (draw), reason: 'king' | 'all' | 'quiet' | 'stuck' }.
 export function outcome(state) {
+  if (state.kings?.[P1] === -2) return { winner: P2, reason: 'king' };
+  if (state.kings?.[P2] === -2) return { winner: P1, reason: 'king' };
   if (state.counts[P1] === 0) return { winner: P2, reason: 'all' };
   if (state.counts[P2] === 0) return { winner: P1, reason: 'all' };
   if (state.quiet >= QUIET_LIMIT) {
     const d = state.counts[P1] - state.counts[P2];
     return { winner: d > 0 ? P1 : d < 0 ? P2 : 0, reason: 'quiet' };
   }
-  if (legalMoves(state.board, state.turn).length === 0) return { winner: other(state.turn), reason: 'stuck' };
+  if (stateMoves(state).length === 0) return { winner: other(state.turn), reason: 'stuck' };
   return null;
 }
 
 export const toJSON = s => ({ ...s, board: Array.from(s.board) });
-export const fromJSON = s => ({ ...s, board: Int8Array.from(s.board) });
+export const fromJSON = s => ({ variant: 'classic', kings: NO_KINGS, ...s, board: Int8Array.from(s.board) });

@@ -56,6 +56,7 @@ along the inlaid lines and swings around the great corner loops to strike an ene
 across the board. Every line is a threat, and every loop is a chance.
 
 - **Temple Ascent:** climb the pyramid past 8 rivals, from the Bone Scribe to the Serpent King, each with their own portrait and voice
+- **3 rule variants**: Classic, Jaguar King (capture the crowned king to win) and Skirmish (6 stones each, fast and brutal)
 - **Quick Play** against 5 AI levels, from Beginner to a Master that plans many moves ahead
 - **Pass & Play** with a friend on one device
 - **Interactive tutorial**: learn in two minutes
@@ -63,7 +64,7 @@ across the board. Every line is a threat, and every loop is a chance.
 - **Coach** that comments on your games: free captures, stones in danger, when to play safe
 - Original flute, slit-drum and rattle soundtrack that never repeats
 - Capture-path previews and threat warnings, so beginners learn fast
-- 11 achievements that unlock 5 new boards and 6 stone sets: Turquoise, Cacao Beans, Sun & Moon, Gold & Onyx, Ballgame Rubber, Fire & Ash
+- 12 achievements that unlock 5 new boards and 7 stone sets: Turquoise, Cacao Beans, Sun & Moon, Gold & Onyx, Ballgame Rubber, Jaguar Pelt, Fire & Ash
 - No ads, no timers, no internet needed
 
 **Tags:** board game, strategy, abstract, ancient, maya, puzzle, chess-like, traditional, relaxing, singleplayer, local multiplayer

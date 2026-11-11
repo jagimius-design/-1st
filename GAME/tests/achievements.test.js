@@ -25,3 +25,9 @@ test('event achievements need their event', () => {
   assert.deepEqual(earned(d, { type: 'game', won: true, left: 10, opponent: null, level: 4 }).sort(), ['master', 'untouchable']);
   assert.deepEqual(earned(d, { type: 'game', won: true, left: 10, opponent: 7, level: 4 }), ['untouchable']);
 });
+
+test('Regicide needs a win by capturing the king', () => {
+  const d = { stars: [], stats: { won: 1 }, drills: [], achievements: { victory: 1 } };
+  assert.deepEqual(earned(d, { type: 'game', won: true, left: 3, opponent: null, level: 1, reason: 'king' }), ['regicide']);
+  assert.deepEqual(earned(d, { type: 'game', won: true, left: 3, opponent: null, level: 1, reason: 'all' }), []);
+});

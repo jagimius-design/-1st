@@ -3,6 +3,14 @@
 export const DEMO_OPPONENTS = 3; // the demo plays opponents [0, DEMO_OPPONENTS)
 export const DEMO_LEVELS = 3;    // and Quick Play levels [0, DEMO_LEVELS)
 
+// Rule variants (see core.js VARIANTS): name and one-line explanation shown before play.
+export const VARIANT_INFO = {
+  classic: { name: 'Classic', text: 'The traditional game. Capture every enemy stone to win.' },
+  king: { name: 'Jaguar King', text: 'Each side has one crowned king. Capture the enemy king and you win at once. Kings may not step into corners.' },
+  skirmish: { name: 'Skirmish', text: 'Six stones each, starting face to face on the small loops. Fast and brutal.' },
+};
+
+// variant: the rules this rival plays by (classic unless set).
 export const OPPONENTS = [
   { name: 'The Bone Scribe', title: 'First step', color: '#c9b27c', glyph: 'S', level: 0,
     look: { head: 'scribe', skin: '#9c6440', eyes: '#d8e4ff', paint: 'ink', mouth: 'thin' },
@@ -31,7 +39,7 @@ export const OPPONENTS = [
       win: ['A pleasure robbing you.'],
       lose: ['Take the step. The debt remains.'] },
     blurb: 'Buys stones. Sells regrets.' },
-  { name: 'The Jaguar Stalker', title: 'Fourth step', color: '#d98a2b', glyph: 'J', level: 2,
+  { name: 'The Jaguar Stalker', variant: 'king', title: 'Fourth step', color: '#d98a2b', glyph: 'J', level: 2,
     look: { head: 'jaguar', skin: '#7d4526', eyes: '#ffcc33', paint: 'claw', mouth: 'snarl' },
     lines: {
       intro: ['I have been watching you since the first step. You never saw me.', 'Run if you like. I prefer it when they run.'],
@@ -39,7 +47,7 @@ export const OPPONENTS = [
       lost: ['A scratch.', 'Now I am hungry.'],
       win: ['The jungle swallows another one.'],
       lose: ['You live. Tonight.'] },
-    blurb: 'Waits in the dark, then strikes from across the board.' },
+    blurb: 'Waits in the dark, then strikes from across the board. Plays Jaguar King rules.' },
   { name: 'The Night Seer', title: 'Fifth step', color: '#4fa3b8', glyph: 'N', level: { depth: 3, noise: 6, quiesce: true, time: 1500 },
     look: { head: 'stargazer', skin: '#8f5530', eyes: '#7fe8ff', paint: 'band', mouth: 'thin' },
     lines: {
@@ -49,7 +57,7 @@ export const OPPONENTS = [
       win: ['Written in the heavens. Erased from the steps.'],
       lose: ['The stars lied. Someone will pay for that.'] },
     blurb: 'Read your defeat in the stars before you arrived.' },
-  { name: 'The Ballcourt Champion', title: 'Sixth step', color: '#b5432e', glyph: 'B', level: 3,
+  { name: 'The Ballcourt Champion', variant: 'skirmish', title: 'Sixth step', color: '#b5432e', glyph: 'B', level: 3,
     look: { head: 'champion', skin: '#7d4526', eyes: '#ff6a3d', paint: 'redband', mouth: 'snarl' },
     lines: {
       intro: ['In the old ballgame, the losers paid with more than pride. Begin.', 'The crowd came for a loser. It is never me.'],
@@ -57,7 +65,7 @@ export const OPPONENTS = [
       lost: ['Lucky bounce.', 'Hah! At last, a fight.'],
       win: ['The crowd has its loser.'],
       lose: ['The court is yours. Do not come back.'] },
-    blurb: 'In the old ballgame, losing cost more than pride.' },
+    blurb: 'In the old ballgame, losing cost more than pride. Plays Skirmish rules.' },
   { name: 'The Smoke Priestess', title: 'Seventh step', color: '#3e8e6b', glyph: 'P', level: { depth: 6, noise: 0, quiesce: true, time: 2000 },
     look: { head: 'priestess', skin: '#8f5530', eyes: '#ff3b3b', paint: 'skull', mouth: 'thin' },
     lines: {
@@ -67,7 +75,7 @@ export const OPPONENTS = [
       win: ['As it was written in the smoke.'],
       lose: ['Go to the summit, then. He is waiting for you.'] },
     blurb: 'Sees five moves ahead, and smiles at what she sees.' },
-  { name: 'The Serpent King', title: 'Temple summit', color: '#e2b35a', glyph: 'K', level: 4,
+  { name: 'The Serpent King', variant: 'king', title: 'Temple summit', color: '#e2b35a', glyph: 'K', level: 4,
     look: { head: 'serpent', skin: '#6e3c22', eyes: '#ffe14d', paint: 'scales', mouth: 'fangs' },
     lines: {
       intro: ['So. You climbed every step. The serpent waits at the top for a reason.', 'Kneel. No? Then fall.'],
@@ -75,7 +83,7 @@ export const OPPONENTS = [
       lost: ['You dare?', 'A scratch. Nothing more.'],
       win: ['Back down the stairs. All of them.'],
       lose: ['Then the summit is yours… Loopmaster.'] },
-    blurb: 'Coiled at the top of the pyramid. No one remembers the last time it lost.' },
+    blurb: 'Coiled at the top of the pyramid. Plays Jaguar King rules. No one remembers the last time it lost.' },
 ];
 
 // goal: 'step' (any non-capture), 'capture' (any capture), 'win' (beat the Beginner level)
@@ -164,6 +172,8 @@ export const STONES = {
     p1: ['#fff6cf', '#d9a632', '#6e4a0a'], f1: 'glass', p2: ['#5a5a5a', '#141414', '#000000'], f2: 'glass' },
   ballgame: { name: 'Ballgame Rubber', n1: 'Pale ball', n2: 'Black ball', unlock: 'ballcourt',
     p1: ['#f0d9a8', '#b98b4e', '#5a3a1a'], f1: 'rubber', p2: ['#5a4a40', '#211913', '#050302'], f2: 'rubber' },
+  jaguar: { name: 'Jaguar Pelt', n1: 'Gold pelt', n2: 'Black pelt', unlock: 'regicide',
+    p1: ['#ffe6a8', '#d99a2b', '#6e3f0a'], f1: 'spots', p2: ['#6a5a48', '#2a2018', '#050302'], f2: 'spots' },
   ember: { name: 'Fire & Ash', n1: 'Fire', n2: 'Ash', unlock: 'master',
     p1: ['#fff1a8', '#ff7a1a', '#7a1500'], f1: 'glow', p2: ['#b8b2ab', '#55504c', '#1a1817'], f2: 'mottle' },
 };
@@ -180,5 +190,6 @@ export const ACHIEVEMENTS = [
   { id: 'summit', title: 'The Summit', text: 'Defeat the Serpent King at the top of the pyramid.', full: true },
   { id: 'stars18', title: 'Star Collector', text: 'Earn 18 stars on the Temple Ascent.', full: true },
   { id: 'perfect', title: 'Perfect Climb', text: 'Earn three stars on every step.', full: true },
+  { id: 'regicide', title: 'Regicide', text: 'Win a Jaguar King game by capturing the enemy king.' },
   { id: 'master', title: 'Master Slayer', text: 'Beat the Master level in Quick Play.', full: true },
 ];

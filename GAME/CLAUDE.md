@@ -15,14 +15,15 @@ Content (opponents, lessons, themes and what the demo includes) is data in `cont
 - `style.css` — screen and component styles.
 - `ui.js` — screens, canvas drawing (carved board cached per size/theme, stone sprites), animation, input,
   game flow, saved data (`localStorage`).
-- `core.js` — rules: circuits, moves, captures with paths, outcome. Pure, runs in Node.
+- `core.js` — rules: circuits, moves, captures with paths, outcome, and the variants (`newGame(variant)`:
+  classic, king, skirmish). Use `stateMoves`/`stateMovesFrom` for play: they apply the king's corner rule.
 - `ai.js` — `chooseMove` (negamax, quiescence, iterative deepening) and the five `LEVELS`.
 - `ai-worker.js` — runs `chooseMove` off the main thread.
 - `coach.js` — strategy help: `meetsGoal` checks Beginner's Path puzzle answers, `coachTip` picks the
   in-game coach's line. Rests on threats being mutual: a capture path reversed is a capture path.
 - `portraits.js` — `portrait(look, color)`: SVG busts of the Temple Ascent rivals, one headdress per `look.head`.
 - `achievements.js` — `earned(data, event)`: which achievements are newly met; `reward(id)`: what each unlocks.
-- `content.js` — Temple Ascent opponents (with `look` and spoken `lines`), `ACHIEVEMENTS`, `STONES` sets, tutorial lessons, Beginner's Path puzzles (`DRILLS`), boards
+- `content.js` — Temple Ascent opponents (with `look`, spoken `lines`, optional `variant`), `VARIANT_INFO`, `ACHIEVEMENTS`, `STONES` sets, tutorial lessons, Beginner's Path puzzles (`DRILLS`), boards
   (`THEMES`), demo limits. Each achievement unlocks exactly one board or stone set (`unlock` field). New puzzles must pass `tests/coach.test.js` (a solution and a wrong answer).
 - `audio.js` — synthesised instruments (ocarina, slit drum, rattle, rain stick, conch), sound effects
   and the generative background music: a 16-bar cycle at 100 bpm (groove, full band with harmony, breakdown, drum fill); no continuous drone.

@@ -1,5 +1,5 @@
 // Computer opponent: negamax with alpha-beta, capture-only quiescence and iterative deepening.
-import { QUIET_LIMIT, other, legalMoves, capturesFrom, applyMove, attackedBy } from './core.js';
+import { QUIET_LIMIT, other, stateMoves, capturesFrom, applyMove, attackedBy } from './core.js';
 
 // noise: random points added to each root move's score (100 = one stone), so weak levels blunder.
 export const LEVELS = [
@@ -19,11 +19,15 @@ export function resolveLevel(level) {
 
 function evaluate(s) {
   const me = s.turn, op = other(me);
-  const mine = attackedBy(s.board, me).size, theirs = attackedBy(s.board, op).size;
-  return 100 * (s.counts[me] - s.counts[op]) + 10 * mine - 14 * theirs;
+  const mine = attackedBy(s.board, me), theirs = attackedBy(s.board, op);
+  let v = 100 * (s.counts[me] - s.counts[op]) + 10 * mine.size - 14 * theirs.size;
+  if (s.kings?.[op] >= 0 && mine.has(s.kings[op])) v += 400;   // their king hangs and it is my move
+  if (s.kings?.[me] >= 0 && theirs.has(s.kings[me])) v -= 120; // mine is attacked but I move first
+  return v;
 }
 
 function terminal(s, ply) {
+  if (s.kings?.[s.turn] === -2) return -WIN + ply;
   if (s.counts[s.turn] === 0) return -WIN + ply;
   if (s.counts[other(s.turn)] === 0) return WIN - ply;
   if (s.quiet >= QUIET_LIMIT) {
@@ -64,7 +68,7 @@ export function chooseMove(state, level, random = Math.random) {
     const t = terminal(s, ply);
     if (t !== null) return t;
     if (depth === 0) return L.quiesce ? quiesce(s, alpha, beta, ply, 6) : evaluate(s);
-    const moves = legalMoves(s.board, s.turn);
+    const moves = stateMoves(s);
     if (moves.length === 0) return -WIN + ply;
     let best = -Infinity;
     for (const m of moves) {
@@ -76,7 +80,7 @@ export function chooseMove(state, level, random = Math.random) {
     return best;
   }
 
-  let moves = legalMoves(state.board, state.turn);
+  let moves = stateMoves(state);
   if (moves.length <= 1) return strip(moves[0]);
   let scored = moves.map(m => ({ m, v: 0 }));
 
