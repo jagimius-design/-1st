@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Loopstone</title>
+<meta name="description" content="Loopstone — an ancient game of jade, obsidian and loops. Climb the temple against eight rivals, play a friend, or learn in two minutes.">
+<meta name="theme-color" content="#13201b">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-512.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="toast" id="toast" role="status" hidden></div>
+<main id="app">
+
+  <section id="menu" class="screen active">
+    <div class="scene" aria-hidden="true">
+      <svg viewBox="0 0 400 230" preserveAspectRatio="xMidYMax slice">
+        <circle cx="300" cy="62" r="26" class="moon"/>
+        <g class="far"><path d="M0 200 Q60 170 120 188 T240 180 T400 176 V230 H0Z"/></g>
+        <g class="temple">
+          <path d="M110 230 V206 H122 V190 H134 V174 H146 V158 H158 V142 H170 V126 H230 V142 H242 V158 H254 V174 H266 V190 H278 V206 H290 V230Z"/>
+          <path d="M178 126 V100 H222 V126Z"/><path d="M184 100 V92 H216 V100Z"/>
+          <rect x="195" y="108" width="10" height="18" class="door"/>
+          <path d="M193 230 V126 H207 V230Z" class="stairs"/>
+        </g>
+        <rect x="0" y="222" width="400" height="8" fill="#0d1612"/>
+        <g class="canopy"><path d="M0 230 V150 Q20 130 40 150 Q55 120 80 148 Q96 140 104 170 Q90 200 96 230Z"/>
+          <path d="M400 230 V140 Q378 118 356 142 Q338 124 318 152 Q300 150 296 180 Q310 205 304 230Z"/></g>
+      </svg>
+      <i class="fly" style="--x:18%;--y:62%;--d:7s"></i><i class="fly" style="--x:76%;--y:70%;--d:9s"></i>
+      <i class="fly" style="--x:60%;--y:48%;--d:11s"></i><i class="fly" style="--x:30%;--y:80%;--d:8s"></i>
+    </div>
+    <div class="hero">
+      <h1>Loopstone</h1>
+      <div class="fret" aria-hidden="true"></div>
+      <p class="tag">An ancient game of jade, obsidian and loops</p>
+    </div>
+    <nav class="stack">
+      <button class="btn primary" id="btn-resume" hidden>Resume game</button>
+      <button class="btn primary" data-go="campaign">Temple Ascent</button>
+      <button class="btn" data-go="quick">Quick Play</button>
+      <button class="btn" data-action="pass">Pass &amp; Play</button>
+      <button class="btn" data-action="tutorial">How to Play</button>
+      <button class="btn" data-go="path">Beginner&rsquo;s Path</button>
+      <button class="btn" data-go="achievements">Achievements</button>
+      <button class="btn ghost" data-go="settings">Settings</button>
+    </nav>
+    <p class="demo-note" data-demo hidden><span>Free demo: 3 of 8 rivals, Beginner to Medium.</span><a class="btn buy" href="#" data-buy>Get the full game</a></p>
+  </section>
+
+  <section id="campaign" class="screen">
+    <header class="bar"><button class="back" data-go="menu" aria-label="Back">‹</button><h2>Temple Ascent</h2><span class="stars-total" id="stars-total"></span></header>
+    <div id="pyramid"></div>
+    <p class="intro">Eight rivals guard the steps of the great pyramid. Beat each one to climb higher. Keep more stones to earn more stars.</p>
+    <ol class="opponents" id="opponents"></ol>
+  </section>
+
+  <section id="path" class="screen">
+    <header class="bar"><button class="back" data-go="menu" aria-label="Back">‹</button><h2>Beginner&rsquo;s Path</h2><span class="stars-total" id="path-count"></span></header>
+    <p class="intro">Learn the rules, then seven tips for getting the upper hand. Each tip ends in a puzzle: find the move that puts it into practice.</p>
+    <ol class="opponents path" id="drills"></ol>
+  </section>
+
+  <section id="achievements" class="screen">
+    <header class="bar"><button class="back" data-go="menu" aria-label="Back">‹</button><h2>Achievements</h2><span class="stars-total" id="ach-count"></span></header>
+    <p class="intro">Each achievement unlocks a new board or set of stones. Choose them in Settings.</p>
+    <ol class="achs" id="ach-list"></ol>
+  </section>
+
+  <section id="quick" class="screen">
+    <header class="bar"><button class="back" data-go="menu" aria-label="Back">‹</button><h2>Quick Play</h2></header>
+    <h3>Rules</h3>
+    <div class="choices" id="variants"></div>
+    <h3>Opponent</h3>
+    <div class="choices" id="levels"></div>
+    <h3 class="sides-head">Your stones</h3>
+    <div class="choices row" id="sides">
+      <button class="choice selected" data-side="1"><span class="stone s1"></span><span id="side1">Jade</span><small>moves first</small></button>
+      <button class="choice" data-side="2"><span class="stone s2"></span><span id="side2">Obsidian</span><small>moves second</small></button>
+    </div>
+    <button class="btn primary wide" id="btn-quick-start">Play</button>
+  </section>
+
+  <section id="settings" class="screen">
+    <header class="bar"><button class="back" data-go="menu" aria-label="Back">‹</button><h2>Settings</h2></header>
+    <label class="toggle"><span>Music<small>Flute, drum and rattle, generated as you play</small></span><input type="checkbox" id="set-music" data-setting="music"></label>
+    <label class="toggle"><span>Sound effects</span><input type="checkbox" id="set-sound" data-setting="sound"></label>
+    <label class="toggle"><span>Coach<small>Tips during games against the computer</small></span><input type="checkbox" id="set-coach" data-setting="coach"></label>
+    <label class="toggle"><span>Show moves<small>Dots and capture paths for the selected stone</small></span><input type="checkbox" id="set-hints" data-setting="hints"></label>
+    <label class="toggle"><span>Show threats<small>Mark your stones the opponent can capture</small></span><input type="checkbox" id="set-threats" data-setting="threats"></label>
+    <h3>Board</h3>
+    <div class="themes" id="themes"></div>
+    <h3>Stones</h3>
+    <div class="themes" id="stonesets"></div>
+    <h3>Record</h3>
+    <dl class="stats" id="stats"></dl>
+    <button class="btn ghost danger-text" id="btn-reset">Reset progress</button>
+    <p class="fine">Loopstone v1.1 · The rules are those of Surakarta, a traditional game from Java. The temple setting is inspired by the ancient Maya. Cinzel font under the SIL Open Font License.</p>
+  </section>
+
+  <section id="game" class="screen">
+    <header class="bar game-bar">
+      <button class="back" id="btn-leave" aria-label="Menu">‹</button>
+      <h2 id="game-title"></h2>
+      <div class="tools">
+        <button class="tool" id="btn-hint" title="Hint">Hint</button>
+        <button class="tool" id="btn-undo" title="Undo">Undo</button>
+      </div>
+    </header>
+    <div class="play" id="play">
+      <div class="lesson" id="lesson" hidden></div>
+      <div class="chip" id="chip-top"></div>
+      <div class="say" id="say" hidden></div>
+      <div class="board-wrap"><canvas id="board" aria-label="Game board"></canvas></div>
+      <div class="chip" id="chip-bottom"></div>
+      <p class="status" id="status" aria-live="polite"></p>
+      <div class="coach" id="coach" aria-live="polite" hidden></div>
+    </div>
+    <div class="overlay" id="overlay" hidden><div class="card" id="card"></div></div>
+  </section>
+
+</main>
+<script type="module" src="ui.js"></script>
+</body>
+</html>
