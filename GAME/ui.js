@@ -612,7 +612,11 @@ const pending = new Map();
 function getWorker() {
   if (worker !== null) return worker;
   try {
-    worker = new Worker(new URL('./ai-worker.js', import.meta.url), { type: 'module' });
+    // The single-file build (build.mjs, itch target) embeds the worker's code; opened from disk,
+    // a browser refuses module workers, but a blob worker still runs.
+    const src = globalThis.LOOPSTONE_WORKER;
+    worker = src ? new Worker(URL.createObjectURL(new Blob([src], { type: 'text/javascript' })))
+      : new Worker(new URL('./ai-worker.js', import.meta.url), { type: 'module' });
     worker.onmessage = e => { pending.get(e.data.id)?.resolve(e.data.move); pending.delete(e.data.id); };
     worker.onerror = () => {
       worker = false;
@@ -971,10 +975,15 @@ function leaveGame(to = 'menu') {
 
 // ---------------------------------------------------------------- wiring
 
+// Where "Get the full game" goes: the configured store page, or, for a demo embedded on an
+// itch.io page, that page itself (the embed's referrer).
+const storeUrl = () => STORE_URL || (/^https:\/\/[^/]+\.itch\.io\//.test(document.referrer) ? document.referrer : '');
+
 function wireBuy() {
+  const url = storeUrl();
   document.querySelectorAll('[data-buy]').forEach(a => {
-    a.href = STORE_URL || '#';
-    if (STORE_URL) { a.target = '_blank'; a.rel = 'noopener'; }
+    a.href = url || '#';
+    if (url) { a.target = '_blank'; a.rel = 'noopener'; }
   });
 }
 
@@ -983,11 +992,11 @@ document.addEventListener('click', e => {
   if (!el) return;
   unlockAudio();
   const d = el.dataset;
-  if ('buy' in d && !STORE_URL) { e.preventDefault(); return; }
+  if ('buy' in d && !storeUrl()) { e.preventDefault(); return; }
   if (d.go) { leaveGame(d.go); return; }
   if (d.opp !== undefined && el.closest('#opponents, #card')) {
     const i = +d.opp;
-    if (!FULL_VERSION && i >= DEMO_OPPONENTS) { if (STORE_URL) window.open(STORE_URL, '_blank', 'noopener'); return; }
+    if (!FULL_VERSION && i >= DEMO_OPPONENTS) { if (storeUrl()) window.open(storeUrl(), '_blank', 'noopener'); return; }
     startGame({ mode: 'ai', opponent: i, level: OPPONENTS[i].level, human: P1, state: newGame(OPPONENTS[i].variant || 'classic') });
     introduce(i);
     return;

@@ -27,9 +27,12 @@ Content (opponents, lessons, themes and what the demo includes) is data in `cont
   (`THEMES`), demo limits. Each achievement unlocks exactly one board or stone set (`unlock` field). New puzzles must pass `tests/coach.test.js` (a solution and a wrong answer).
 - `audio.js` — synthesised instruments (ocarina, slit drum, rattle, rain stick, conch), sound effects
   and the generative background music: a 16-bar cycle at 100 bpm (groove, full band with harmony, breakdown, drum fill); no continuous drone.
-- `config.js` — `FULL_VERSION` and `STORE_URL`, the only build-time switches.
+- `config.js` — `FULL_VERSION` and `STORE_URL`, the only build-time switches. Without `STORE_URL`, a demo
+  embedded on an itch.io page links back to that page (its referrer).
 - `build.mjs` — `node build.mjs [store-url]` writes `dist/web` (demo) and `dist/full` (paid), with the
-  font inlined into `style.css`.
+  font inlined into `style.css`, and the itch.io uploads in `dist/itch`: the browser demo zip and the
+  paid zip, a single `Loopstone.html` bundled by esbuild (`npm ci` first) that runs from `file://`.
+- `itch/` — itch.io page: `PAGE.md` (setup steps, description), `cover.png`, `embed-background.png`.
 - `fonts/` — Cinzel 700 (SIL OFL, licence in `OFL.txt`) for headings.
 - `sw.js`, `manifest.webmanifest`, `icon.svg`, `icon-512.png` — offline cache and install metadata;
   bump `VERSION` in `sw.js` when shipped files change.

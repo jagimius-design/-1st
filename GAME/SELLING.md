@@ -28,10 +28,8 @@ option is to make the mobile app free with one $2.99 "Unlock full game" in-app p
 
 ## Launch order (cheapest first)
 
-1. **itch.io** (free to list, sells HTML5 games directly). Run `node build.mjs`, zip the
-   *contents* of `dist/full`, upload as a paid HTML/downloadable game. Upload `dist/web` as a
-   separate free "Loopstone Demo" page that links to the paid one. Put that page's URL in
-   `node build.mjs <url>` so the demo's buy buttons point at it.
+1. **itch.io** (free to list). Everything is ready: follow `itch/PAGE.md`. The browser demo plays
+   free on the page; the paid download is one `Loopstone.html` that plays offline.
 2. **Your own site**: the demo is deployed to GitHub Pages at `/game/` (see
    `.github/workflows/pages.yml`).
 3. **Google Play** ($25 one-time). Wrap `dist/full` with Capacitor
