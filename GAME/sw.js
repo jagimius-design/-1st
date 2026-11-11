@@ -1,5 +1,5 @@
 // Offline cache. Bump VERSION whenever a file below changes.
-const VERSION = 'loopstone-1';
+const VERSION = 'loopstone-2';
 const FILES = ['./', 'index.html', 'style.css', 'ui.js', 'core.js', 'ai.js', 'ai-worker.js', 'audio.js',
   'content.js', 'config.js', 'icon.svg', 'icon-512.png', 'manifest.webmanifest'];
 

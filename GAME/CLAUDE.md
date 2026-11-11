@@ -1,7 +1,8 @@
 # GAME
 
 Loopstone: a premium digital edition of Surakarta, a traditional (public-domain) Javanese board
-game where stones capture by riding loops round the board's corners. Plain HTML/CSS/JS ES modules,
+game where stones capture by riding loops round the board's corners, dressed as an ancient Maya
+temple: carved limestone, jade against obsidian, a pyramid to climb, flute-and-drum music. Plain HTML/CSS/JS ES modules,
 no dependencies, no build step to run it; works offline as a PWA. One codebase for every store:
 the free web demo and the paid build differ only in `config.js`. The demo is deployed to GitHub
 Pages at `/game/` beside SITE (`.github/workflows/pages.yml`).
@@ -9,16 +10,20 @@ Pages at `/game/` beside SITE (`.github/workflows/pages.yml`).
 Rules live in `core.js`, the opponent in `ai.js` (run in a worker), everything on screen in `ui.js`.
 Content (opponents, lessons, themes and what the demo includes) is data in `content.js`.
 
-- `index.html` — all screens: menu, Journey, Quick Play, Settings, game.
+- `index.html` — all screens: menu (with the temple scene), Temple Ascent, Quick Play, Settings, game.
 - `style.css` — screen and component styles.
-- `ui.js` — screens, canvas board drawing and animation, input, game flow, saved data (`localStorage`).
+- `ui.js` — screens, canvas drawing (carved board cached per size/theme, stone sprites), animation, input,
+  game flow, saved data (`localStorage`).
 - `core.js` — rules: circuits, moves, captures with paths, outcome. Pure, runs in Node.
 - `ai.js` — `chooseMove` (negamax, quiescence, iterative deepening) and the five `LEVELS`.
 - `ai-worker.js` — runs `chooseMove` off the main thread.
-- `content.js` — Journey opponents, tutorial lessons, board themes, demo limits.
-- `audio.js` — synthesised sound effects.
+- `content.js` — Temple Ascent opponents, tutorial lessons, board themes, demo limits.
+- `audio.js` — synthesised instruments (ocarina, slit drum, rattle, rain stick, conch), sound effects
+  and the generative background music.
 - `config.js` — `FULL_VERSION` and `STORE_URL`, the only build-time switches.
-- `build.mjs` — `node build.mjs [store-url]` writes `dist/web` (demo) and `dist/full` (paid).
+- `build.mjs` — `node build.mjs [store-url]` writes `dist/web` (demo) and `dist/full` (paid), with the
+  font inlined into `style.css`.
+- `fonts/` — Cinzel 700 (SIL OFL, licence in `OFL.txt`) for headings.
 - `sw.js`, `manifest.webmanifest`, `icon.svg`, `icon-512.png` — offline cache and install metadata;
   bump `VERSION` in `sw.js` when shipped files change.
 - `store/` — store screenshots (phone 860×1864, desktop 1280×800).

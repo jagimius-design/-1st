@@ -3,16 +3,16 @@ import { P1, P2, QUIET_LIMIT, CIRCUITS, row, col, newGame, fromLayout, movesFrom
   attackedBy, toJSON, fromJSON } from './core.js';
 import { chooseMove, LEVELS } from './ai.js';
 import { OPPONENTS, LESSONS, THEMES, DEMO_OPPONENTS, DEMO_LEVELS } from './content.js';
-import { sfx, setSound, unlockAudio } from './audio.js';
+import { sfx, setSound, setMusic, unlockAudio } from './audio.js';
 import { FULL_VERSION, STORE_URL } from './config.js';
 
 const $ = s => document.querySelector(s);
-const SIDE_NAME = { [P1]: 'Ivory', [P2]: 'Obsidian' };
+const SIDE_NAME = { [P1]: 'Jade', [P2]: 'Obsidian' };
 
 // ---------------------------------------------------------------- saved data
 
 const KEY = 'loopstone.v1';
-const DEFAULTS = { settings: { sound: true, hints: true, threats: false, theme: 'teak' }, stars: [],
+const DEFAULTS = { settings: { sound: true, music: true, hints: true, threats: false, theme: 'temple' }, stars: [],
   stats: { played: 0, won: 0, lost: 0, drawn: 0 }, lessonsDone: false, saved: null };
 const data = (() => {
   try {
@@ -24,8 +24,8 @@ const persist = () => { try { localStorage.setItem(KEY, JSON.stringify(data)); }
 
 const opponentOpen = i => (FULL_VERSION || i < DEMO_OPPONENTS) && (i === 0 || (data.stars[i - 1] || 0) > 0);
 const levelOpen = i => FULL_VERSION || i < DEMO_LEVELS;
-const themeOpen = t => (FULL_VERSION || THEMES[t].demo) && (THEMES[t].unlock === null || (data.stars[THEMES[t].unlock] || 0) > 0);
-const theme = () => THEMES[themeOpen(data.settings.theme) ? data.settings.theme : 'teak'];
+const themeOpen = t => !!THEMES[t] && (FULL_VERSION || THEMES[t].demo) && (THEMES[t].unlock === null || (data.stars[THEMES[t].unlock] || 0) > 0);
+const theme = () => THEMES[themeOpen(data.settings.theme) ? data.settings.theme : 'temple'];
 
 // ---------------------------------------------------------------- screens
 
@@ -41,22 +41,39 @@ function renderMenu() {
 }
 
 const starsHTML = n => [0, 1, 2].map(i => `<span class="${i < n ? '' : 'off'}">★</span>`).join('');
-const avatar = o => `<span class="avatar" style="background:radial-gradient(circle at 35% 30%, #fff8, ${o.color} 60%)">${o.name.replace('The ', '')[0]}</span>`;
+// Opponents are shown as carved glyph blocks: a rounded cartouche with their initial.
+const avatar = o => `<span class="avatar" style="--glyph:${o.color}">${o.glyph || o.name[0]}</span>`;
+
+// Temple Ascent progress as a stepped pyramid: one tier per opponent, lit once beaten.
+function pyramidSVG() {
+  const n = OPPONENTS.length, h = 13, W = 260;
+  const tiers = OPPONENTS.map((o, i) => {
+    const w = W - i * 26, y = (n - 1 - i) * h + 22, beaten = (data.stars[i] || 0) > 0;
+    return `<rect x="${(W - w) / 2 + 10}" y="${y}" width="${w}" height="${h - 2}" rx="1" class="${beaten ? 'tier lit' : opponentOpen(i) ? 'tier next' : 'tier'}"/>`;
+  }).join('');
+  const top = data.stars[n - 1] > 0;
+  return `<svg viewBox="0 0 280 ${n * h + 26}" class="pyramid" role="img" aria-label="Pyramid progress">
+    <rect x="${140 - 24}" y="4" width="48" height="18" rx="2" class="tier temple ${top ? 'lit' : ''}"/>
+    <rect x="${140 - 6}" y="10" width="12" height="12" class="door"/>${tiers}</svg>`;
+}
 
 function renderCampaign() {
   const total = data.stars.reduce((a, b) => a + (b || 0), 0);
   $('#stars-total').textContent = `★ ${total}/${OPPONENTS.length * 3}`;
+  $('#pyramid').innerHTML = pyramidSVG();
   $('#opponents').innerHTML = OPPONENTS.map((o, i) => {
     const locked = !opponentOpen(i), paywall = !FULL_VERSION && i >= DEMO_OPPONENTS;
     const strength = Math.min(5, Math.round(1 + i * 4 / (OPPONENTS.length - 1)));
     return `<li><button class="opp" data-opp="${i}" ${locked && !paywall ? 'disabled' : ''}>
       ${avatar(o)}
-      <span class="opp-body"><span class="opp-name">${o.name}</span> <span class="opp-title">· ${o.title}</span>
-        <div class="opp-blurb">${paywall ? '<span class="paywall">Unlock in the full game</span>' : locked ? 'Beat the previous master to unlock' : o.blurb}</div>
+      <span class="opp-body"><span class="opp-name">${o.name}</span> <span class="opp-title">${o.title}</span>
+        <div class="opp-blurb">${paywall ? '<span class="paywall">Unlock in the full game</span>' : locked ? 'Beat the step below to unlock' : o.blurb}</div>
         <span class="pips">${[1, 2, 3, 4, 5].map(k => `<i class="${k <= strength ? 'on' : ''}"></i>`).join('')}</span></span>
       <span class="opp-side">${paywall ? '🔒' : locked ? '🔒' : `<span class="stars">${starsHTML(data.stars[i] || 0)}</span>`}</span>
     </button></li>`;
   }).join('');
+  const next = OPPONENTS.findIndex((_, i) => opponentOpen(i) && !(data.stars[i] > 0));
+  if (next > 0) document.querySelector(`#opponents [data-opp="${next}"]`)?.scrollIntoView({ block: 'center' });
 }
 
 let quickLevel = 1, quickSide = P1;
@@ -93,7 +110,7 @@ function resize() {
   if (size === V.size && dpr === V.dpr) return;
   canvas.style.width = canvas.style.height = size + 'px';
   canvas.width = canvas.height = Math.round(size * dpr);
-  const s = size / 10;
+  const s = size / 10.8;
   V = { size, s, o: (size - 5 * s) / 2, dpr };
 }
 
@@ -141,54 +158,188 @@ const circuitPaths = () => CIRCUITS.map(c => ({ squares: [...c, c[0]], loops: c.
 // ---------------------------------------------------------------- drawing
 
 let anim = null, particles = [];
+let layer = { key: '', canvas: null }, sprites = { key: '', [P1]: null, [P2]: null };
 
-function drawStone(x, y, p, scale = 1, alpha = 1) {
-  const t = theme(), r = V.s * 0.34 * scale, [hi, mid, lo] = p === P1 ? t.p1 : t.p2;
-  ctx.save();
-  ctx.globalAlpha = alpha;
-  ctx.shadowColor = 'rgba(0,0,0,.45)';
-  ctx.shadowBlur = r * 0.5;
-  ctx.shadowOffsetY = r * 0.25;
-  const g = ctx.createRadialGradient(x - r * 0.35, y - r * 0.4, r * 0.1, x, y, r);
-  g.addColorStop(0, hi); g.addColorStop(0.55, mid); g.addColorStop(1, lo);
-  ctx.fillStyle = g;
-  ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fill();
-  ctx.shadowColor = 'transparent';
-  ctx.strokeStyle = 'rgba(255,255,255,.25)';
-  ctx.lineWidth = r * 0.08;
-  ctx.beginPath(); ctx.arc(x, y, r * 0.86, Math.PI * 1.1, Math.PI * 1.6); ctx.stroke();
-  ctx.restore();
+function rng(seed) {
+  return () => { seed = (seed + 0x6d2b79f5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
 }
 
-function strokePts(pts) {
-  ctx.beginPath();
-  pts.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)));
-  ctx.stroke();
+const offscreen = px => { const c = document.createElement('canvas'); c.width = c.height = px; return c; };
+
+// Slab outline: a square whose corners are cut in three steps, like a temple platform.
+function slabPath(c, x0, size, k) {
+  const x1 = x0 + size, m = x0 + size / 2;
+  const corner = [[x1 - 3 * k, x0], [x1 - 3 * k, x0 + k], [x1 - 2 * k, x0 + k], [x1 - 2 * k, x0 + 2 * k],
+    [x1 - k, x0 + 2 * k], [x1 - k, x0 + 3 * k], [x1, x0 + 3 * k]];
+  c.beginPath();
+  for (let q = 0; q < 4; q++) {
+    const a = q * Math.PI / 2, cos = Math.cos(a), sin = Math.sin(a);
+    for (const [x, y] of corner) {
+      const dx = x - m, dy = y - m;
+      c.lineTo(m + dx * cos - dy * sin, m + dx * sin + dy * cos);
+    }
+  }
+  c.closePath();
 }
 
-function draw(now) {
-  const t = theme(), { size, s, o, dpr } = V;
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  ctx.clearRect(0, 0, size, size);
+// Interlocking stepped frets along a band from (0,0) to (len,h), drawn in local coordinates.
+function fretBand(c, len, h, light, dark) {
+  const w = h * 1.6, units = Math.max(4, Math.round(len / w)), u = len / units, st = h / 3;
+  c.fillStyle = dark; c.fillRect(0, 0, len, h);
+  c.fillStyle = light;
+  for (let i = 0; i < units; i++) {
+    const x = i * u;
+    c.beginPath();
+    c.moveTo(x, h);
+    c.lineTo(x, h - st); c.lineTo(x + u * 0.18, h - st); c.lineTo(x + u * 0.18, h - 2 * st);
+    c.lineTo(x + u * 0.36, h - 2 * st); c.lineTo(x + u * 0.36, h - 2.6 * st);
+    c.lineTo(x + u * 0.64, h - 2.6 * st); c.lineTo(x + u * 0.64, h - 2 * st);
+    c.lineTo(x + u * 0.82, h - 2 * st); c.lineTo(x + u * 0.82, h - st); c.lineTo(x + u, h - st);
+    c.lineTo(x + u, h); c.closePath(); c.fill();
+    c.fillRect(x + u * 0.45, h * 0.12, u * 0.1, h * 0.12); // carved seed dot above each step
+  }
+}
 
-  // board
-  const pad = s * 0.12, g = ctx.createLinearGradient(0, 0, size, size);
+function carve(c, pts, width, groove, ridge) {
+  c.lineCap = 'round'; c.lineJoin = 'round';
+  c.save(); c.translate(0.9, 1.1); c.strokeStyle = ridge; c.lineWidth = width; strokeOn(c, pts); c.restore();
+  c.strokeStyle = groove; c.lineWidth = width; strokeOn(c, pts);
+}
+
+function strokeOn(c, pts) {
+  c.beginPath();
+  pts.forEach(([x, y], i) => (i ? c.lineTo(x, y) : c.moveTo(x, y)));
+  c.stroke();
+}
+
+function sunGlyph(c, x, y, r, groove, ridge) {
+  for (const [col, dx] of [[ridge, 0.8], [groove, 0]]) {
+    c.strokeStyle = col; c.lineWidth = r * 0.22;
+    c.beginPath(); c.arc(x + dx, y + dx, r, 0, 7); c.stroke();
+    for (let i = 0; i < 4; i++) {
+      const a = i * Math.PI / 2 + Math.PI / 4;
+      c.beginPath(); c.arc(x + dx + Math.cos(a) * r * 1.65, y + dx + Math.sin(a) * r * 1.65, r * 0.32, 0, 7); c.stroke();
+    }
+  }
+}
+
+// The static carved board, redrawn only when the size or theme changes.
+function boardLayer(t) {
+  const key = `${t.name}|${V.size}|${V.dpr}`;
+  if (layer.key === key) return layer.canvas;
+  const { size, s, o, dpr } = V, cv = offscreen(Math.round(size * dpr)), c = cv.getContext('2d'), rand = rng(7);
+  c.scale(dpr, dpr);
+  const pad = s * 0.1, k = s * 0.16, slab = size - 2 * pad;
+
+  c.save();
+  c.shadowColor = 'rgba(0,0,0,.5)'; c.shadowBlur = s * 0.3; c.shadowOffsetY = s * 0.12;
+  slabPath(c, pad, slab, k);
+  const g = c.createLinearGradient(0, 0, size, size);
   g.addColorStop(0, t.board[0]); g.addColorStop(1, t.board[1]);
-  ctx.fillStyle = g;
-  ctx.beginPath(); ctx.roundRect(pad, pad, size - 2 * pad, size - 2 * pad, s * 0.6); ctx.fill();
-  ctx.strokeStyle = 'rgba(0,0,0,.25)'; ctx.lineWidth = 2; ctx.stroke();
+  c.fillStyle = g; c.fill();
+  c.restore();
 
-  ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-  ctx.strokeStyle = t.grid; ctx.lineWidth = s * 0.05;
+  c.save();
+  slabPath(c, pad, slab, k); c.clip();
+  for (let i = 0; i < 2600; i++) { // pitted stone
+    c.globalAlpha = 0.08 + rand() * 0.18;
+    c.fillStyle = t.speck[rand() < 0.6 ? 0 : 1];
+    c.beginPath(); c.arc(rand() * size, rand() * size, s * (0.006 + rand() * 0.022), 0, 7); c.fill();
+  }
+  c.globalAlpha = 0.25; c.strokeStyle = t.speck[0]; c.lineWidth = 0.8;
+  for (let i = 0; i < 5; i++) { // hairline cracks
+    let x = rand() * size, y = rand() * size, a = rand() * 7;
+    c.beginPath(); c.moveTo(x, y);
+    for (let j = 0; j < 14; j++) { a += (rand() - 0.5) * 0.9; x += Math.cos(a) * s * 0.12; y += Math.sin(a) * s * 0.12; c.lineTo(x, y); }
+    c.stroke();
+  }
+  c.globalAlpha = 1;
+
+  // fret frame on all four sides
+  const bh = s * 0.36, b0 = pad + k * 3, blen = slab - 6 * k;
+  for (let side = 0; side < 4; side++) {
+    c.save();
+    c.translate(size / 2, size / 2); c.rotate(side * Math.PI / 2); c.translate(-size / 2, -size / 2);
+    c.translate(b0, pad + s * 0.08);
+    c.globalAlpha = 0.85;
+    fretBand(c, blen, bh, t.board[0], t.frame);
+    c.globalAlpha = 1;
+    c.restore();
+  }
+  c.restore();
+  c.strokeStyle = 'rgba(0,0,0,.35)'; c.lineWidth = 1.5; slabPath(c, pad, slab, k); c.stroke();
+
+  // carved grid, then the two circuits inlaid as coloured stone
   for (let i = 0; i < 6; i++) {
-    strokePts([[o, o + i * s], [o + 5 * s, o + i * s]]);
-    strokePts([[o + i * s, o], [o + i * s, o + 5 * s]]);
+    carve(c, [[o, o + i * s], [o + 5 * s, o + i * s]], s * 0.05, t.groove, t.ridge);
+    carve(c, [[o + i * s, o], [o + i * s, o + 5 * s]], s * 0.05, t.groove, t.ridge);
   }
   circuitPaths().forEach((p, i) => {
-    ctx.strokeStyle = i === 0 ? t.inner : t.outer;
-    ctx.lineWidth = s * 0.075;
-    strokePts(pathPoints(p));
+    const pts = pathPoints(p);
+    carve(c, pts, s * 0.12, t.groove, t.ridge);
+    c.strokeStyle = i === 0 ? t.inner : t.outer; c.lineWidth = s * 0.075; strokeOn(c, pts);
+    c.strokeStyle = 'rgba(255,255,255,.28)'; c.lineWidth = s * 0.018;
+    c.save(); c.translate(-s * 0.012, -s * 0.012); strokeOn(c, pts); c.restore();
   });
+  // the four corner points sit on no circuit: stones there are safe, marked with a sun glyph
+  for (const [r, cc] of [[0, 0], [0, 5], [5, 0], [5, 5]]) sunGlyph(c, o + cc * s, o + r * s, s * 0.1, t.groove, t.ridge);
+
+  layer = { key, canvas: cv };
+  return cv;
+}
+
+// Jade and obsidian stones, rendered once per size and theme.
+function stoneSprite(p, t) {
+  const key = `${t.name}|${V.size}|${V.dpr}`;
+  if (sprites.key !== key) sprites = { key, [P1]: null, [P2]: null };
+  if (sprites[p]) return sprites[p];
+  const r = V.s * 0.36, m = r * 0.6, px = Math.ceil((2 * r + 2 * m) * V.dpr), cv = offscreen(px), c = cv.getContext('2d');
+  const rand = rng(p * 31), [hi, mid, lo] = p === P1 ? t.p1 : t.p2;
+  c.scale(V.dpr, V.dpr);
+  const x = r + m, y = r + m;
+  c.shadowColor = 'rgba(0,0,0,.5)'; c.shadowBlur = r * 0.5; c.shadowOffsetY = r * 0.28;
+  const g = c.createRadialGradient(x - r * 0.3, y - r * 0.35, r * 0.05, x, y, r);
+  g.addColorStop(0, hi); g.addColorStop(0.5, mid); g.addColorStop(1, lo);
+  c.fillStyle = g; c.beginPath(); c.arc(x, y, r, 0, 7); c.fill();
+  c.shadowColor = 'transparent';
+  c.save(); c.beginPath(); c.arc(x, y, r, 0, 7); c.clip();
+  if (p === P1) { // jade mottling and veins
+    for (let i = 0; i < 26; i++) {
+      c.globalAlpha = 0.08 + rand() * 0.12; c.fillStyle = rand() < 0.5 ? hi : lo;
+      c.beginPath(); c.ellipse(x + (rand() - 0.5) * 2 * r, y + (rand() - 0.5) * 2 * r, r * (0.1 + rand() * 0.3), r * (0.05 + rand() * 0.15), rand() * 3, 0, 7); c.fill();
+    }
+    c.globalAlpha = 0.25; c.strokeStyle = hi; c.lineWidth = r * 0.04;
+    c.beginPath(); c.moveTo(x - r, y + r * 0.2); c.bezierCurveTo(x - r * 0.3, y - r * 0.4, x + r * 0.2, y + r * 0.5, x + r, y - r * 0.1); c.stroke();
+  } else { // obsidian conchoidal ripples
+    c.globalAlpha = 0.18; c.strokeStyle = hi; c.lineWidth = r * 0.035;
+    for (let i = 1; i <= 4; i++) { c.beginPath(); c.arc(x + r * 0.5, y + r * 0.6, r * 0.3 * i, Math.PI * 1.05, Math.PI * 1.55); c.stroke(); }
+  }
+  c.restore();
+  c.globalAlpha = p === P1 ? 0.55 : 0.75; c.fillStyle = '#ffffff'; // polished highlight
+  c.beginPath(); c.ellipse(x - r * 0.32, y - r * 0.42, r * 0.32, r * 0.14, -0.6, 0, 7); c.fill();
+  c.globalAlpha = 0.35; c.strokeStyle = 'rgba(0,0,0,.6)'; c.lineWidth = r * 0.06;
+  c.beginPath(); c.arc(x, y, r * 0.97, 0.1, Math.PI - 0.1); c.stroke();
+  sprites[p] = cv;
+  return cv;
+}
+
+function drawStone(x, y, p, scale = 1, alpha = 1) {
+  const sp = stoneSprite(p, theme()), w = sp.width / V.dpr * scale;
+  ctx.globalAlpha = alpha;
+  ctx.drawImage(sp, x - w / 2, y - w / 2, w, w);
+  ctx.globalAlpha = 1;
+}
+
+function strokePts(pts) { strokeOn(ctx, pts); }
+
+function draw(now) {
+  const t = theme(), { size, s, dpr } = V;
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(boardLayer(t), 0, 0);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.lineCap = 'round'; ctx.lineJoin = 'round';
 
   if (!G) return;
   const pulse = 0.5 + 0.5 * Math.sin(now / 260);
@@ -197,8 +348,9 @@ function draw(now) {
   // last move
   if (G.last && !anim) for (const sq of [G.last.from, G.last.to]) {
     const [x, y] = xy(sq);
-    ctx.fillStyle = 'rgba(255,255,255,.16)';
+    ctx.fillStyle = t.mark; ctx.globalAlpha = 0.22;
     ctx.beginPath(); ctx.arc(x, y, s * 0.44, 0, 7); ctx.fill();
+    ctx.globalAlpha = 1;
   }
 
   // capture paths and move targets for the selection
@@ -360,7 +512,7 @@ function startGame(cfg) {
 
 const humanTurn = () => G.mode === 'pass' || G.state.turn === G.human;
 const opponentInfo = () => G.opponent !== null ? OPPONENTS[G.opponent]
-  : { name: G.lesson !== null ? 'Training bot' : `${LEVELS[G.level].name} AI`, title: '', color: '#bfa98d' };
+  : { name: G.lesson !== null ? 'Temple Guide' : `${LEVELS[G.level].name} rival`, title: '', color: '#c9b27c', glyph: G.lesson !== null ? 'G' : LEVELS[G.level].name[0] };
 
 function chip(el, side, label, sub, av) {
   const active = !G.over && G.state.turn === side;
@@ -372,7 +524,7 @@ function chip(el, side, label, sub, av) {
 function refresh() {
   const lesson = G.lesson !== null ? LESSONS[G.lesson] : null;
   const top = G.mode === 'pass' || G.human === P1 ? P2 : P1, bottom = 3 - top;
-  const you = `<span class="avatar" style="background:radial-gradient(circle at 35% 30%, #fff8, #f2c14e 60%)">★</span>`;
+  const you = `<span class="avatar you">★</span>`;
   const sideAvatar = p => `<span class="stone s${p}" style="width:34px;height:34px"></span>`;
   if (G.mode === 'pass') {
     chip($('#chip-top'), top, SIDE_NAME[top], '', sideAvatar(top));
@@ -386,7 +538,7 @@ function refresh() {
   $('#lesson').hidden = !lesson;
   resize();
   if (lesson) $('#lesson').innerHTML = `<b>Lesson ${G.lesson + 1} of ${LESSONS.length} · ${lesson.title}</b>${lesson.text}`;
-  $('#game-title').textContent = lesson ? 'How to Play' : G.mode === 'pass' ? 'Pass & Play' : G.opponent !== null ? 'The Journey' : 'Quick Play';
+  $('#game-title').textContent = lesson ? 'How to Play' : G.mode === 'pass' ? 'Pass & Play' : G.opponent !== null ? 'Temple Ascent' : 'Quick Play';
   $('#btn-undo').hidden = G.opponent !== null || !!lesson;
   $('#btn-hint').hidden = G.opponent !== null || G.mode === 'pass';
   $('#btn-undo').disabled = G.busy || G.thinking || !G.history.length || !!G.over;
@@ -522,8 +674,8 @@ function finish(res) {
     if (humanWon) { data.lessonsDone = true; persist(); sfx.win(); }
     else sfx.lose();
     html = humanWon
-      ? `<h2>You’re ready</h2><p>You know everything you need. The masters of the Journey await.</p>
-        <div class="stack"><button class="btn primary" data-opp="0">Start the Journey</button><button class="btn ghost" data-go="menu">Menu</button></div>`
+      ? `<h2>You’re ready</h2><p>You know everything you need. The temple steps await.</p>
+        <div class="stack"><button class="btn primary" data-opp="0">Climb the temple</button><button class="btn ghost" data-go="menu">Menu</button></div>`
       : `<h2>So close</h2><p>${why} Give it another go.</p>
         <div class="stack"><button class="btn primary" data-lesson="${G.lesson}">Try again</button><button class="btn ghost" data-go="menu">Menu</button></div>`;
     return overlay(html);
@@ -548,15 +700,15 @@ function finish(res) {
     const unlocked = humanWon && !before ? Object.values(THEMES).find(t => t.unlock === i && (FULL_VERSION || t.demo)) : null;
     const hasNext = i + 1 < OPPONENTS.length;
     const nextBtn = !humanWon ? `<button class="btn primary" data-opp="${i}">Try again</button>`
-      : !hasNext ? `<button class="btn primary" data-go="campaign">Journey complete!</button>`
-      : !FULL_VERSION && i + 1 >= DEMO_OPPONENTS ? `<a class="btn primary" href="#" data-buy>Unlock all 8 masters</a>`
-      : `<button class="btn primary" data-opp="${i + 1}">Next: ${OPPONENTS[i + 1].name}</button>`;
+      : !hasNext ? `<button class="btn primary" data-go="campaign">Summit reached!</button>`
+      : !FULL_VERSION && i + 1 >= DEMO_OPPONENTS ? `<a class="btn primary" href="#" data-buy>Unlock all 8 steps</a>`
+      : `<button class="btn primary" data-opp="${i + 1}">Climb on: ${OPPONENTS[i + 1].name}</button>`;
     html = `<h2>${humanWon ? 'Victory!' : draw ? 'Draw' : 'Defeat'}</h2>
       ${humanWon ? `<div class="stars">${starsHTML(stars)}</div>` : ''}
       <p>${humanWon ? `You beat ${OPPONENTS[i].name} with ${left} stone${left === 1 ? '' : 's'} left.` : why}</p>
       ${unlocked ? `<p class="unlock">New board unlocked: ${unlocked.name}</p>` : ''}
       ${humanWon && stars < 3 ? `<p>Keep 8 stones for three stars.</p>` : ''}
-      <div class="stack">${nextBtn}${humanWon ? `<button class="btn" data-opp="${i}">Replay</button>` : ''}<button class="btn ghost" data-go="campaign">Journey</button></div>`;
+      <div class="stack">${nextBtn}${humanWon ? `<button class="btn" data-opp="${i}">Replay</button>` : ''}<button class="btn ghost" data-go="campaign">The pyramid</button></div>`;
   } else {
     html = `<h2>${humanWon ? 'You win!' : draw ? 'Draw' : 'You lost'}</h2><p>${why}</p>
       <div class="stack"><button class="btn primary" data-replay>Play again</button>
@@ -621,11 +773,12 @@ $('#btn-hint').onclick = hint;
 $('#btn-reset').onclick = () => {
   if (!confirm('Reset all stars, stats and settings?')) return;
   Object.assign(data, structuredClone(DEFAULTS));
-  persist(); setSound(true); renderSettings();
+  persist(); setSound(true); setMusic(true); renderSettings();
 };
 document.querySelectorAll('[data-setting]').forEach(el => el.addEventListener('change', () => {
   data.settings[el.dataset.setting] = el.checked;
   if (el.dataset.setting === 'sound') setSound(el.checked);
+  if (el.dataset.setting === 'music') { setMusic(el.checked); if (el.checked) unlockAudio(); }
   persist();
 }));
 
@@ -636,6 +789,7 @@ canvas.addEventListener('pointerdown', e => {
 new ResizeObserver(() => { if ($('#game').classList.contains('active')) resize(); }).observe($('#play'));
 
 setSound(data.settings.sound);
+setMusic(data.settings.music);
 wireBuy();
 renderMenu();
 if (!data.lessonsDone && !data.saved && data.stats.played === 0) $('[data-action="tutorial"]').classList.add('primary');

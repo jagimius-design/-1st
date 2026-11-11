@@ -3,7 +3,9 @@
 ## Why this game
 
 - **Surakarta** is a traditional Javanese game: public domain, no licence or royalty. "Loopstone",
-  the art, code and characters are original. Do a trademark search on "Loopstone" in your markets
+  the art, music, code and characters are original. The setting is a Maya-inspired temple world
+  (invented characters, no real deities or copied glyphs), which gives it a strong look for store
+  pages without tying it to any licensed property. Do a trademark search on "Loopstone" in your markets
   before paying for store listings.
 - Almost no polished digital version exists on Steam, the App Store or Google Play, so the
   search term "Surakarta" and the "abstract strategy" niche are wide open.
@@ -16,8 +18,8 @@
 
 | Build | What's in it | Where |
 |---|---|---|
-| Demo (`dist/web`) | Tutorial, Journey opponents 1–3, Quick Play Beginner–Medium, Pass & Play, 2 boards | Your website, itch.io free page, Steam demo |
-| Full (`dist/full`) | All 8 Journey masters, Hard and Master AI, all 4 boards | Paid on each store |
+| Demo (`dist/web`) | Tutorial, Temple Ascent steps 1–3, Quick Play Beginner–Medium, Pass & Play, 2 boards | Your website, itch.io free page, Steam demo |
+| Full (`dist/full`) | All 8 pyramid steps, Hard and Master AI, all 4 boards | Paid on each store |
 
 Suggested prices: **$4.99 on Steam, $5–7 on itch.io (pay-what-you-want minimum), $2.99 on mobile**.
 No ads and no in-app purchases in v1 keeps reviews friendly and store review simple. A later
@@ -43,28 +45,29 @@ option is to make the mobile app free with one $2.99 "Unlock full game" in-app p
 
 ## Store listing copy
 
-**Short:** An ancient board game where every capture rides the loops. Easy to learn, hard to master.
+**Short:** Jade against obsidian on a temple stone. Every capture rides the loops. Easy to learn, hard to master.
 
 **Long:**
-Slide, loop, strike. Loopstone is the beautiful digital edition of Surakarta, a centuries-old
-strategy game from Java. It was nearly forgotten outside Indonesia.
+Slide, loop, strike. Loopstone brings a centuries-old strategy game to an ancient temple in the
+jungle, where jade and obsidian stones meet on a carved limestone board.
 
 Moving is simple: one step in any direction. Capturing is where it gets wild. Your stone races
-along the board's coloured lines and swings around the great corner loops to strike an enemy
-stone from across the board. Every line is a threat, and every loop is a chance.
+along the inlaid lines and swings around the great corner loops to strike an enemy stone from
+across the board. Every line is a threat, and every loop is a chance.
 
-- **The Journey:** 8 hand-tuned AI masters, from curious Pip to the unbeaten Loopmaster
+- **Temple Ascent:** climb the pyramid past 8 rivals, from the Novice Scribe to the Serpent King
 - **Quick Play** against 5 AI levels, from Beginner to a Master that plans many moves ahead
 - **Pass & Play** with a friend on one device
 - **Interactive tutorial**: learn in two minutes
+- Original flute, slit-drum and rattle soundtrack that never repeats
 - Capture-path previews and threat warnings, so beginners learn fast
-- 4 unlockable boards: Teak, Jade, Midnight, Sandstone
+- 4 unlockable boards: Limestone, Jungle, Night of Venus, Cinnabar
 - No ads, no timers, no internet needed
 
-**Tags:** board game, strategy, abstract, puzzle, chess-like, traditional, relaxing, singleplayer, local multiplayer
+**Tags:** board game, strategy, abstract, ancient, maya, puzzle, chess-like, traditional, relaxing, singleplayer, local multiplayer
 
 **Screenshots:** `store/`. Record a 15–30 s trailer of `04-lesson` → the four-loop capture in
-`05-loop-ride` → a Journey victory.
+`05-loop-ride` → a Temple Ascent victory, with the soundtrack.
 
 ## Content ideas for v1.1 (reasons to come back, review hooks)
 

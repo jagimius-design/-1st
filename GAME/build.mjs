@@ -16,5 +16,9 @@ for (const [name, full] of [['web', false], ['full', true]]) {
     .replace(/FULL_VERSION = \w+/, `FULL_VERSION = ${full}`)
     .replace(/STORE_URL = '[^']*'/, `STORE_URL = '${storeUrl}'`);
   writeFileSync(out + 'config.js', cfg);
+  // Inline the font so the game is a flat folder of files (store wrappers, artifact hosting).
+  const font = readFileSync(here + 'fonts/cinzel-700.woff2').toString('base64');
+  const css = readFileSync(out + 'style.css', 'utf8').replace('fonts/cinzel-700.woff2', `data:font/woff2;base64,${font}`);
+  writeFileSync(out + 'style.css', css);
   console.log(`dist/${name}: ${full ? 'full game' : 'demo'}`);
 }

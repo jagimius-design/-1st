@@ -1,12 +1,12 @@
 {
   "name": "Loopstone",
   "short_name": "Loopstone",
-  "description": "The ancient loop-capture board game of Surakarta.",
+  "description": "An ancient game of jade, obsidian and loops.",
   "start_url": ".",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#120b07",
-  "theme_color": "#1a120c",
+  "background_color": "#080d0b",
+  "theme_color": "#13201b",
   "icons": [
     { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml" },
     { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
