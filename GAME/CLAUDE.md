@@ -25,7 +25,7 @@ Content (opponents, lessons, themes and what the demo includes) is data in `cont
 - `content.js` — Temple Ascent opponents (with `look` and spoken `lines`), `ACHIEVEMENTS`, `STONES` sets, tutorial lessons, Beginner's Path puzzles (`DRILLS`), boards
   (`THEMES`), demo limits. Each achievement unlocks exactly one board or stone set (`unlock` field). New puzzles must pass `tests/coach.test.js` (a solution and a wrong answer).
 - `audio.js` — synthesised instruments (ocarina, slit drum, rattle, rain stick, conch), sound effects
-  and the generative background music (drum, rattle, flute, birds; no continuous drone).
+  and the generative background music: a 16-bar cycle at 100 bpm (groove, full band with harmony, breakdown, drum fill); no continuous drone.
 - `config.js` — `FULL_VERSION` and `STORE_URL`, the only build-time switches.
 - `build.mjs` — `node build.mjs [store-url]` writes `dist/web` (demo) and `dist/full` (paid), with the
   font inlined into `style.css`.

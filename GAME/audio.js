@@ -173,16 +173,24 @@ export const sfx = {
 
 // ---------------------------------------------------------------- generative music
 
-const BEAT = 60 / 76 / 2; // eighth notes at 76 bpm
-const DRUM = [[110, 0.22], 0, 0, [146.83, 0.14], 0, 0, [110, 0.16], [164.81, 0.1]]; // 3-3-2 pattern
+const BEAT = 60 / 100 / 2; // eighth notes at 100 bpm
+// A 16-bar cycle: groove builds (0-3), full band (4-11), breakdown with a flute run (12-13),
+// drum fill back to the top (14-15).
+const ROOTS = [110, 110, 98, 98, 130.81, 130.81, 146.83, 123.47]; // slit-drum riff root per bar (pentatonic)
+const BASS = [1, 0, 0, 1, 0, 0, 1, 0];                              // 3-3-2 on the deep drum
+const CLAVE = new Set([0, 3, 6, 10, 12]);                           // over two bars of eighths
 let nextAt = 0, step = 0, phrase = [];
+
+// Deep skin drum: a low thump with a fast pitch drop.
+const bassDrum = (bus, t, vol = 0.5) => { osc(bus, t, 92, 0.28, { vol, drop: 0.45 }); noise(bus, t, 0.02, { vol: vol * 0.3, freq: 300, q: 1 }); };
+const woodblock = (bus, t, vol = 0.12) => { osc(bus, t, 1650, 0.05, { vol, type: 'triangle' }); noise(bus, t, 0.015, { vol: vol * 0.6, freq: 3200, q: 8 }); };
 
 function startMusic() {
   if (!ctx || musicTimer) return;
   musicBus.gain.cancelScheduledValues(now());
-  musicBus.gain.setTargetAtTime(0.55, now(), 1.5);
-  nextAt = now() + 0.2; step = 0;
-  musicTimer = setInterval(schedule, 120);
+  musicBus.gain.setTargetAtTime(0.5, now(), 1);
+  nextAt = now() + 0.2; step = 0; phrase = [];
+  musicTimer = setInterval(schedule, 100);
 }
 
 function stopMusic() {
@@ -192,33 +200,62 @@ function stopMusic() {
 }
 
 function schedule() {
-  while (nextAt < now() + 0.5) {
-    const beat = step % 8, bar = (step / 8) | 0;
-    const d = DRUM[beat];
-    if (d && (bar % 8 < 6 || beat === 0)) slitDrum(musicBus, nextAt, d[0], d[1]);
-    if (beat % 2 === 1 && bar % 4 !== 3) rattle(musicBus, nextAt, 0.025);
-    if (beat === 0 && bar % 4 === 0 && !phrase.length && Math.random() < 0.8) phrase = makePhrase();
-    if (phrase.length) {
-      const n = phrase.shift();
-      if (n) ocarina(musicBus, nextAt, n[0], n[1] * BEAT, 0.07);
+  while (nextAt < now() + 0.4) {
+    const beat = step % 8, bar = ((step / 8) | 0) % 16, t = nextAt;
+    const full = bar >= 4 && bar < 12, breakdown = bar === 12 || bar === 13, fill = bar >= 14;
+    const root = ROOTS[bar % 8];
+
+    if (BASS[beat] && !breakdown) bassDrum(musicBus, t, beat === 0 ? 0.5 : 0.35);
+    if (full && beat === 4 && Math.random() < 0.5) bassDrum(musicBus, t, 0.2);
+
+    // slit-drum riff: root and fifth, busier in the full section
+    if (!fill) {
+      if (beat === 0 || beat === 3) slitDrum(musicBus, t, root, 0.2);
+      if (beat === 6) slitDrum(musicBus, t, root * 1.5, 0.14);
+      if (full && (beat === 2 || beat === 7)) slitDrum(musicBus, t, root * 2, 0.08);
+    } else {
+      // fill: a run of sixteenths down the scale
+      const k = (bar - 14) * 8 + beat;
+      if (bar === 15 || beat % 2 === 0) {
+        slitDrum(musicBus, t, SCALE[Math.max(0, 8 - (k >> 1))] / 2, 0.16);
+        if (bar === 15) slitDrum(musicBus, t + BEAT / 2, SCALE[Math.max(0, 7 - (k >> 1))] / 2, 0.12);
+      }
     }
-    if (beat === 4 && Math.random() < 0.12) bird(musicBus, nextAt);
-    if (beat === 0 && bar % 16 === 15) rainStick(musicBus, nextAt, 2.5, 0.02);
+
+    if (bar >= 2 && !fill && CLAVE.has((bar % 2) * 8 + beat)) woodblock(musicBus, t);
+
+    // shaker: eighths, doubled to sixteenths when the full band plays
+    rattle(musicBus, t, beat % 2 ? 0.035 : 0.018);
+    if (full) rattle(musicBus, t + BEAT / 2, 0.014);
+
+    // melody with a second flute a third below on longer notes
+    if ((full || breakdown) && !phrase.length && (beat === 0 || beat === 4)) phrase = makePhrase(breakdown);
+    if (phrase.length && !fill) {
+      const n = phrase.shift();
+      if (n) {
+        ocarina(musicBus, t, n[0], n[1] * BEAT, 0.075);
+        if (full && n[1] >= 2 && Math.random() < 0.6) ocarina(musicBus, t, n[0] * 0.8409, n[1] * BEAT, 0.04);
+      }
+    } else if (fill) phrase = [];
+    if (bar === 13 && beat === 4) for (let i = 0; i < 6; i++) ocarina(musicBus, t + i * BEAT / 2, SCALE[4 + i], BEAT * 0.6, 0.06);
+
+    if (beat === 5 && Math.random() < 0.1) bird(musicBus, t);
+    if (bar === 15 && beat === 0) rainStick(musicBus, t, 2.2, 0.025);
     nextAt += BEAT; step++;
   }
 }
 
 // A short wandering melody on the pentatonic scale, as a list of eighth-note slots.
-function makePhrase() {
+function makePhrase(sparse) {
   const out = [];
-  let i = 3 + (Math.random() * 4 | 0);
-  const notes = 4 + (Math.random() * 4 | 0);
+  let i = 4 + (Math.random() * 4 | 0);
+  const notes = sparse ? 3 : 5 + (Math.random() * 4 | 0);
   for (let k = 0; k < notes; k++) {
     i = Math.max(0, Math.min(SCALE.length - 1, i + [-2, -1, -1, 1, 1, 2, 0][Math.random() * 7 | 0]));
-    const len = k === notes - 1 ? 6 : [1, 2, 2, 3, 4][Math.random() * 5 | 0];
-    out.push([SCALE[i] * (Math.random() < 0.15 ? 0.5 : 1), len]);
+    const len = k === notes - 1 ? 4 : [1, 1, 2, 2, 3][Math.random() * 5 | 0];
+    out.push([SCALE[i], len]);
     for (let r = 1; r < len; r++) out.push(0);
   }
-  for (let r = 0; r < 16; r++) out.push(0);
+  for (let r = 0; r < (sparse ? 6 : 2); r++) out.push(0);
   return out;
 }

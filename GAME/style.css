@@ -256,3 +256,12 @@ h3 { font: 700 12px var(--sans); text-transform: uppercase; letter-spacing: .16e
 .toast .swatch { flex: none; width: 56px; height: 40px; margin: 0; }
 .toast.show { animation: drop .4s ease-out; }
 @keyframes drop { from { opacity: 0; transform: translate(-50%, -20px); } }
+
+/* the action a lesson or puzzle asks for */
+.task { display: flex; align-items: center; gap: 10px; margin-top: 10px; padding: 9px 12px; clip-path: var(--steps);
+  background: linear-gradient(180deg, #f3d987, var(--gold)); color: #2b1a06; font-size: 14px; animation: beckon 2s ease-in-out infinite; }
+.task b { font-weight: 800; text-transform: uppercase; letter-spacing: .06em; font-size: 12px; margin-right: 4px; }
+.task-icon { flex: none; width: 26px; height: 26px; display: grid; place-items: center; border-radius: 50%; background: #2b1a06; color: var(--gold); font-size: 11px; animation: nudge 1s ease-in-out infinite; }
+@keyframes beckon { 50% { filter: brightness(1.12); } }
+@keyframes nudge { 50% { transform: translateX(3px); } }
+.lesson .task b { display: inline; margin: 0 4px 0 0; color: #2b1a06; font: 800 12px var(--sans); letter-spacing: .06em; }

@@ -449,7 +449,7 @@ function draw(now) {
   // capture paths and move targets for the selection
   if (G.selected !== null && !anim) {
     const caps = G.moves.filter(m => m.capture), steps = G.moves.filter(m => !m.capture);
-    if (data.settings.hints || G.mode === 'lesson') {
+    if (data.settings.hints || G.lesson !== null || G.drill !== null) {
       ctx.save();
       ctx.strokeStyle = t.danger; ctx.lineWidth = s * 0.2; ctx.globalAlpha = 0.22;
       caps.forEach(m => strokePts(pathPoints(m.path)));
@@ -469,6 +469,19 @@ function draw(now) {
     const [x, y] = xy(G.selected);
     ctx.strokeStyle = t.mark; ctx.lineWidth = s * 0.06;
     ctx.beginPath(); ctx.arc(x, y, s * 0.44, 0, 7); ctx.stroke();
+  }
+
+  // in lessons and puzzles, invite the first tap: your stones pulse until one is picked
+  if ((G.lesson !== null || G.drill !== null) && G.selected === null && !anim && !G.busy && !G.over && humanTurn()) {
+    ctx.strokeStyle = '#f2c14e'; ctx.lineWidth = s * 0.07;
+    for (let sq = 0; sq < 36; sq++) if (board[sq] === G.state.turn) {
+      const [x, y] = xy(sq), k = (now / 900) % 1;
+      ctx.globalAlpha = 0.55 + 0.45 * pulse;
+      ctx.beginPath(); ctx.arc(x, y, s * 0.45, 0, 7); ctx.stroke();
+      ctx.globalAlpha = 0.8 * (1 - k);
+      ctx.beginPath(); ctx.arc(x, y, s * (0.45 + 0.3 * k), 0, 7); ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
   }
 
   // threatened own stones
@@ -633,8 +646,9 @@ function refresh() {
   $('#lesson').hidden = !lesson && !drill;
   const stepNav = (kind, i, n) => `<span class="step-nav"><button class="step" data-step="${kind}:${i - 1}" ${i === 0 ? 'disabled' : ''} aria-label="Previous">‹</button>
     <span>${i + 1} / ${n}</span><button class="step" data-step="${kind}:${i + 1}" ${i + 1 === n ? 'disabled' : ''} aria-label="Next">›</button></span>`;
-  if (lesson) $('#lesson').innerHTML = `<div class="lesson-head"><b>Lesson · ${lesson.title}</b>${stepNav('lesson', G.lesson, LESSONS.length)}</div>${lesson.text}`;
-  if (drill) $('#lesson').innerHTML = `<div class="lesson-head"><b>Tip · ${drill.title}</b>${stepNav('drill', G.drill, DRILLS.length)}</div>${drill.text}`;
+  const taskBar = task => G.over ? '' : `<div class="task"><span class="task-icon" aria-hidden="true">▶</span><span><b>Your move:</b> ${task}</span></div>`;
+  if (lesson) $('#lesson').innerHTML = `<div class="lesson-head"><b>Lesson · ${lesson.title}</b>${stepNav('lesson', G.lesson, LESSONS.length)}</div>${lesson.text}${taskBar(lesson.task)}`;
+  if (drill) $('#lesson').innerHTML = `<div class="lesson-head"><b>Tip · ${drill.title}</b>${stepNav('drill', G.drill, DRILLS.length)}</div>${drill.text}${taskBar(drill.task)}`;
   const coachOn = data.settings.coach && G.mode === 'ai' && !lesson && !drill;
   const tip = coachOn && humanTurn() && !G.over && !G.busy ? coachTip(G.state, G.human, G.lostLast) : null;
   $('#coach').hidden = !coachOn;
@@ -653,7 +667,8 @@ function refresh() {
   if (G.over) status.textContent = '';
   else if (G.state.quiet >= QUIET_LIMIT - 14) status.textContent = `${QUIET_LIMIT - G.state.quiet} moves left to capture — then more stones wins`;
   else if (G.mode === 'pass') status.textContent = `${sideName(G.state.turn)} to move`;
-  else status.textContent = humanTurn() ? (G.state.ply < 2 && !lesson && !drill ? 'Your move — tap a stone' : 'Your move') : `${opponentInfo().name} is thinking…`;
+  else if ((lesson || drill) && humanTurn() && !G.busy) status.textContent = G.selected === null ? 'Tap one of your glowing stones to start' : 'Now tap a glowing point to move there';
+  else status.textContent = humanTurn() ? (G.state.ply < 2 && !lesson ? 'Your move — tap a stone' : 'Your move') : `${opponentInfo().name} is thinking…`;
 }
 
 function onTap(sq) {
@@ -661,16 +676,16 @@ function onTap(sq) {
   if (!G || G.busy || G.over || G.thinking || !humanTurn() || sq < 0) return;
   const b = G.state.board;
   if (b[sq] === G.state.turn) {
-    if (G.selected === sq) { G.selected = null; G.moves = []; return; }
+    if (G.selected === sq) { G.selected = null; G.moves = []; return refresh(); }
     G.selected = sq;
     G.moves = movesFrom(b, sq, G.state.turn, true);
     sfx.select();
-    return;
+    return refresh();
   }
   const mv = G.moves.find(m => m.to === sq);
   if (mv) return play(mv);
   if (G.selected !== null && b[sq]) sfx.nope();
-  G.selected = null; G.moves = [];
+  if (G.selected !== null) { G.selected = null; G.moves = []; refresh(); }
 }
 
 // Animates a move and applies it. Returns false if the game was left meanwhile.
