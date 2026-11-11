@@ -18,7 +18,7 @@
 
 | Build | What's in it | Where |
 |---|---|---|
-| Demo (`dist/web`) | Tutorial, Temple Ascent steps 1–3, Quick Play Beginner–Medium, Pass & Play, 2 boards | Your website, itch.io free page, Steam demo |
+| Demo (`dist/web`) | Tutorial, Beginner's Path, coach, Temple Ascent steps 1–3, Quick Play Beginner–Medium, Pass & Play, 2 boards | Your website, itch.io free page, Steam demo |
 | Full (`dist/full`) | All 8 pyramid steps, Hard and Master AI, all 4 boards | Paid on each store |
 
 Suggested prices: **$4.99 on Steam, $5–7 on itch.io (pay-what-you-want minimum), $2.99 on mobile**.
@@ -59,6 +59,8 @@ across the board. Every line is a threat, and every loop is a chance.
 - **Quick Play** against 5 AI levels, from Beginner to a Master that plans many moves ahead
 - **Pass & Play** with a friend on one device
 - **Interactive tutorial**: learn in two minutes
+- **Beginner's Path**: 7 strategy tips, each with a puzzle, to go from knowing the rules to winning games
+- **Coach** that comments on your games: free captures, stones in danger, when to play safe
 - Original flute, slit-drum and rattle soundtrack that never repeats
 - Capture-path previews and threat warnings, so beginners learn fast
 - 4 unlockable boards: Limestone, Jungle, Night of Venus, Cinnabar

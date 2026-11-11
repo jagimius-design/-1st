@@ -1,8 +1,9 @@
 // Screens, board rendering, input and game flow.
-import { P1, P2, QUIET_LIMIT, CIRCUITS, row, col, newGame, fromLayout, movesFrom, applyMove, outcome,
+import { P1, P2, QUIET_LIMIT, CIRCUITS, row, col, newGame, fromLayout, movesFrom, legalMoves, applyMove, outcome,
   attackedBy, toJSON, fromJSON } from './core.js';
 import { chooseMove, LEVELS } from './ai.js';
-import { OPPONENTS, LESSONS, THEMES, DEMO_OPPONENTS, DEMO_LEVELS } from './content.js';
+import { OPPONENTS, LESSONS, DRILLS, THEMES, DEMO_OPPONENTS, DEMO_LEVELS } from './content.js';
+import { meetsGoal, coachTip } from './coach.js';
 import { sfx, setSound, setMusic, unlockAudio } from './audio.js';
 import { FULL_VERSION, STORE_URL } from './config.js';
 
@@ -12,8 +13,8 @@ const SIDE_NAME = { [P1]: 'Jade', [P2]: 'Obsidian' };
 // ---------------------------------------------------------------- saved data
 
 const KEY = 'loopstone.v1';
-const DEFAULTS = { settings: { sound: true, music: true, hints: true, threats: false, theme: 'temple' }, stars: [],
-  stats: { played: 0, won: 0, lost: 0, drawn: 0 }, lessonsDone: false, saved: null };
+const DEFAULTS = { settings: { sound: true, music: true, coach: true, hints: true, threats: false, theme: 'temple' }, stars: [],
+  stats: { played: 0, won: 0, lost: 0, drawn: 0 }, lessonsDone: false, drills: [], saved: null };
 const data = (() => {
   try {
     const s = JSON.parse(localStorage.getItem(KEY)) || {};
@@ -31,7 +32,7 @@ const theme = () => THEMES[themeOpen(data.settings.theme) ? data.settings.theme 
 
 function show(id) {
   document.querySelectorAll('.screen').forEach(el => el.classList.toggle('active', el.id === id));
-  ({ menu: renderMenu, campaign: renderCampaign, quick: renderQuick, settings: renderSettings })[id]?.();
+  ({ menu: renderMenu, campaign: renderCampaign, quick: renderQuick, settings: renderSettings, path: renderPath })[id]?.();
   if (id === 'game') requestAnimationFrame(resize);
 }
 
@@ -74,6 +75,16 @@ function renderCampaign() {
   }).join('');
   const next = OPPONENTS.findIndex((_, i) => opponentOpen(i) && !(data.stars[i] > 0));
   if (next > 0) document.querySelector(`#opponents [data-opp="${next}"]`)?.scrollIntoView({ block: 'center' });
+}
+
+function renderPath() {
+  const done = data.drills.filter(Boolean).length;
+  $('#path-count').textContent = `${done}/${DRILLS.length}`;
+  const item = (attrs, title, sub, ok) => `<li><button class="opp" ${attrs}>
+    <span class="tick ${ok ? 'ok' : ''}">${ok ? '✓' : ''}</span>
+    <span class="opp-body"><span class="opp-name">${title}</span><div class="opp-blurb">${sub}</div></span></button></li>`;
+  $('#drills').innerHTML = item('data-lesson="0"', 'The rules', 'Moving, capturing and winning, in four short lessons.', data.lessonsDone)
+    + DRILLS.map((d, i) => item(`data-drill="${i}"`, `${i + 1}. ${d.title}`, d.text.split('. ')[0] + '.', data.drills[i])).join('');
 }
 
 let quickLevel = 1, quickSide = P1;
@@ -501,7 +512,7 @@ function requestMove(state, level) {
 let G = null, token = 0;
 
 function startGame(cfg) {
-  G = { mode: 'ai', human: P1, level: 1, opponent: null, lesson: null, state: newGame(), history: [],
+  G = { mode: 'ai', human: P1, level: 1, opponent: null, lesson: null, drill: null, lostLast: false, state: newGame(), history: [],
     last: null, selected: null, moves: [], hint: null, threats: null, busy: false, thinking: false, over: null, ...cfg };
   G.token = ++token;
   $('#overlay').hidden = true;
@@ -512,7 +523,7 @@ function startGame(cfg) {
 
 const humanTurn = () => G.mode === 'pass' || G.state.turn === G.human;
 const opponentInfo = () => G.opponent !== null ? OPPONENTS[G.opponent]
-  : { name: G.lesson !== null ? 'Temple Guide' : `${LEVELS[G.level].name} rival`, title: '', color: '#c9b27c', glyph: G.lesson !== null ? 'G' : LEVELS[G.level].name[0] };
+  : { name: G.lesson !== null || G.drill !== null ? 'Temple Guide' : `${LEVELS[G.level].name} rival`, title: '', color: '#c9b27c', glyph: G.lesson !== null || G.drill !== null ? 'G' : LEVELS[G.level].name[0] };
 
 function chip(el, side, label, sub, av) {
   const active = !G.over && G.state.turn === side;
@@ -534,12 +545,19 @@ function refresh() {
     chip($('#chip-top'), top, o.name, o.title || SIDE_NAME[top], avatar(o));
     chip($('#chip-bottom'), bottom, 'You', SIDE_NAME[bottom], you);
   }
-  $('#chip-top').hidden = !!lesson && lesson.goal !== 'win';
-  $('#lesson').hidden = !lesson;
-  resize();
+  const drill = G.drill !== null ? DRILLS[G.drill] : null;
+  $('#chip-top').hidden = (!!lesson && lesson.goal !== 'win') || !!drill;
+  $('#lesson').hidden = !lesson && !drill;
   if (lesson) $('#lesson').innerHTML = `<b>Lesson ${G.lesson + 1} of ${LESSONS.length} · ${lesson.title}</b>${lesson.text}`;
-  $('#game-title').textContent = lesson ? 'How to Play' : G.mode === 'pass' ? 'Pass & Play' : G.opponent !== null ? 'Temple Ascent' : 'Quick Play';
-  $('#btn-undo').hidden = G.opponent !== null || !!lesson;
+  if (drill) $('#lesson').innerHTML = `<b>Tip ${G.drill + 1} of ${DRILLS.length} · ${drill.title}</b>${drill.text}`;
+  const coachOn = data.settings.coach && G.mode === 'ai' && !lesson && !drill;
+  const tip = coachOn && humanTurn() && !G.over && !G.busy ? coachTip(G.state, G.human, G.lostLast) : null;
+  $('#coach').hidden = !coachOn;
+  $('#coach').className = `coach ${tip ? tip.kind : 'idle'}`;
+  $('#coach').innerHTML = tip ? `<b>Coach</b>${tip.text}` : `<b>Coach</b>Watching ${opponentInfo().name}…`;
+  resize();
+  $('#game-title').textContent = lesson ? 'How to Play' : drill ? 'Beginner\u2019s Path' : G.mode === 'pass' ? 'Pass & Play' : G.opponent !== null ? 'Temple Ascent' : 'Quick Play';
+  $('#btn-undo').hidden = G.opponent !== null || !!lesson || !!drill;
   $('#btn-hint').hidden = G.opponent !== null || G.mode === 'pass';
   $('#btn-undo').disabled = G.busy || G.thinking || !G.history.length || !!G.over;
   $('#btn-hint').disabled = G.busy || G.thinking || !humanTurn() || !!G.over;
@@ -550,7 +568,7 @@ function refresh() {
   if (G.over) status.textContent = '';
   else if (G.state.quiet >= QUIET_LIMIT - 14) status.textContent = `${QUIET_LIMIT - G.state.quiet} moves left to capture — then more stones wins`;
   else if (G.mode === 'pass') status.textContent = `${SIDE_NAME[G.state.turn]} to move`;
-  else status.textContent = humanTurn() ? (G.state.ply < 2 && !lesson ? 'Your move — tap a stone' : 'Your move') : `${opponentInfo().name} is thinking…`;
+  else status.textContent = humanTurn() ? (G.state.ply < 2 && !lesson && !drill ? 'Your move — tap a stone' : 'Your move') : `${opponentInfo().name} is thinking…`;
 }
 
 function onTap(sq) {
@@ -570,22 +588,30 @@ function onTap(sq) {
   G.selected = null; G.moves = [];
 }
 
-async function play(mv) {
+// Animates a move and applies it. Returns false if the game was left meanwhile.
+async function animateAndApply(mv) {
   const tk = G.token;
-  G.busy = true; G.selected = null; G.moves = []; G.hint = null;
-  refresh();
   await animateMove(mv);
-  if (tk !== G.token) return;
+  if (tk !== G.token) return false;
   if (mv.capture) {
     const victim = G.state.board[mv.to] === P1 ? theme().p1 : theme().p2;
     burst(mv.to, [...victim, theme().danger]);
     sfx.capture();
     navigator.vibrate?.(30);
   } else sfx.step();
+  G.lostLast = G.state.turn !== G.human && mv.capture;
   G.history.push(G.state);
   G.state = applyMove(G.state, mv);
   G.last = mv;
+  return true;
+}
+
+async function play(mv) {
+  G.busy = true; G.selected = null; G.moves = []; G.hint = null;
+  refresh();
+  if (!await animateAndApply(mv)) return;
   G.busy = false;
+  if (G.drill !== null) return drillStep(mv);
 
   const lesson = G.lesson !== null ? LESSONS[G.lesson] : null;
   if (lesson && lesson.goal !== 'win') return lessonStep(lesson, mv);
@@ -622,6 +648,13 @@ function undo() {
 
 function hint() {
   if (!humanTurn() || G.busy) return;
+  if (G.drill !== null) {
+    const d = DRILLS[G.drill];
+    G.hint = legalMoves(G.state.board, G.human).find(m => meetsGoal(d.goal, G.state, m));
+    G.selected = G.hint.from;
+    G.moves = movesFrom(G.state.board, G.hint.from, G.state.turn, true);
+    return refresh();
+  }
   G.thinking = true;
   refresh();
   const tk = G.token;
@@ -636,7 +669,7 @@ function hint() {
 }
 
 function saveGame() {
-  data.saved = G.lesson === null && !G.over
+  data.saved = G.lesson === null && G.drill === null && !G.over
     ? { mode: G.mode, human: G.human, level: G.level, opponent: G.opponent, state: toJSON(G.state) } : null;
   persist();
 }
@@ -657,6 +690,42 @@ function lessonStep(lesson, mv) {
     <div class="stack"><button class="btn primary" data-next-lesson>Next lesson</button><button class="btn ghost" data-go="menu">Menu</button></div>`);
 }
 
+// A Beginner's Path puzzle: right moves complete it; a wrong one shows the punishment, then resets.
+async function drillStep(mv) {
+  const d = DRILLS[G.drill], start = G.history[0];
+  if (meetsGoal(d.goal, G.history.at(-1), mv)) {
+    G.over = { winner: G.human, reason: 'drill' };
+    data.drills[G.drill] = true;
+    persist();
+    sfx.win();
+    const last = G.drill + 1 >= DRILLS.length;
+    return overlay(`<h2>Well played</h2><p>${d.title}: ${['you kept every stone out of reach.', 'you struck before they could.',
+      'a free stone, with nothing lost.', 'you saw the trap and stepped around it.', 'two stones attacked: they can only save one.',
+      'the corner keeps your stone safe.', 'with the lead, safe moves win the game.'][G.drill]}</p>
+      <div class="stack">${last ? '<button class="btn primary" data-opp="0">Climb the temple</button>' : '<button class="btn primary" data-next-drill>Next tip</button>'}
+      <button class="btn ghost" data-go="path">Beginner\u2019s Path</button></div>`);
+  }
+  const tk = G.token;
+  G.busy = true;
+  sfx.nope();
+  $('#status').textContent = d.miss;
+  $('#status').classList.add('warn');
+  const reply = legalMoves(G.state.board, G.state.turn, true).find(m => m.capture);
+  await new Promise(r => setTimeout(r, 700));
+  if (tk !== G.token) return;
+  if (reply) { if (!await animateAndApply(reply)) return; }
+  await new Promise(r => setTimeout(r, reply ? 1600 : 900));
+  if (tk !== G.token) return;
+  G.state = start; G.history = []; G.last = null; G.busy = false;
+  refresh();
+  $('#status').textContent = d.miss + ' Try again.';
+}
+
+function startDrill(i) {
+  const d = DRILLS[i];
+  startGame({ mode: 'ai', drill: i, level: 0, human: P1, state: { ...fromLayout(d.layout), quiet: d.quiet || 0 } });
+}
+
 function startLesson(i) {
   const L = LESSONS[i];
   startGame({ mode: 'ai', lesson: i, level: 0, human: P1, state: fromLayout(L.layout) });
@@ -674,8 +743,8 @@ function finish(res) {
     if (humanWon) { data.lessonsDone = true; persist(); sfx.win(); }
     else sfx.lose();
     html = humanWon
-      ? `<h2>You’re ready</h2><p>You know everything you need. The temple steps await.</p>
-        <div class="stack"><button class="btn primary" data-opp="0">Climb the temple</button><button class="btn ghost" data-go="menu">Menu</button></div>`
+      ? `<h2>You know the rules</h2><p>Now learn how to get the upper hand: seven short strategy puzzles on the Beginner\u2019s Path.</p>
+        <div class="stack"><button class="btn primary" data-drill="0">Beginner\u2019s Path: strategy tips</button><button class="btn" data-opp="0">Climb the temple</button><button class="btn ghost" data-go="menu">Menu</button></div>`
       : `<h2>So close</h2><p>${why} Give it another go.</p>
         <div class="stack"><button class="btn primary" data-lesson="${G.lesson}">Try again</button><button class="btn ghost" data-go="menu">Menu</button></div>`;
     return overlay(html);
@@ -753,6 +822,8 @@ document.addEventListener('click', e => {
   }
   if (d.lesson !== undefined) return startLesson(+d.lesson);
   if ('nextLesson' in d) return startLesson(G.lesson + 1);
+  if (d.drill !== undefined) return startDrill(+d.drill);
+  if ('nextDrill' in d) return startDrill(G.drill + 1);
   if ('replay' in d) return startGame({ mode: 'ai', level: G.level, human: G.human });
   if ('levelUp' in d) return startGame({ mode: 'ai', level: G.level + 1, human: G.human });
   if (d.action === 'pass') return startGame({ mode: 'pass' });

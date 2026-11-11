@@ -10,14 +10,18 @@ Pages at `/game/` beside SITE (`.github/workflows/pages.yml`).
 Rules live in `core.js`, the opponent in `ai.js` (run in a worker), everything on screen in `ui.js`.
 Content (opponents, lessons, themes and what the demo includes) is data in `content.js`.
 
-- `index.html` — all screens: menu (with the temple scene), Temple Ascent, Quick Play, Settings, game.
+- `index.html` — all screens: menu (with the temple scene), Temple Ascent, Beginner's Path, Quick Play,
+  Settings, game.
 - `style.css` — screen and component styles.
 - `ui.js` — screens, canvas drawing (carved board cached per size/theme, stone sprites), animation, input,
   game flow, saved data (`localStorage`).
 - `core.js` — rules: circuits, moves, captures with paths, outcome. Pure, runs in Node.
 - `ai.js` — `chooseMove` (negamax, quiescence, iterative deepening) and the five `LEVELS`.
 - `ai-worker.js` — runs `chooseMove` off the main thread.
-- `content.js` — Temple Ascent opponents, tutorial lessons, board themes, demo limits.
+- `coach.js` — strategy help: `meetsGoal` checks Beginner's Path puzzle answers, `coachTip` picks the
+  in-game coach's line. Rests on threats being mutual: a capture path reversed is a capture path.
+- `content.js` — Temple Ascent opponents, tutorial lessons, Beginner's Path puzzles (`DRILLS`), board
+  themes, demo limits. New puzzles must pass `tests/coach.test.js` (a solution and a wrong answer).
 - `audio.js` — synthesised instruments (ocarina, slit drum, rattle, rain stick, conch), sound effects
   and the generative background music.
 - `config.js` — `FULL_VERSION` and `STORE_URL`, the only build-time switches.

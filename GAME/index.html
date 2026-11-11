@@ -43,6 +43,7 @@
       <button class="btn" data-go="quick">Quick Play</button>
       <button class="btn" data-action="pass">Pass &amp; Play</button>
       <button class="btn" data-action="tutorial">How to Play</button>
+      <button class="btn" data-go="path">Beginner&rsquo;s Path</button>
       <button class="btn ghost" data-go="settings">Settings</button>
     </nav>
     <p class="demo-note" data-demo hidden>Free demo · <a href="#" data-buy>Get the full game</a></p>
@@ -53,6 +54,12 @@
     <div id="pyramid"></div>
     <p class="intro">Eight rivals guard the steps of the great pyramid. Beat each one to climb higher. Keep more stones to earn more stars.</p>
     <ol class="opponents" id="opponents"></ol>
+  </section>
+
+  <section id="path" class="screen">
+    <header class="bar"><button class="back" data-go="menu" aria-label="Back">‹</button><h2>Beginner&rsquo;s Path</h2><span class="stars-total" id="path-count"></span></header>
+    <p class="intro">Learn the rules, then seven tips for getting the upper hand. Each tip ends in a puzzle: find the move that puts it into practice.</p>
+    <ol class="opponents path" id="drills"></ol>
   </section>
 
   <section id="quick" class="screen">
@@ -71,6 +78,7 @@
     <header class="bar"><button class="back" data-go="menu" aria-label="Back">‹</button><h2>Settings</h2></header>
     <label class="toggle"><span>Music<small>Flute, drum and rattle, generated as you play</small></span><input type="checkbox" id="set-music" data-setting="music"></label>
     <label class="toggle"><span>Sound effects</span><input type="checkbox" id="set-sound" data-setting="sound"></label>
+    <label class="toggle"><span>Coach<small>Tips during games against the computer</small></span><input type="checkbox" id="set-coach" data-setting="coach"></label>
     <label class="toggle"><span>Show moves<small>Dots and capture paths for the selected stone</small></span><input type="checkbox" id="set-hints" data-setting="hints"></label>
     <label class="toggle"><span>Show threats<small>Mark your stones the opponent can capture</small></span><input type="checkbox" id="set-threats" data-setting="threats"></label>
     <h3>Board</h3>
@@ -96,6 +104,7 @@
       <div class="board-wrap"><canvas id="board" aria-label="Game board"></canvas></div>
       <div class="chip" id="chip-bottom"></div>
       <p class="status" id="status" aria-live="polite"></p>
+      <div class="coach" id="coach" aria-live="polite" hidden></div>
     </div>
     <div class="overlay" id="overlay" hidden><div class="card" id="card"></div></div>
   </section>

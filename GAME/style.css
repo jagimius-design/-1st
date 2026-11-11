@@ -186,3 +186,17 @@ h3 { font: 700 12px var(--sans); text-transform: uppercase; letter-spacing: .16e
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+/* Beginner's Path list runs top to bottom, unlike the pyramid */
+.opponents.path { flex-direction: column; }
+.tick { flex: none; width: 36px; height: 36px; display: grid; place-items: center; font-weight: 700; color: var(--lime);
+  border: 2px dashed rgba(216, 199, 159, .3); border-radius: 30%; }
+.tick.ok { border: 0; background: var(--jade); color: #eafff3; }
+
+/* coach: a short line of advice under the board */
+.coach { clip-path: var(--steps); padding: 9px 14px; font-size: 14px; background: var(--panel); min-height: calc(3 * 1.45em + 18px); color: var(--ink); }
+.coach b { font: 700 12px var(--display); letter-spacing: .1em; text-transform: uppercase; margin-right: 8px; color: var(--muted); }
+.coach.good { background: rgba(63, 154, 114, .2); } .coach.good b { color: #7fe0b1; }
+.coach.warn { background: rgba(192, 83, 58, .2); } .coach.warn b { color: #ff9a7a; }
+.coach.info b { color: var(--gold); }
+.coach.idle { color: var(--muted); }
