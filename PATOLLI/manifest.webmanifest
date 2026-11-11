@@ -1,0 +1,14 @@
+{
+  "name": "Court of Fortune",
+  "short_name": "Court of Fortune",
+  "description": "The ancient Mesoamerican game of Patolli.",
+  "start_url": ".",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0c0705",
+  "theme_color": "#140d0a",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

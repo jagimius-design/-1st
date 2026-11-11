@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Court of Fortune</title>
+<meta name="description" content="Court of Fortune: the ancient Mesoamerican game of Patolli. Throw the beans, race the cross, bet your jade.">
+<meta name="theme-color" content="#140d0a">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-512.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="toast" id="toast" role="status" hidden></div>
+<main id="app">
+
+  <section id="menu" class="screen active">
+    <div class="scene" aria-hidden="true">
+      <svg viewBox="0 0 400 230" preserveAspectRatio="xMidYMax slice">
+        <g class="stars"><circle cx="40" cy="30" r="1.2"/><circle cx="90" cy="60" r="1"/><circle cx="330" cy="40" r="1.3"/><circle cx="370" cy="80" r="1"/><circle cx="260" cy="20" r="1"/><circle cx="140" cy="18" r="1.1"/></g>
+        <circle cx="300" cy="58" r="22" class="moon"/>
+        <path class="palace" d="M30 230V150H70V136H110V122H290V136H330V150H370V230Z"/>
+        <path class="palace" d="M140 122V100H260V122Z"/><path class="palace" d="M160 100V86H240V100Z"/>
+        <g class="windows"><rect x="186" y="104" width="28" height="18"/><rect x="82" y="160" width="12" height="16"/><rect x="306" y="160" width="12" height="16"/>
+          <rect x="128" y="138" width="10" height="14"/><rect x="262" y="138" width="10" height="14"/></g>
+        <path class="stair" d="M176 230V122h48v108z"/>
+        <g class="stair-lines"><path d="M176 140h48M176 158h48M176 176h48M176 194h48M176 212h48"/></g>
+        <g class="torch"><rect x="58" y="168" width="6" height="40"/><rect x="336" y="168" width="6" height="40"/></g>
+      </svg>
+      <i class="flame" style="--x:15.25%;--y:62%"></i><i class="flame" style="--x:84.75%;--y:62%"></i>
+      <i class="ember" style="--x:15.5%;--d:3s"></i><i class="ember" style="--x:84.5%;--d:4s"></i><i class="ember" style="--x:16%;--d:5s"></i>
+    </div>
+    <div class="hero">
+      <h1>Court of Fortune</h1>
+      <div class="fret" aria-hidden="true"></div>
+      <p class="tag">The ancient game of Patolli. Throw the beans, race the cross, bet your jade.</p>
+    </div>
+    <nav class="stack">
+      <button class="btn primary" id="btn-resume" hidden>Resume match</button>
+      <button class="btn primary" data-go="court">The Court</button>
+      <button class="btn" data-go="quick">Quick Play</button>
+      <button class="btn" data-go="rules">How to Play</button>
+      <button class="btn" data-go="achievements">Achievements</button>
+      <button class="btn ghost" data-go="settings">Settings</button>
+    </nav>
+    <p class="demo-note" data-demo hidden><span>Free demo: 2 of 6 rivals, Easy and Medium.</span><a class="btn buy" href="#" data-buy>Get the full game</a></p>
+  </section>
+
+  <section id="court" class="screen">
+    <header class="bar"><button class="back" data-go="menu" aria-label="Back">‹</button><h2>The Court</h2><span class="count" id="court-stars"></span></header>
+    <p class="intro">Six gamblers rule this court. Beat each one at their table to face the next. Finish with more jade than you started with to earn more stars.</p>
+    <ol class="list" id="rivals"></ol>
+  </section>
+
+  <section id="quick" class="screen">
+    <header class="bar"><button class="back" data-go="menu" aria-label="Back">‹</button><h2>Quick Play</h2></header>
+    <h3>Rules</h3>
+    <div class="choices" id="variants"></div>
+    <h3>Opponent</h3>
+    <div class="choices" id="levels"></div>
+    <button class="btn primary wide" id="btn-quick-start">Play</button>
+  </section>
+
+  <section id="rules" class="screen">
+    <header class="bar"><button class="back" data-go="menu" aria-label="Back">‹</button><h2>How to Play</h2><span class="count" id="rule-count"></span></header>
+    <div class="rule-card" id="rule-card"></div>
+    <div class="rule-nav">
+      <button class="btn" id="rule-prev">‹ Back</button>
+      <button class="btn primary" id="rule-next">Next ›</button>
+    </div>
+  </section>
+
+  <section id="achievements" class="screen">
+    <header class="bar"><button class="back" data-go="menu" aria-label="Back">‹</button><h2>Achievements</h2><span class="count" id="ach-count"></span></header>
+    <p class="intro">Each achievement unlocks a new mat or set of beans. Choose them in Settings.</p>
+    <ol class="list" id="ach-list"></ol>
+  </section>
+
+  <section id="settings" class="screen">
+    <header class="bar"><button class="back" data-go="menu" aria-label="Back">‹</button><h2>Settings</h2></header>
+    <label class="toggle"><span>Music<small>Flute, drum and rattle, generated as you play</small></span><input type="checkbox" id="set-music" data-setting="music"></label>
+    <label class="toggle"><span>Sound effects</span><input type="checkbox" id="set-sound" data-setting="sound"></label>
+    <label class="toggle"><span>Coach<small>Advice under the board during matches</small></span><input type="checkbox" id="set-coach" data-setting="coach"></label>
+    <label class="toggle"><span>Quick moves<small>Move automatically when only one stone can go</small></span><input type="checkbox" id="set-auto" data-setting="auto"></label>
+    <h3>Mat</h3>
+    <div class="swatches" id="mats"></div>
+    <h3>Beans</h3>
+    <div class="swatches" id="beansets"></div>
+    <h3>Record</h3>
+    <dl class="stats" id="stats"></dl>
+    <button class="btn ghost danger-text" id="btn-reset">Reset progress</button>
+    <div class="confirm" id="confirm-reset" hidden><p>Erase all stars, achievements and records?</p>
+      <div class="row"><button class="btn" id="reset-no">Keep them</button><button class="btn danger" id="reset-yes">Erase</button></div></div>
+    <p class="fine">Court of Fortune v1.0 · Patolli was played across ancient Mesoamerica. All characters are invented. Cinzel font under the SIL Open Font License.</p>
+  </section>
+
+  <section id="game" class="screen">
+    <header class="bar game-bar">
+      <button class="back" id="btn-leave" aria-label="Menu">‹</button>
+      <h2 id="game-title"></h2>
+      <button class="tool" data-go-rules>Rules</button>
+    </header>
+    <div class="play" id="play">
+      <div class="chip" id="chip-top"></div>
+      <div class="say" id="say" hidden></div>
+      <div class="board-wrap"><canvas id="board" aria-label="Patolli board"></canvas></div>
+      <div class="chip" id="chip-bottom"></div>
+      <div class="action">
+        <div class="tray" id="tray" aria-label="Beans">
+          <span class="bean"></span><span class="bean"></span><span class="bean"></span><span class="bean"></span><span class="bean"></span>
+          <b class="result" id="result"></b>
+        </div>
+        <button class="btn primary throw" id="btn-throw">Throw the beans</button>
+      </div>
+      <p class="status" id="status" aria-live="polite"></p>
+      <div class="coach" id="coach" aria-live="polite" hidden></div>
+    </div>
+    <div class="overlay" id="overlay" hidden><div class="card" id="card"></div></div>
+  </section>
+
+</main>
+<script type="module" src="ui.js"></script>
+</body>
+</html>

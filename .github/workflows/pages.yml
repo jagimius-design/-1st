@@ -3,7 +3,7 @@ name: Deploy site to Pages
 on:
   push:
     branches: [main]
-    paths: ["SITE/**", "GAME/**", ".github/workflows/pages.yml"]
+    paths: ["SITE/**", "GAME/**", "PATOLLI/**", ".github/workflows/pages.yml"]
   workflow_dispatch:
 
 permissions:
@@ -28,8 +28,10 @@ jobs:
           node-version: 22
       - run: node --test SITE/tests/*.test.js
       - run: cd GAME && npm ci && npm test
+      - run: cd PATOLLI && npm ci && npm test
       - run: mkdir -p _site/img && cp SITE/*.html SITE/*.css SITE/*.js SITE/*.svg SITE/*.webmanifest _site/ && cp SITE/img/*.webp _site/img/
       - run: cd GAME && node build.mjs && cp -r dist/web ../_site/game
+      - run: cd PATOLLI && node build.mjs && cp -r dist/web ../_site/fortune
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
