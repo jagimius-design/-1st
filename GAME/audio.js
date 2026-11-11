@@ -161,13 +161,12 @@ export const sfx = {
 
 const BEAT = 60 / 76 / 2; // eighth notes at 76 bpm
 const DRUM = [[110, 0.22], 0, 0, [146.83, 0.14], 0, 0, [110, 0.16], [164.81, 0.1]]; // 3-3-2 pattern
-let nextAt = 0, step = 0, drone = null, phrase = [];
+let nextAt = 0, step = 0, phrase = [];
 
 function startMusic() {
   if (!ctx || musicTimer) return;
   musicBus.gain.cancelScheduledValues(now());
   musicBus.gain.setTargetAtTime(0.55, now(), 1.5);
-  startDrone();
   nextAt = now() + 0.2; step = 0;
   musicTimer = setInterval(schedule, 120);
 }
@@ -176,29 +175,6 @@ function stopMusic() {
   if (!ctx || !musicTimer) return;
   clearInterval(musicTimer); musicTimer = null;
   musicBus.gain.setTargetAtTime(0, now(), 0.4);
-  const d = drone; drone = null;
-  setTimeout(() => d?.forEach(n => n.stop()), 2000);
-}
-
-// A low breathy hum on A and E, swelling slowly.
-function startDrone() {
-  if (drone) return;
-  const g = ctx.createGain(), f = ctx.createBiquadFilter(), lfo = ctx.createOscillator(), lg = ctx.createGain();
-  f.type = 'lowpass'; f.frequency.value = 420;
-  g.gain.value = 0.05;
-  lfo.frequency.value = 0.07; lg.gain.value = 0.03;
-  lfo.connect(lg).connect(g.gain);
-  const oscs = [55, 82.41, 110.3].map(fr => {
-    const o = ctx.createOscillator(); o.type = 'triangle'; o.frequency.value = fr; o.connect(f); o.start(); return o;
-  });
-  const wind = ctx.createBufferSource(), wf = ctx.createBiquadFilter(), wg = ctx.createGain();
-  wind.buffer = noiseBuf; wind.loop = true;
-  wf.type = 'bandpass'; wf.frequency.value = 500; wf.Q.value = 0.7; wg.gain.value = 0.025;
-  wind.connect(wf).connect(wg).connect(musicBus);
-  wind.start();
-  f.connect(g).connect(musicBus);
-  lfo.start();
-  drone = [...oscs, lfo, wind];
 }
 
 function schedule() {

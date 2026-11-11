@@ -55,7 +55,7 @@ Moving is simple: one step in any direction. Capturing is where it gets wild. Yo
 along the inlaid lines and swings around the great corner loops to strike an enemy stone from
 across the board. Every line is a threat, and every loop is a chance.
 
-- **Temple Ascent:** climb the pyramid past 8 rivals, from the Novice Scribe to the Serpent King
+- **Temple Ascent:** climb the pyramid past 8 rivals, from the Novice Scribe to the Serpent King, each with their own portrait and voice
 - **Quick Play** against 5 AI levels, from Beginner to a Master that plans many moves ahead
 - **Pass & Play** with a friend on one device
 - **Interactive tutorial**: learn in two minutes

@@ -4,6 +4,7 @@ import { P1, P2, QUIET_LIMIT, CIRCUITS, row, col, newGame, fromLayout, movesFrom
 import { chooseMove, LEVELS } from './ai.js';
 import { OPPONENTS, LESSONS, DRILLS, THEMES, DEMO_OPPONENTS, DEMO_LEVELS } from './content.js';
 import { meetsGoal, coachTip } from './coach.js';
+import { portrait } from './portraits.js';
 import { sfx, setSound, setMusic, unlockAudio } from './audio.js';
 import { FULL_VERSION, STORE_URL } from './config.js';
 
@@ -43,7 +44,9 @@ function renderMenu() {
 
 const starsHTML = n => [0, 1, 2].map(i => `<span class="${i < n ? '' : 'off'}">★</span>`).join('');
 // Opponents are shown as carved glyph blocks: a rounded cartouche with their initial.
-const avatar = o => `<span class="avatar" style="--glyph:${o.color}">${o.glyph || o.name[0]}</span>`;
+const avatar = o => o.look ? `<span class="avatar drawn">${portrait(o.look, o.color)}</span>`
+  : `<span class="avatar" style="--glyph:${o.color}">${o.glyph || o.name[0]}</span>`;
+const pick = list => list[Math.random() * list.length | 0];
 
 // Temple Ascent progress as a stepped pyramid: one tier per opponent, lit once beaten.
 function pyramidSVG() {
@@ -68,7 +71,7 @@ function renderCampaign() {
     return `<li><button class="opp" data-opp="${i}" ${locked && !paywall ? 'disabled' : ''}>
       ${avatar(o)}
       <span class="opp-body"><span class="opp-name">${o.name}</span> <span class="opp-title">${o.title}</span>
-        <div class="opp-blurb">${paywall ? '<span class="paywall">Unlock in the full game</span>' : locked ? 'Beat the step below to unlock' : o.blurb}</div>
+        <div class="opp-blurb">${paywall ? '<span class="paywall">Unlock in the full game</span>' : locked ? 'Beat the previous step to unlock' : o.blurb}</div>
         <span class="pips">${[1, 2, 3, 4, 5].map(k => `<i class="${k <= strength ? 'on' : ''}"></i>`).join('')}</span></span>
       <span class="opp-side">${paywall ? '🔒' : locked ? '🔒' : `<span class="stars">${starsHTML(data.stars[i] || 0)}</span>`}</span>
     </button></li>`;
@@ -516,6 +519,7 @@ function startGame(cfg) {
     last: null, selected: null, moves: [], hint: null, threats: null, busy: false, thinking: false, over: null, ...cfg };
   G.token = ++token;
   $('#overlay').hidden = true;
+  $('#say').hidden = true;
   show('game');
   refresh();
   maybeAI();
@@ -548,8 +552,10 @@ function refresh() {
   const drill = G.drill !== null ? DRILLS[G.drill] : null;
   $('#chip-top').hidden = (!!lesson && lesson.goal !== 'win') || !!drill;
   $('#lesson').hidden = !lesson && !drill;
-  if (lesson) $('#lesson').innerHTML = `<b>Lesson ${G.lesson + 1} of ${LESSONS.length} · ${lesson.title}</b>${lesson.text}`;
-  if (drill) $('#lesson').innerHTML = `<b>Tip ${G.drill + 1} of ${DRILLS.length} · ${drill.title}</b>${drill.text}`;
+  const stepNav = (kind, i, n) => `<span class="step-nav"><button class="step" data-step="${kind}:${i - 1}" ${i === 0 ? 'disabled' : ''} aria-label="Previous">‹</button>
+    <span>${i + 1} / ${n}</span><button class="step" data-step="${kind}:${i + 1}" ${i + 1 === n ? 'disabled' : ''} aria-label="Next">›</button></span>`;
+  if (lesson) $('#lesson').innerHTML = `<div class="lesson-head"><b>Lesson · ${lesson.title}</b>${stepNav('lesson', G.lesson, LESSONS.length)}</div>${lesson.text}`;
+  if (drill) $('#lesson').innerHTML = `<div class="lesson-head"><b>Tip · ${drill.title}</b>${stepNav('drill', G.drill, DRILLS.length)}</div>${drill.text}`;
   const coachOn = data.settings.coach && G.mode === 'ai' && !lesson && !drill;
   const tip = coachOn && humanTurn() && !G.over && !G.busy ? coachTip(G.state, G.human, G.lostLast) : null;
   $('#coach').hidden = !coachOn;
@@ -600,6 +606,7 @@ async function animateAndApply(mv) {
     navigator.vibrate?.(30);
   } else sfx.step();
   G.lostLast = G.state.turn !== G.human && mv.capture;
+  if (mv.capture && G.opponent !== null) say(pick(OPPONENTS[G.opponent].lines[G.state.turn === G.human ? 'lost' : 'capture']));
   G.history.push(G.state);
   G.state = applyMove(G.state, mv);
   G.last = mv;
@@ -721,6 +728,28 @@ async function drillStep(mv) {
   $('#status').textContent = d.miss + ' Try again.';
 }
 
+// A rival steps forward before the match: portrait, name and an opening line.
+function introduce(i) {
+  const o = OPPONENTS[i];
+  $('#card').innerHTML = `<div class="card-portrait big">${portrait(o.look, o.color)}</div>
+    <p class="step-label">${o.title}</p><h2>${o.name}</h2>
+    <p class="quote">\u201c${pick(o.lines.intro)}\u201d</p>
+    <div class="stack"><button class="btn primary" data-begin>Begin</button></div>`;
+  $('#overlay').hidden = false;
+}
+
+// A speech bubble from the rival during the match.
+let sayTimer = 0;
+function say(text) {
+  const el = $('#say');
+  el.innerHTML = text;
+  el.style.top = ($('#chip-top').offsetTop + $('#chip-top').offsetHeight - 4) + 'px';
+  el.hidden = false;
+  el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop');
+  clearTimeout(sayTimer);
+  sayTimer = setTimeout(() => { el.hidden = true; }, 2800);
+}
+
 function startDrill(i) {
   const d = DRILLS[i];
   startGame({ mode: 'ai', drill: i, level: 0, human: P1, state: { ...fromLayout(d.layout), quiet: d.quiet || 0 } });
@@ -772,7 +801,10 @@ function finish(res) {
       : !hasNext ? `<button class="btn primary" data-go="campaign">Summit reached!</button>`
       : !FULL_VERSION && i + 1 >= DEMO_OPPONENTS ? `<a class="btn primary" href="#" data-buy>Unlock all 8 steps</a>`
       : `<button class="btn primary" data-opp="${i + 1}">Climb on: ${OPPONENTS[i + 1].name}</button>`;
-    html = `<h2>${humanWon ? 'Victory!' : draw ? 'Draw' : 'Defeat'}</h2>
+    const o = OPPONENTS[i];
+    html = `<div class="card-portrait">${portrait(o.look, o.color)}</div>
+      <p class="quote">\u201c${pick(humanWon ? o.lines.lose : o.lines.win)}\u201d<span>${o.name}</span></p>
+      <h2>${humanWon ? 'Victory!' : draw ? 'Draw' : 'Defeat'}</h2>
       ${humanWon ? `<div class="stars">${starsHTML(stars)}</div>` : ''}
       <p>${humanWon ? `You beat ${OPPONENTS[i].name} with ${left} stone${left === 1 ? '' : 's'} left.` : why}</p>
       ${unlocked ? `<p class="unlock">New board unlocked: ${unlocked.name}</p>` : ''}
@@ -818,11 +850,14 @@ document.addEventListener('click', e => {
     const i = +d.opp;
     if (!FULL_VERSION && i >= DEMO_OPPONENTS) { if (STORE_URL) window.open(STORE_URL, '_blank', 'noopener'); return; }
     startGame({ mode: 'ai', opponent: i, level: OPPONENTS[i].level, human: P1 });
+    introduce(i);
     return;
   }
   if (d.lesson !== undefined) return startLesson(+d.lesson);
   if ('nextLesson' in d) return startLesson(G.lesson + 1);
   if (d.drill !== undefined) return startDrill(+d.drill);
+  if (d.step) { const [kind, i] = d.step.split(':'); return kind === 'lesson' ? startLesson(+i) : startDrill(+i); }
+  if ('begin' in d) { $('#overlay').hidden = true; return; }
   if ('nextDrill' in d) return startDrill(G.drill + 1);
   if ('replay' in d) return startGame({ mode: 'ai', level: G.level, human: G.human });
   if ('levelUp' in d) return startGame({ mode: 'ai', level: G.level + 1, human: G.human });

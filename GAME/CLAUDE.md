@@ -20,10 +20,11 @@ Content (opponents, lessons, themes and what the demo includes) is data in `cont
 - `ai-worker.js` — runs `chooseMove` off the main thread.
 - `coach.js` — strategy help: `meetsGoal` checks Beginner's Path puzzle answers, `coachTip` picks the
   in-game coach's line. Rests on threats being mutual: a capture path reversed is a capture path.
-- `content.js` — Temple Ascent opponents, tutorial lessons, Beginner's Path puzzles (`DRILLS`), board
+- `portraits.js` — `portrait(look, color)`: SVG busts of the Temple Ascent rivals, one headdress per `look.head`.
+- `content.js` — Temple Ascent opponents (with `look` and spoken `lines`), tutorial lessons, Beginner's Path puzzles (`DRILLS`), board
   themes, demo limits. New puzzles must pass `tests/coach.test.js` (a solution and a wrong answer).
 - `audio.js` — synthesised instruments (ocarina, slit drum, rattle, rain stick, conch), sound effects
-  and the generative background music.
+  and the generative background music (drum, rattle, flute, birds; no continuous drone).
 - `config.js` — `FULL_VERSION` and `STORE_URL`, the only build-time switches.
 - `build.mjs` — `node build.mjs [store-url]` writes `dist/web` (demo) and `dist/full` (paid), with the
   font inlined into `style.css`.
