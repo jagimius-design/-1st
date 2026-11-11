@@ -29,7 +29,7 @@ Content (opponents, lessons, themes and what the demo includes) is data in `cont
   and the generative background music: a 16-bar cycle at 100 bpm (groove, full band with harmony, breakdown, drum fill); no continuous drone.
 - `config.js` — `FULL_VERSION` and `STORE_URL`, the only build-time switches. Without `STORE_URL`, a demo
   embedded on an itch.io page links back to that page (its referrer).
-- `build.mjs` — `node build.mjs [store-url]` writes `dist/web` (demo) and `dist/full` (paid), with the
+- `build.mjs` — `node build.mjs [store-url]` (the URL overrides `config.js`) writes `dist/web` (demo) and `dist/full` (paid), with the
   font inlined into `style.css`, and the itch.io uploads in `dist/itch`: the browser demo zip and the
   paid zip, a single `Loopstone.html` bundled by esbuild (`npm ci` first) that runs from `file://`.
 - `itch/` — itch.io page: `PAGE.md` (setup steps, description), `cover.png`, `embed-background.png`.
