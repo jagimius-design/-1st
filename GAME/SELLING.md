@@ -18,8 +18,8 @@
 
 | Build | What's in it | Where |
 |---|---|---|
-| Demo (`dist/web`) | Tutorial, Beginner's Path, coach, Temple Ascent steps 1–3, Quick Play Beginner–Medium, Pass & Play, 2 boards | Your website, itch.io free page, Steam demo |
-| Full (`dist/full`) | All 8 pyramid steps, Hard and Master AI, all 4 boards | Paid on each store |
+| Demo (`dist/web`) | Tutorial, Beginner's Path, coach, Temple Ascent steps 1–3, Quick Play Beginner–Medium, Pass & Play, the achievements reachable in it | Your website, itch.io free page, Steam demo |
+| Full (`dist/full`) | All 8 pyramid steps, Hard and Master AI, and the achievements that need them | Paid on each store |
 
 Suggested prices: **$4.99 on Steam, $5–7 on itch.io (pay-what-you-want minimum), $2.99 on mobile**.
 No ads and no in-app purchases in v1 keeps reviews friendly and store review simple. A later
@@ -55,7 +55,7 @@ Moving is simple: one step in any direction. Capturing is where it gets wild. Yo
 along the inlaid lines and swings around the great corner loops to strike an enemy stone from
 across the board. Every line is a threat, and every loop is a chance.
 
-- **Temple Ascent:** climb the pyramid past 8 rivals, from the Novice Scribe to the Serpent King, each with their own portrait and voice
+- **Temple Ascent:** climb the pyramid past 8 rivals, from the Bone Scribe to the Serpent King, each with their own portrait and voice
 - **Quick Play** against 5 AI levels, from Beginner to a Master that plans many moves ahead
 - **Pass & Play** with a friend on one device
 - **Interactive tutorial**: learn in two minutes
@@ -63,7 +63,7 @@ across the board. Every line is a threat, and every loop is a chance.
 - **Coach** that comments on your games: free captures, stones in danger, when to play safe
 - Original flute, slit-drum and rattle soundtrack that never repeats
 - Capture-path previews and threat warnings, so beginners learn fast
-- 4 unlockable boards: Limestone, Jungle, Night of Venus, Cinnabar
+- 11 achievements that unlock 5 new boards and 6 stone sets: Turquoise, Cacao Beans, Sun & Moon, Gold & Onyx, Ballgame Rubber, Fire & Ash
 - No ads, no timers, no internet needed
 
 **Tags:** board game, strategy, abstract, ancient, maya, puzzle, chess-like, traditional, relaxing, singleplayer, local multiplayer

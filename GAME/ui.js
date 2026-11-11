@@ -2,20 +2,21 @@
 import { P1, P2, QUIET_LIMIT, CIRCUITS, row, col, newGame, fromLayout, movesFrom, legalMoves, applyMove, outcome,
   attackedBy, toJSON, fromJSON } from './core.js';
 import { chooseMove, LEVELS } from './ai.js';
-import { OPPONENTS, LESSONS, DRILLS, THEMES, DEMO_OPPONENTS, DEMO_LEVELS } from './content.js';
+import { OPPONENTS, LESSONS, DRILLS, THEMES, STONES, ACHIEVEMENTS, DEMO_OPPONENTS, DEMO_LEVELS } from './content.js';
+import { earned, reward } from './achievements.js';
 import { meetsGoal, coachTip } from './coach.js';
 import { portrait } from './portraits.js';
 import { sfx, setSound, setMusic, unlockAudio } from './audio.js';
 import { FULL_VERSION, STORE_URL } from './config.js';
 
 const $ = s => document.querySelector(s);
-const SIDE_NAME = { [P1]: 'Jade', [P2]: 'Obsidian' };
+
 
 // ---------------------------------------------------------------- saved data
 
 const KEY = 'loopstone.v1';
-const DEFAULTS = { settings: { sound: true, music: true, coach: true, hints: true, threats: false, theme: 'temple' }, stars: [],
-  stats: { played: 0, won: 0, lost: 0, drawn: 0 }, lessonsDone: false, drills: [], saved: null };
+const DEFAULTS = { settings: { sound: true, music: true, coach: true, hints: true, threats: false, theme: 'temple', stones: 'jade' }, stars: [],
+  stats: { played: 0, won: 0, lost: 0, drawn: 0 }, lessonsDone: false, drills: [], achievements: {}, saved: null };
 const data = (() => {
   try {
     const s = JSON.parse(localStorage.getItem(KEY)) || {};
@@ -26,14 +27,19 @@ const persist = () => { try { localStorage.setItem(KEY, JSON.stringify(data)); }
 
 const opponentOpen = i => (FULL_VERSION || i < DEMO_OPPONENTS) && (i === 0 || (data.stars[i - 1] || 0) > 0);
 const levelOpen = i => FULL_VERSION || i < DEMO_LEVELS;
-const themeOpen = t => !!THEMES[t] && (FULL_VERSION || THEMES[t].demo) && (THEMES[t].unlock === null || (data.stars[THEMES[t].unlock] || 0) > 0);
+const itemOpen = item => !!item && (item.unlock === null || !!data.achievements[item.unlock]);
+const themeOpen = t => itemOpen(THEMES[t]);
+const stonesOpen = k => itemOpen(STONES[k]);
+const stoneSet = () => STONES[stonesOpen(data.settings.stones) ? data.settings.stones : 'jade'];
+const sideName = p => p === P1 ? stoneSet().n1 : stoneSet().n2;
+const achievementTitle = id => ACHIEVEMENTS.find(a => a.id === id).title;
 const theme = () => THEMES[themeOpen(data.settings.theme) ? data.settings.theme : 'temple'];
 
 // ---------------------------------------------------------------- screens
 
 function show(id) {
   document.querySelectorAll('.screen').forEach(el => el.classList.toggle('active', el.id === id));
-  ({ menu: renderMenu, campaign: renderCampaign, quick: renderQuick, settings: renderSettings, path: renderPath })[id]?.();
+  ({ menu: renderMenu, campaign: renderCampaign, quick: renderQuick, settings: renderSettings, path: renderPath, achievements: renderAchievements })[id]?.();
   if (id === 'game') requestAnimationFrame(resize);
 }
 
@@ -96,15 +102,71 @@ function renderQuick() {
   $('#levels').innerHTML = LEVELS.map((L, i) => `<button class="choice ${i === quickLevel ? 'selected' : ''}" data-level="${i}" ${levelOpen(i) ? '' : 'disabled'}>
     <span class="pips">${[0, 1, 2, 3, 4].map(k => `<i class="${k <= i ? 'on' : ''}"></i>`).join('')}</span>${L.name}<small>${levelOpen(i) ? '' : 'Full game 🔒'}</small></button>`).join('');
   document.querySelectorAll('[data-side]').forEach(b => b.classList.toggle('selected', +b.dataset.side === quickSide));
+  $('#side1').textContent = sideName(P1); $('#side2').textContent = sideName(P2);
+}
+
+const boardSwatch = t => `<div class="swatch" style="background:linear-gradient(135deg, ${t.board[0]}, ${t.board[1]});--c1:${t.inner};--c2:${t.outer}"></div>`;
+const ball = c => `radial-gradient(circle at 32% 28%, #fff 0 8%, ${c[0]} 14%, ${c[1]} 55%, ${c[2]})`;
+const stoneSwatch = st => `<div class="swatch stones"><span style="background:${ball(st.p1)}"></span><span style="background:${ball(st.p2)}"></span></div>`;
+
+// Small stone icons in chips and menus follow the chosen set.
+function applyStones() {
+  const st = stoneSet();
+  document.documentElement.style.setProperty('--s1', ball(st.p1));
+  document.documentElement.style.setProperty('--s2', ball(st.p2));
+}
+
+function renderAchievements() {
+  const got = ACHIEVEMENTS.filter(a => data.achievements[a.id]).length;
+  $('#ach-count').textContent = `${got}/${ACHIEVEMENTS.length}`;
+  $('#ach-list').innerHTML = ACHIEVEMENTS.map(a => {
+    const r = reward(a.id), done = !!data.achievements[a.id], item = r.kind === 'board' ? THEMES[r.key] : STONES[r.key];
+    return `<li class="ach ${done ? 'done' : ''}">
+      <div class="ach-reward">${r.kind === 'board' ? boardSwatch(item) : stoneSwatch(item)}</div>
+      <div class="opp-body"><span class="opp-name">${a.title}</span><div class="opp-blurb">${a.text}</div>
+        <div class="ach-prize">${done ? 'Unlocked' : 'Reward'}: ${r.kind === 'board' ? 'board' : 'stones'} \u00b7 ${r.name}${!done && a.full && !FULL_VERSION ? ' <span class="paywall">Full game</span>' : ''}</div></div>
+      <span class="tick ${done ? 'ok' : ''}">${done ? '✓' : ''}</span></li>`;
+  }).join('');
+}
+
+// Records newly earned achievements and announces each with its reward.
+function checkAchievements(event) {
+  const ids = earned(data, event);
+  if (!ids.length) return;
+  ids.forEach(id => { data.achievements[id] = Date.now(); });
+  persist();
+  ids.forEach(id => toast(id));
+}
+
+const toasts = [];
+function toast(id) {
+  toasts.push(id);
+  if (toasts.length === 1) nextToast();
+}
+function nextToast() {
+  if (!toasts.length) return;
+  const id = toasts[0], r = reward(id), el = $('#toast');
+  const item = r.kind === 'board' ? THEMES[r.key] : STONES[r.key];
+  el.innerHTML = `${r.kind === 'board' ? boardSwatch(item) : stoneSwatch(item)}<div><b>Achievement: ${achievementTitle(id)}</b>
+    New ${r.kind === 'board' ? 'board' : 'stones'} unlocked: ${r.name}</div>`;
+  el.hidden = false;
+  el.classList.remove('show'); void el.offsetWidth; el.classList.add('show');
+  sfx.unlock();
+  setTimeout(() => { el.hidden = true; toasts.shift(); nextToast(); }, 3600);
 }
 
 function renderSettings() {
   document.querySelectorAll('[data-setting]').forEach(el => { el.checked = data.settings[el.dataset.setting]; });
+  const lockNote = item => `<small>🔒 ${achievementTitle(item.unlock)}</small>`;
   $('#themes').innerHTML = Object.entries(THEMES).map(([key, t]) => {
     const open = themeOpen(key);
-    const why = !FULL_VERSION && !t.demo ? 'Full game' : t.unlock !== null ? `Beat ${OPPONENTS[t.unlock].name}` : '';
-    return `<button class="theme ${key === data.settings.theme ? 'selected' : ''}" data-theme="${key}" ${open ? '' : 'disabled'} title="${open ? t.name : why}">
-      <div class="swatch" style="background:linear-gradient(135deg, ${t.board[0]}, ${t.board[1]});--c1:${t.inner};--c2:${t.outer}"></div>${open ? t.name : '🔒 ' + t.name}</button>`;
+    return `<button class="theme ${key === data.settings.theme ? 'selected' : ''}" data-theme="${key}" ${open ? '' : 'disabled'}>
+      ${boardSwatch(t)}${t.name}${open ? '' : lockNote(t)}</button>`;
+  }).join('');
+  $('#stonesets').innerHTML = Object.entries(STONES).map(([key, st]) => {
+    const open = stonesOpen(key);
+    return `<button class="theme ${key === data.settings.stones ? 'selected' : ''}" data-stones="${key}" ${open ? '' : 'disabled'}>
+      ${stoneSwatch(st)}${st.name}${open ? '' : lockNote(st)}</button>`;
   }).join('');
   const s = data.stats;
   $('#stats').innerHTML = [['Played', s.played], ['Won', s.won], ['Lost', s.lost], ['Drawn', s.drawn]]
@@ -305,32 +367,49 @@ function boardLayer(t) {
 
 // Jade and obsidian stones, rendered once per size and theme.
 function stoneSprite(p, t) {
-  const key = `${t.name}|${V.size}|${V.dpr}`;
+  const key = `${t.name}|${data.settings.stones}|${V.size}|${V.dpr}`;
+  t = stoneSet();
   if (sprites.key !== key) sprites = { key, [P1]: null, [P2]: null };
   if (sprites[p]) return sprites[p];
   const r = V.s * 0.36, m = r * 0.6, px = Math.ceil((2 * r + 2 * m) * V.dpr), cv = offscreen(px), c = cv.getContext('2d');
-  const rand = rng(p * 31), [hi, mid, lo] = p === P1 ? t.p1 : t.p2;
+  const rand = rng(p * 31), [hi, mid, lo] = p === P1 ? t.p1 : t.p2, finish = p === P1 ? t.f1 : t.f2;
   c.scale(V.dpr, V.dpr);
   const x = r + m, y = r + m;
-  c.shadowColor = 'rgba(0,0,0,.5)'; c.shadowBlur = r * 0.5; c.shadowOffsetY = r * 0.28;
+  c.shadowColor = finish === 'glow' ? mid : 'rgba(0,0,0,.5)'; c.shadowBlur = r * (finish === 'glow' ? 0.9 : 0.5); c.shadowOffsetY = finish === 'glow' ? 0 : r * 0.28;
   const g = c.createRadialGradient(x - r * 0.3, y - r * 0.35, r * 0.05, x, y, r);
   g.addColorStop(0, hi); g.addColorStop(0.5, mid); g.addColorStop(1, lo);
   c.fillStyle = g; c.beginPath(); c.arc(x, y, r, 0, 7); c.fill();
   c.shadowColor = 'transparent';
   c.save(); c.beginPath(); c.arc(x, y, r, 0, 7); c.clip();
-  if (p === P1) { // jade mottling and veins
+  if (finish === 'mottle') { // veined stone
     for (let i = 0; i < 26; i++) {
       c.globalAlpha = 0.08 + rand() * 0.12; c.fillStyle = rand() < 0.5 ? hi : lo;
       c.beginPath(); c.ellipse(x + (rand() - 0.5) * 2 * r, y + (rand() - 0.5) * 2 * r, r * (0.1 + rand() * 0.3), r * (0.05 + rand() * 0.15), rand() * 3, 0, 7); c.fill();
     }
     c.globalAlpha = 0.25; c.strokeStyle = hi; c.lineWidth = r * 0.04;
     c.beginPath(); c.moveTo(x - r, y + r * 0.2); c.bezierCurveTo(x - r * 0.3, y - r * 0.4, x + r * 0.2, y + r * 0.5, x + r, y - r * 0.1); c.stroke();
-  } else { // obsidian conchoidal ripples
+  } else if (finish === 'glass') { // conchoidal ripples
     c.globalAlpha = 0.18; c.strokeStyle = hi; c.lineWidth = r * 0.035;
     for (let i = 1; i <= 4; i++) { c.beginPath(); c.arc(x + r * 0.5, y + r * 0.6, r * 0.3 * i, Math.PI * 1.05, Math.PI * 1.55); c.stroke(); }
+  } else if (finish === 'sun') { // carved sun glyph
+    c.globalAlpha = 0.55; c.strokeStyle = lo; c.lineWidth = r * 0.07;
+    c.beginPath(); c.arc(x, y, r * 0.32, 0, 7); c.stroke();
+    for (let i = 0; i < 8; i++) { const a = i * Math.PI / 4; c.beginPath(); c.moveTo(x + Math.cos(a) * r * 0.45, y + Math.sin(a) * r * 0.45); c.lineTo(x + Math.cos(a) * r * 0.7, y + Math.sin(a) * r * 0.7); c.stroke(); }
+  } else if (finish === 'moon') { // crescent shadow
+    c.globalAlpha = 0.45; c.fillStyle = lo;
+    c.beginPath(); c.arc(x + r * 0.45, y + r * 0.1, r * 0.95, 0, 7); c.fill();
+  } else if (finish === 'seam') { // cacao bean crease
+    c.globalAlpha = 0.6; c.strokeStyle = lo; c.lineWidth = r * 0.08;
+    c.beginPath(); c.moveTo(x - r * 0.15, y - r * 0.85); c.bezierCurveTo(x + r * 0.25, y - r * 0.3, x - r * 0.25, y + r * 0.3, x + r * 0.15, y + r * 0.85); c.stroke();
+  } else if (finish === 'rubber') { // matte, pitted latex
+    for (let i = 0; i < 40; i++) { c.globalAlpha = 0.12; c.fillStyle = rand() < 0.5 ? lo : hi; c.beginPath(); c.arc(x + (rand() - 0.5) * 2 * r, y + (rand() - 0.5) * 2 * r, r * 0.04, 0, 7); c.fill(); }
+  } else if (finish === 'glow') { // molten core
+    const core = c.createRadialGradient(x, y, 0, x, y, r * 0.7);
+    core.addColorStop(0, '#fffbe0'); core.addColorStop(1, 'rgba(255,200,80,0)');
+    c.globalAlpha = 0.8; c.fillStyle = core; c.beginPath(); c.arc(x, y, r, 0, 7); c.fill();
   }
   c.restore();
-  c.globalAlpha = p === P1 ? 0.55 : 0.75; c.fillStyle = '#ffffff'; // polished highlight
+  c.globalAlpha = finish === 'rubber' ? 0.22 : finish === 'glass' ? 0.75 : 0.55; c.fillStyle = '#ffffff'; // polished highlight
   c.beginPath(); c.ellipse(x - r * 0.32, y - r * 0.42, r * 0.32, r * 0.14, -0.6, 0, 7); c.fill();
   c.globalAlpha = 0.35; c.strokeStyle = 'rgba(0,0,0,.6)'; c.lineWidth = r * 0.06;
   c.beginPath(); c.arc(x, y, r * 0.97, 0.1, Math.PI - 0.1); c.stroke();
@@ -542,12 +621,12 @@ function refresh() {
   const you = `<span class="avatar you">★</span>`;
   const sideAvatar = p => `<span class="stone s${p}" style="width:34px;height:34px"></span>`;
   if (G.mode === 'pass') {
-    chip($('#chip-top'), top, SIDE_NAME[top], '', sideAvatar(top));
-    chip($('#chip-bottom'), bottom, SIDE_NAME[bottom], '', sideAvatar(bottom));
+    chip($('#chip-top'), top, sideName(top), '', sideAvatar(top));
+    chip($('#chip-bottom'), bottom, sideName(bottom), '', sideAvatar(bottom));
   } else {
     const o = opponentInfo();
-    chip($('#chip-top'), top, o.name, o.title || SIDE_NAME[top], avatar(o));
-    chip($('#chip-bottom'), bottom, 'You', SIDE_NAME[bottom], you);
+    chip($('#chip-top'), top, o.name, o.title || sideName(top), avatar(o));
+    chip($('#chip-bottom'), bottom, 'You', sideName(bottom), you);
   }
   const drill = G.drill !== null ? DRILLS[G.drill] : null;
   $('#chip-top').hidden = (!!lesson && lesson.goal !== 'win') || !!drill;
@@ -573,7 +652,7 @@ function refresh() {
   status.classList.toggle('warn', G.state.quiet >= QUIET_LIMIT - 14);
   if (G.over) status.textContent = '';
   else if (G.state.quiet >= QUIET_LIMIT - 14) status.textContent = `${QUIET_LIMIT - G.state.quiet} moves left to capture — then more stones wins`;
-  else if (G.mode === 'pass') status.textContent = `${SIDE_NAME[G.state.turn]} to move`;
+  else if (G.mode === 'pass') status.textContent = `${sideName(G.state.turn)} to move`;
   else status.textContent = humanTurn() ? (G.state.ply < 2 && !lesson && !drill ? 'Your move — tap a stone' : 'Your move') : `${opponentInfo().name} is thinking…`;
 }
 
@@ -600,7 +679,8 @@ async function animateAndApply(mv) {
   await animateMove(mv);
   if (tk !== G.token) return false;
   if (mv.capture) {
-    const victim = G.state.board[mv.to] === P1 ? theme().p1 : theme().p2;
+    const victim = G.state.board[mv.to] === P1 ? stoneSet().p1 : stoneSet().p2;
+    if (G.state.turn === G.human && G.mode === 'ai' && G.lesson === null && G.drill === null) checkAchievements({ type: 'capture', loops: mv.path.loops.filter(Boolean).length });
     burst(mv.to, [...victim, theme().danger]);
     sfx.capture();
     navigator.vibrate?.(30);
@@ -704,6 +784,7 @@ async function drillStep(mv) {
     G.over = { winner: G.human, reason: 'drill' };
     data.drills[G.drill] = true;
     persist();
+    checkAchievements();
     sfx.win();
     const last = G.drill + 1 >= DRILLS.length;
     return overlay(`<h2>Well played</h2><p>${d.title}: ${['you kept every stone out of reach.', 'you struck before they could.',
@@ -731,6 +812,8 @@ async function drillStep(mv) {
 // A rival steps forward before the match: portrait, name and an opening line.
 function introduce(i) {
   const o = OPPONENTS[i];
+  sfx.rival();
+  $('#card').className = 'card rival';
   $('#card').innerHTML = `<div class="card-portrait big">${portrait(o.look, o.color)}</div>
     <p class="step-label">${o.title}</p><h2>${o.name}</h2>
     <p class="quote">\u201c${pick(o.lines.intro)}\u201d</p>
@@ -769,7 +852,7 @@ function finish(res) {
   let html;
 
   if (G.lesson !== null) {
-    if (humanWon) { data.lessonsDone = true; persist(); sfx.win(); }
+    if (humanWon) { data.lessonsDone = true; persist(); sfx.win(); checkAchievements(); }
     else sfx.lose();
     html = humanWon
       ? `<h2>You know the rules</h2><p>Now learn how to get the upper hand: seven short strategy puzzles on the Beginner\u2019s Path.</p>
@@ -781,7 +864,7 @@ function finish(res) {
 
   if (G.mode === 'pass') {
     sfx.win();
-    html = `<h2>${draw ? 'Draw' : SIDE_NAME[res.winner] + ' wins'}</h2><p>${why}</p>
+    html = `<h2>${draw ? 'Draw' : sideName(res.winner) + ' wins'}</h2><p>${why}</p>
       <div class="stack"><button class="btn primary" data-action="pass">Play again</button><button class="btn ghost" data-go="menu">Menu</button></div>`;
     return overlay(html);
   }
@@ -795,7 +878,6 @@ function finish(res) {
     const stars = humanWon ? (left >= 8 ? 3 : left >= 4 ? 2 : 1) : 0;
     const before = data.stars[i] || 0;
     data.stars[i] = Math.max(before, stars);
-    const unlocked = humanWon && !before ? Object.values(THEMES).find(t => t.unlock === i && (FULL_VERSION || t.demo)) : null;
     const hasNext = i + 1 < OPPONENTS.length;
     const nextBtn = !humanWon ? `<button class="btn primary" data-opp="${i}">Try again</button>`
       : !hasNext ? `<button class="btn primary" data-go="campaign">Summit reached!</button>`
@@ -807,7 +889,6 @@ function finish(res) {
       <h2>${humanWon ? 'Victory!' : draw ? 'Draw' : 'Defeat'}</h2>
       ${humanWon ? `<div class="stars">${starsHTML(stars)}</div>` : ''}
       <p>${humanWon ? `You beat ${OPPONENTS[i].name} with ${left} stone${left === 1 ? '' : 's'} left.` : why}</p>
-      ${unlocked ? `<p class="unlock">New board unlocked: ${unlocked.name}</p>` : ''}
       ${humanWon && stars < 3 ? `<p>Keep 8 stones for three stars.</p>` : ''}
       <div class="stack">${nextBtn}${humanWon ? `<button class="btn" data-opp="${i}">Replay</button>` : ''}<button class="btn ghost" data-go="campaign">The pyramid</button></div>`;
   } else {
@@ -817,11 +898,12 @@ function finish(res) {
       <button class="btn ghost" data-go="menu">Menu</button></div>`;
   }
   persist();
+  checkAchievements({ type: 'game', won: humanWon, left: G.state.counts[G.human], level: G.level, opponent: G.opponent });
   overlay(html);
 }
 
 function overlay(html) {
-  setTimeout(() => { $('#card').innerHTML = html; wireBuy(); $('#overlay').hidden = false; }, 650);
+  setTimeout(() => { $('#card').className = 'card'; $('#card').innerHTML = html; wireBuy(); $('#overlay').hidden = false; }, 650);
 }
 
 function leaveGame(to = 'menu') {
@@ -866,6 +948,7 @@ document.addEventListener('click', e => {
   if (d.level !== undefined) { quickLevel = +d.level; renderQuick(); return; }
   if (d.side !== undefined) { quickSide = +d.side; renderQuick(); return; }
   if (d.theme) { data.settings.theme = d.theme; persist(); renderSettings(); return; }
+  if (d.stones) { data.settings.stones = d.stones; persist(); applyStones(); renderSettings(); return; }
 });
 
 $('#btn-quick-start').onclick = () => startGame({ mode: 'ai', level: quickLevel, human: quickSide });
@@ -894,6 +977,8 @@ canvas.addEventListener('pointerdown', e => {
 });
 new ResizeObserver(() => { if ($('#game').classList.contains('active')) resize(); }).observe($('#play'));
 
+applyStones();
+checkAchievements();
 setSound(data.settings.sound);
 setMusic(data.settings.music);
 wireBuy();

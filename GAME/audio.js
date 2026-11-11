@@ -154,6 +154,20 @@ export const sfx = {
     [440, 392, 329.63, 293.66].forEach((f, i) => ocarina(sfxBus, t + i * 0.28, f, i === 3 ? 0.9 : 0.3, 0.11));
     slitDrum(sfxBus, t + 1, 98, 0.4);
   },
+  unlock: () => {
+    if (!can()) return;
+    const t = now();
+    [659.25, 783.99, 880, 1046.5].forEach((f, i) => ocarina(sfxBus, t + i * 0.09, f, i === 3 ? 0.6 : 0.15, 0.1));
+    for (let i = 0; i < 5; i++) rattle(sfxBus, t + i * 0.06, 0.05);
+  },
+  // A rival steps forward: two heavy drum strikes under a low conch.
+  rival: () => {
+    if (!can()) return;
+    const t = now();
+    slitDrum(sfxBus, t, 73.42, 0.6);
+    slitDrum(sfxBus, t + 0.32, 55, 0.6);
+    conch(sfxBus, t + 0.15, 98, 1.6, 0.1);
+  },
   nope: () => { if (can()) noise(sfxBus, now(), 0.08, { vol: 0.2, freq: 500, q: 3 }); },
 };
 

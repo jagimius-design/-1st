@@ -4,19 +4,6 @@
 let uid = 0;
 const DARK = '#1b120c', JADE = '#3f9a72', GOLD = '#e2b35a';
 
-const BROWS = {
-  kind: 'M39 44q5-3 10-1M51 43q5-2 10 1',
-  stern: 'M39 42l10 3M61 42l-10 3',
-  calm: 'M39 44h10M51 44h10',
-  sly: 'M39 43q5-2 10 0M51 45q5-4 10-3',
-};
-const MOUTHS = {
-  smile: 'M44 64q6 5 12 0',
-  flat: 'M45 65h10',
-  smirk: 'M44 65q7 2 12-3',
-  grin: 'M43 63q7 7 14 0z',
-};
-
 const HEADS = {
   scribe: () => `
     <rect x="33" y="36" width="34" height="6" rx="2" fill="#f1e6cc"/>
@@ -78,27 +65,57 @@ const CLOTH = {
   serpent: c => `<path d="M14 100c2-20 16-26 36-26s34 6 36 26z" fill="#1f5c47"/><path d="M28 80q22 14 44 0l-3 8q-19 10-38 0z" fill="${GOLD}"/>`,
 };
 
+const MOUTHS = {
+  thin: '<path d="M44 66.5q6-1.6 12 0" stroke="#3a140c" stroke-width="1.8" fill="none" stroke-linecap="round"/>',
+  frown: '<path d="M43.5 67.5q6.5-4 13 0" stroke="#3a140c" stroke-width="2" fill="none" stroke-linecap="round"/>',
+  smirk: '<path d="M44 67q5 0 12-3.5" stroke="#3a140c" stroke-width="2" fill="none" stroke-linecap="round"/>',
+  snarl: '<path d="M42.5 66.5q7.5-5 15 0q-7.5 3.5-15 0z" fill="#2a0a06"/><path d="M44.5 65.6l1.3 2 1.3-2.4 1.4 2.5 1.5-2.6 1.5 2.6 1.4-2.5 1.3 2.4 1.3-2" fill="#fff4dc"/>',
+  fangs: '<path d="M42 66q8-5 16 0q-8 4-16 0z" fill="#2a0a06"/><path d="M45 65l1.4 4.5 1.4-4.8zM55 65l-1.4 4.5-1.4-4.8z" fill="#fff4dc"/>',
+};
+
+// War paint, drawn over the face (clipped to it).
+const PAINT = {
+  ink: '<g stroke="#120a08" stroke-width="1.6" stroke-linecap="round" opacity=".85"><path d="M42 53v9M45 53.5v5M58 53v9M55 53.5v5"/></g>',
+  jaw: '<g fill="#a3241a" opacity=".9"><path d="M42 66h2.4v8h-2.4zM48.8 68h2.4v8h-2.4zM55.6 66h2.4v8h-2.4z"/></g>',
+  dots: '<g fill="#e2b35a"><circle cx="38" cy="58" r="1.3"/><circle cx="41" cy="61" r="1.3"/><circle cx="62" cy="58" r="1.3"/><circle cx="59" cy="61" r="1.3"/></g><path d="M50 40v6" stroke="#a3241a" stroke-width="2.2"/>',
+  claw: '<g stroke="#120a08" stroke-width="2" stroke-linecap="round"><path d="M36 54l7 4M35 58l7 3.5M64 54l-7 4M65 58l-7 3.5"/></g>',
+  band: '<rect x="30" y="45.5" width="40" height="8" fill="#0b0d14" opacity=".9"/><g fill="#cfe9ff"><circle cx="37" cy="48" r=".7"/><circle cx="63" cy="51" r=".7"/><circle cx="50" cy="47" r=".6"/></g>',
+  redband: '<rect x="30" y="45.5" width="40" height="8" fill="#8a1a12" opacity=".92"/>',
+  skull: '<path d="M33 52q0-15 17-15t17 15v6q-8 4-17 4t-17-4z" fill="#ece4d6" opacity=".93"/><ellipse cx="44.5" cy="50" rx="5.5" ry="4.5" fill="#0d0705"/><ellipse cx="55.5" cy="50" rx="5.5" ry="4.5" fill="#0d0705"/><path d="M50 53l-1.6 4h3.2z" fill="#0d0705"/>',
+  scales: '<g fill="#2b8a6a" opacity=".85"><path d="M36 58q2-3 4 0q-2 2-4 0zM39 62q2-3 4 0q-2 2-4 0zM60 58q2-3 4 0q-2 2-4 0zM57 62q2-3 4 0q-2 2-4 0z"/></g><path d="M34 47h32" stroke="#0b0604" stroke-width="5" opacity=".5"/>',
+};
+
 export function portrait(look, color) {
-  const id = `pt${++uid}`, { head, skin = '#a8693f', brows = 'kind', mouth = 'smile', paint = false } = look;
-  const shade = 'rgba(60,30,10,.35)';
+  const id = `pt${++uid}`, { head, skin = '#8f5530', eyes = '#ffcc33', paint = 'jaw', mouth = 'thin' } = look;
   return `<svg viewBox="0 0 100 100" class="portrait" aria-hidden="true">
-    <defs><radialGradient id="${id}" cx=".35" cy=".25" r=".9"><stop offset="0" stop-color="#fff" stop-opacity=".45"/><stop offset=".6" stop-color="#fff" stop-opacity="0"/></radialGradient>
-      <clipPath id="${id}c"><rect width="100" height="100" rx="26"/></clipPath></defs>
+    <defs>
+      <radialGradient id="${id}b" cx=".5" cy="1" r="1"><stop offset="0" stop-color="${color}" stop-opacity=".9"/><stop offset=".55" stop-color="${color}" stop-opacity=".25"/><stop offset="1" stop-color="#0a0605"/></radialGradient>
+      <linearGradient id="${id}f" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".55"/><stop offset=".45" stop-color="#000" stop-opacity=".15"/><stop offset="1" stop-color="${color}" stop-opacity=".25"/></linearGradient>
+      <radialGradient id="${id}e"><stop offset="0" stop-color="${eyes}" stop-opacity=".9"/><stop offset="1" stop-color="${eyes}" stop-opacity="0"/></radialGradient>
+      <clipPath id="${id}c"><rect width="100" height="100" rx="26"/></clipPath>
+      <clipPath id="${id}h"><ellipse cx="50" cy="52" rx="16" ry="20"/></clipPath>
+    </defs>
     <g clip-path="url(#${id}c)">
-      <rect width="100" height="100" fill="${color}"/><rect width="100" height="100" fill="url(#${id})"/>
-      ${CLOTH[head]()}
-      <rect x="43" y="64" width="14" height="14" fill="${skin}"/><rect x="43" y="64" width="14" height="14" fill="${shade}"/>
+      <rect width="100" height="100" fill="#0a0605"/><rect width="100" height="100" fill="url(#${id}b)"/>
+      ${CLOTH[head]()}<rect y="72" width="100" height="28" fill="#000" opacity=".35"/>
+      <rect x="43" y="64" width="14" height="14" fill="${skin}"/><rect x="43" y="64" width="14" height="14" fill="#000" opacity=".45"/>
       <ellipse cx="34" cy="54" rx="3.5" ry="5" fill="${skin}"/><ellipse cx="66" cy="54" rx="3.5" ry="5" fill="${skin}"/>
       <ellipse cx="50" cy="52" rx="16" ry="20" fill="${skin}"/>
-      <path d="M34 47q0-17 16-17t16 17q-6-8-16-8t-16 8z" fill="${DARK}"/>
+      <g clip-path="url(#${id}h)">
+        <rect x="30" y="30" width="40" height="44" fill="url(#${id}f)"/>
+        <path d="M37 59q4 4 9 3.5M63 59q-4 4-9 3.5" stroke="#000" stroke-opacity=".35" stroke-width="1.6" fill="none"/>
+        ${PAINT[paint] || ''}
+      </g>
+      <path d="M34 47q0-17 16-17t16 17q-6-8-16-8t-16 8z" fill="#0d0805"/>
       <circle cx="33" cy="57" r="3.2" fill="${JADE}" stroke="${DARK}" stroke-width=".8"/>
       <circle cx="67" cy="57" r="3.2" fill="${JADE}" stroke="${DARK}" stroke-width=".8"/>
       ${HEADS[head]()}
-      <path d="${BROWS[brows]}" stroke="${DARK}" stroke-width="1.8" stroke-linecap="round" fill="none"/>
-      <path d="M41 50q4-3 8 0q-4 2-8 0zM51 50q4-3 8 0q-4 2-8 0z" fill="${DARK}"/>
-      <path d="M50 51v7q-2 2-4 1" stroke="${shade}" stroke-width="1.6" fill="none" stroke-linecap="round"/>
-      ${paint ? `<g fill="#b5432e"><circle cx="40" cy="58" r="1.3"/><circle cx="37" cy="61" r="1.3"/><circle cx="60" cy="58" r="1.3"/><circle cx="63" cy="61" r="1.3"/></g>` : ''}
-      <path d="${MOUTHS[mouth]}" stroke="#5a2a1a" stroke-width="1.8" fill="${mouth === 'grin' ? '#fff6e0' : 'none'}" stroke-linecap="round"/>
+      <path d="M36.5 44.5l13 4.2-1 1.6-12.4-3.4zM63.5 44.5l-13 4.2 1 1.6 12.4-3.4z" fill="#0d0805"/>
+      <path d="M39 50q5-2.2 10 1.2q-5 1.6-10-1.2zM61 50q-5-2.2-10 1.2q5 1.6 10-1.2z" fill="#0b0503"/>
+      <circle cx="44.6" cy="50.6" r="4.5" fill="url(#${id}e)"/><circle cx="55.4" cy="50.6" r="4.5" fill="url(#${id}e)"/>
+      <circle cx="44.6" cy="50.6" r="1.25" fill="${eyes}"/><circle cx="55.4" cy="50.6" r="1.25" fill="${eyes}"/>
+      <path d="M50 51v7.5q-2.5 2-5 .8" stroke="#000" stroke-opacity=".45" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+      ${MOUTHS[mouth]}
     </g>
   </svg>`;
 }

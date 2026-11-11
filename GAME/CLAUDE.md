@@ -10,8 +10,8 @@ Pages at `/game/` beside SITE (`.github/workflows/pages.yml`).
 Rules live in `core.js`, the opponent in `ai.js` (run in a worker), everything on screen in `ui.js`.
 Content (opponents, lessons, themes and what the demo includes) is data in `content.js`.
 
-- `index.html` — all screens: menu (with the temple scene), Temple Ascent, Beginner's Path, Quick Play,
-  Settings, game.
+- `index.html` — all screens: menu (with the temple scene), Temple Ascent, Beginner's Path, Achievements,
+  Quick Play, Settings, game.
 - `style.css` — screen and component styles.
 - `ui.js` — screens, canvas drawing (carved board cached per size/theme, stone sprites), animation, input,
   game flow, saved data (`localStorage`).
@@ -21,8 +21,9 @@ Content (opponents, lessons, themes and what the demo includes) is data in `cont
 - `coach.js` — strategy help: `meetsGoal` checks Beginner's Path puzzle answers, `coachTip` picks the
   in-game coach's line. Rests on threats being mutual: a capture path reversed is a capture path.
 - `portraits.js` — `portrait(look, color)`: SVG busts of the Temple Ascent rivals, one headdress per `look.head`.
-- `content.js` — Temple Ascent opponents (with `look` and spoken `lines`), tutorial lessons, Beginner's Path puzzles (`DRILLS`), board
-  themes, demo limits. New puzzles must pass `tests/coach.test.js` (a solution and a wrong answer).
+- `achievements.js` — `earned(data, event)`: which achievements are newly met; `reward(id)`: what each unlocks.
+- `content.js` — Temple Ascent opponents (with `look` and spoken `lines`), `ACHIEVEMENTS`, `STONES` sets, tutorial lessons, Beginner's Path puzzles (`DRILLS`), boards
+  (`THEMES`), demo limits. Each achievement unlocks exactly one board or stone set (`unlock` field). New puzzles must pass `tests/coach.test.js` (a solution and a wrong answer).
 - `audio.js` — synthesised instruments (ocarina, slit drum, rattle, rain stick, conch), sound effects
   and the generative background music (drum, rattle, flute, birds; no continuous drone).
 - `config.js` — `FULL_VERSION` and `STORE_URL`, the only build-time switches.

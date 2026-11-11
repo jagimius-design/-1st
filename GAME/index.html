@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div class="toast" id="toast" role="status" hidden></div>
 <main id="app">
 
   <section id="menu" class="screen active">
@@ -44,6 +45,7 @@
       <button class="btn" data-action="pass">Pass &amp; Play</button>
       <button class="btn" data-action="tutorial">How to Play</button>
       <button class="btn" data-go="path">Beginner&rsquo;s Path</button>
+      <button class="btn" data-go="achievements">Achievements</button>
       <button class="btn ghost" data-go="settings">Settings</button>
     </nav>
     <p class="demo-note" data-demo hidden>Free demo · <a href="#" data-buy>Get the full game</a></p>
@@ -62,14 +64,20 @@
     <ol class="opponents path" id="drills"></ol>
   </section>
 
+  <section id="achievements" class="screen">
+    <header class="bar"><button class="back" data-go="menu" aria-label="Back">‹</button><h2>Achievements</h2><span class="stars-total" id="ach-count"></span></header>
+    <p class="intro">Each achievement unlocks a new board or set of stones. Choose them in Settings.</p>
+    <ol class="achs" id="ach-list"></ol>
+  </section>
+
   <section id="quick" class="screen">
     <header class="bar"><button class="back" data-go="menu" aria-label="Back">‹</button><h2>Quick Play</h2></header>
     <h3>Opponent</h3>
     <div class="choices" id="levels"></div>
     <h3>Your stones</h3>
     <div class="choices row" id="sides">
-      <button class="choice selected" data-side="1"><span class="stone s1"></span>Jade<small>moves first</small></button>
-      <button class="choice" data-side="2"><span class="stone s2"></span>Obsidian<small>moves second</small></button>
+      <button class="choice selected" data-side="1"><span class="stone s1"></span><span id="side1">Jade</span><small>moves first</small></button>
+      <button class="choice" data-side="2"><span class="stone s2"></span><span id="side2">Obsidian</span><small>moves second</small></button>
     </div>
     <button class="btn primary wide" id="btn-quick-start">Play</button>
   </section>
@@ -83,6 +91,8 @@
     <label class="toggle"><span>Show threats<small>Mark your stones the opponent can capture</small></span><input type="checkbox" id="set-threats" data-setting="threats"></label>
     <h3>Board</h3>
     <div class="themes" id="themes"></div>
+    <h3>Stones</h3>
+    <div class="themes" id="stonesets"></div>
     <h3>Record</h3>
     <dl class="stats" id="stats"></dl>
     <button class="btn ghost danger-text" id="btn-reset">Reset progress</button>
