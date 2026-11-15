@@ -1,0 +1,52 @@
+{
+  "timezone": "Europe/Copenhagen",
+  "forecast_days": 3,
+  "model": "best_match",
+  "rules": {
+    "min_wind_kn": 15,
+    "max_wind_kn": 32,
+    "max_gust_kn": 38,
+    "max_gust_spread_kn": 12,
+    "min_hours": 2,
+    "require_daylight": true,
+    "max_rain_mm_per_hour": 3,
+    "min_temp_c": null
+  },
+  "spots": [
+    {
+      "name": "Amager Strandpark",
+      "lat": 55.655,
+      "lon": 12.648,
+      "wind_sectors": [[10, 190]],
+      "note": "East-facing. N/S side-shore, E onshore. W is offshore."
+    },
+    {
+      "name": "Sydvestpynten (Amager)",
+      "lat": 55.588,
+      "lon": 12.578,
+      "wind_sectors": [[170, 300]],
+      "note": "Shallow flat water, works in S to WNW."
+    },
+    {
+      "name": "Dragør Sydstrand",
+      "lat": 55.585,
+      "lon": 12.668,
+      "wind_sectors": [[80, 280]],
+      "note": "South-facing. E and W side-shore, S onshore."
+    },
+    {
+      "name": "Køge Bugt Strandpark (Brøndby/Ishøj)",
+      "lat": 55.612,
+      "lon": 12.385,
+      "wind_sectors": [[70, 230]],
+      "note": "SE-facing lagoon beaches."
+    },
+    {
+      "name": "Bellevue (Klampenborg)",
+      "lat": 55.773,
+      "lon": 12.593,
+      "wind_sectors": [[20, 180]],
+      "note": "East-facing. Busy in summer, check local kite rules."
+    }
+  ]
+}
